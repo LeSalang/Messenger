@@ -15,13 +15,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.lesa.homework_1.ContactService.Companion.ACTION_CONTACTS_RECEIVED
 import com.lesa.homework_1.databinding.ActivityContactsLoaderBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ContactsLoaderActivity : AppCompatActivity() {
     private lateinit var binding: ActivityContactsLoaderBinding
-    private lateinit var service: ContactService
-    private val requestCode = 0
+    private var service: ContactService? = null
+    private val coroutine = CoroutineScope(Dispatchers.IO)
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -38,7 +42,9 @@ class ContactsLoaderActivity : AppCompatActivity() {
             this@ContactsLoaderActivity.service = binder.getService()
         }
 
-        override fun onServiceDisconnected(name: ComponentName?) { }
+        override fun onServiceDisconnected(name: ComponentName?) {
+            service = null
+        }
     }
 
     override fun onStart() {
@@ -46,7 +52,6 @@ class ContactsLoaderActivity : AppCompatActivity() {
         Intent(this, ContactService::class.java).also { intent ->
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
-        registerReceiver(receiver, IntentFilter(ACTION_CONTACTS_RECEIVED))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,15 +64,28 @@ class ContactsLoaderActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         binding.buttonGetContactList.setOnClickListener {
             onGetContactListButtonClicked()
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(receiver)
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager
+            .getInstance(this)
+            .registerReceiver(receiver, IntentFilter(ACTION_CONTACTS_RECEIVED))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager
+            .getInstance(this)
+            .unregisterReceiver(receiver)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unbindService(connection)
     }
 
     override fun onRequestPermissionsResult(
@@ -76,7 +94,7 @@ class ContactsLoaderActivity : AppCompatActivity() {
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == this.requestCode && grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == REQUEST_CODE && grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
             readContacts()
         }
     }
@@ -88,11 +106,17 @@ class ContactsLoaderActivity : AppCompatActivity() {
         if (permissionGranted) {
             readContacts()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
+            ActivityCompat.requestPermissions(this, arrayOf(permission), REQUEST_CODE)
         }
     }
 
     private fun readContacts() {
-        service.getContactList()
+        coroutine.launch {
+            service?.loadContactList()
+        }
+    }
+
+    companion object {
+        private const val REQUEST_CODE = 0
     }
 }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Homework 1</string>
-    <string name="b_1">Open second activity</string>
-    <string name="b_2">Get contact list</string>
-    <string name="first_activity">First activity</string>
-    <string name="second_activity">Second activity</string>
+    <string name="open_second_activity_button_title">Open second activity</string>
+    <string name="get_contact_list_button_title">Get contact list</string>
+    <string name="first_activity_title">First activity</string>
+    <string name="second_activity_title">Second activity</string>
 </resources>

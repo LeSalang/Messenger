@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".ContactsLoaderActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
         <service
             android:name="com.lesa.homework_1.ContactService"

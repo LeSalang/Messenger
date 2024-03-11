@@ -14,7 +14,7 @@
         android:layout_marginStart="@dimen/medium"
         android:layout_marginEnd="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
-        android:text="@string/b_1"
+        android:text="@string/open_second_activity_button_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -43,7 +43,7 @@
         android:layout_marginStart="@dimen/medium"
         android:layout_marginTop="@dimen/medium"
         android:layout_marginEnd="@dimen/medium"
-        android:text="@string/first_activity"
+        android:text="@string/first_activity_title"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
