@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/messageUserLogoCard"
+        android:layout_width="@dimen/message_user_logo_size"
+        android:layout_height="@dimen/message_user_logo_size"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="@dimen/message_user_logo_size">
+
+        <ImageView
+            android:id="@+id/messageUserLogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linear_layout"
+        android:paddingLeft="@dimen/small_padding"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/messageTextCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/gray_dark"
+            app:contentPadding="@dimen/small_padding"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="18dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/messageUserName"
+                    android:textColor="@color/cyan"
+                    android:textSize="@dimen/user_name_text_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/messageText"
+                    android:textColor="@color/gray_light"
+                    android:textSize="@dimen/message_text_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <com.lesa.app.customView.EmojiFlexBox
+            android:id="@+id/emojiFlexBox"
+            android:layout_marginTop="@dimen/small_padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</merge>

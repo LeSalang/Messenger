@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="emoji_flex_box_interitem_spacing">10dp</dimen>
+    <dimen name="message_user_logo_size">37dp</dimen>
+
+    <dimen name="user_name_text_size">14sp</dimen>
+    <dimen name="emoji_text_size">14sp</dimen>
+    <dimen name="message_text_size">16sp</dimen>
+</resources>

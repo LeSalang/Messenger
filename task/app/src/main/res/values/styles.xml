@@ -1,0 +1,8 @@
+<resources>
+    <style name="Emoji">
+        <item name="android:padding">@dimen/small_padding</item>
+    </style>
+    <style name="Widget.Theme.BaseComponents.MyView" parent="">
+        <item name="android:background">@color/gray_400</item>
+    </style>
+</resources>

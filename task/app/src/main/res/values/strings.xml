@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">App</string>
+    <string name="add_emoji_button_title">Add emoji</string>
+    <string name="set_message_button_title">Set message</string>
+    <string name="set_name_button_title">Set name</string>
+    <string name="set_avatar_button_title">Set avatar</string>
+    <string name="sample_name">Marcus Tullius Cicero</string>
+    <string name="sample_message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
 </resources>
