@@ -1,4 +1,4 @@
-package com.lesa.app.customView
+package com.lesa.app.chat
 
 import android.content.Context
 import android.util.AttributeSet
@@ -28,7 +28,7 @@ class EmojiFlexBox @JvmOverloads constructor(
     }
 
     private val sampleEmojiView: EmojiView = EmojiView(context).apply {
-        this.emoji = EmojiView.Model("🐒",  1, true)
+        this.emoji = EmojiView.Model("🐒", 1, true)
     }
 
     private var onEmojiClick: ((String) -> Unit)? = null

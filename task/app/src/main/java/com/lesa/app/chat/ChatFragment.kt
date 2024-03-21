@@ -1,17 +1,19 @@
-package com.lesa.app
+package com.lesa.app.chat
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.lesa.app.customView.EmojiView
-import com.lesa.app.customView.MessageView
+import com.lesa.app.emojiPicker.EmojiPickerBottomSheetFragment
 import com.lesa.app.databinding.FragmentChatBinding
+import com.lesa.app.stubMessageList
 
 class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var adapter: MessageListAdapter
 
     private val emojiList = mutableListOf<EmojiView.Model>()
     private var avatarIndex = 0
@@ -24,14 +26,21 @@ class ChatFragment : Fragment() {
     ): View {
         _binding = FragmentChatBinding.inflate(inflater, container, false)
         return binding.root
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        addPresetEmojis()
+        adapter = MessageListAdapter(stubMessageList)
+        binding.chatRecyclerView.adapter = adapter
+
+        binding.setAvatarButton.setOnClickListener {
+            EmojiPickerBottomSheetFragment().show(childFragmentManager,
+                EmojiPickerBottomSheetFragment.TAG
+            )
+        }
+
+        /*addPresetEmojis()
         message = MessageView.Model(
             R.drawable.cat_1,
             resources.getString(R.string.sample_name),
@@ -45,11 +54,13 @@ class ChatFragment : Fragment() {
             setMessageButton.setOnClickListener { updateMessage() }
             addEmojiButton.setOnClickListener { addEmoji() }
             messageView.addEmojiClickListener(this@ChatFragment::onEmojiClicked)
-        }
+        }*/
 
     }
 
-    private fun updateAvatar() {
+
+
+    /*private fun updateAvatar() {
         val imageList = listOf(
             R.drawable.cat_1,
             R.drawable.cat_2,
@@ -127,7 +138,7 @@ class ChatFragment : Fragment() {
             )
         }
         updateEmojiList()
-    }
+    }*/
 
     companion object {
         const val TAG = "ChatFragment"

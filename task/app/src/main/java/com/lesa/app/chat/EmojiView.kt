@@ -1,4 +1,4 @@
-package com.lesa.app.customView
+package com.lesa.app.chat
 
 import android.content.Context
 import android.graphics.Canvas

@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.google.android.flexbox)
     implementation(libs.picasso)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

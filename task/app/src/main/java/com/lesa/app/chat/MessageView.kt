@@ -1,4 +1,4 @@
-package com.lesa.app.customView
+package com.lesa.app.chat
 
 import android.content.Context
 import android.util.AttributeSet
@@ -13,9 +13,10 @@ import com.squareup.picasso.Picasso
 
 class MessageView @JvmOverloads constructor(
     context: Context,
-    attributeSet: AttributeSet,
+    attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
+    attachToRoot: Boolean = true
 ) : ViewGroup(context, attributeSet, defStyleAttr, defStyleRes) {
     private var binding: MessageViewBinding
 
@@ -47,7 +48,7 @@ class MessageView @JvmOverloads constructor(
 
     init {
         val inflater = LayoutInflater.from(context)
-        inflater.inflate(R.layout.message_view, this, true)
+        inflater.inflate(R.layout.message_view, this, attachToRoot)
         binding = MessageViewBinding.bind(this)
     }
 

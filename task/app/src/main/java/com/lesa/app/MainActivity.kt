@@ -2,6 +2,7 @@ package com.lesa.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.lesa.app.chat.ChatFragment
 import com.lesa.app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.containerFragment, ChatFragment(), ChatFragment.TAG)
                 .addToBackStack(null)
                 .commit()
+
+
         }
     }
+
 }
