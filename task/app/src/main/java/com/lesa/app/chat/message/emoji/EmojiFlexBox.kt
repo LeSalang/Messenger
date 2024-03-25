@@ -1,4 +1,4 @@
-package com.lesa.app.chat
+package com.lesa.app.chat.message.emoji
 
 import android.content.Context
 import android.util.AttributeSet
@@ -32,6 +32,7 @@ class EmojiFlexBox @JvmOverloads constructor(
     }
 
     private var onEmojiClick: ((String) -> Unit)? = null
+    private var onPlusButtonClick: (() -> Unit)? = null
 
     private val interItemSpacing = resources.getDimensionPixelOffset(R.dimen.emoji_flex_box_interitem_spacing)
 
@@ -80,8 +81,12 @@ class EmojiFlexBox @JvmOverloads constructor(
         }
     }
 
-    fun addClickListener(onClick: (String) -> Unit) {
+    fun addEmojiClickListener(onClick: (String) -> Unit) {
         onEmojiClick = onClick
+    }
+
+    fun addPlusButtonClickListener(onClick: () -> Unit) {
+        onPlusButtonClick = onClick
     }
 
     private fun updateViews() {
@@ -94,6 +99,9 @@ class EmojiFlexBox @JvmOverloads constructor(
                 onEmojiClick?.invoke(emoji)
             }
             addView(emojiView)
+        }
+        plusButton.setOnClickListener {
+            onPlusButtonClick?.invoke()
         }
         addView(plusButton)
         addView(sampleEmojiView)

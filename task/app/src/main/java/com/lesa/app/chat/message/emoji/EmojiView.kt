@@ -1,4 +1,4 @@
-package com.lesa.app.chat
+package com.lesa.app.chat.message.emoji
 
 import android.content.Context
 import android.graphics.Canvas
@@ -34,7 +34,7 @@ class EmojiView @JvmOverloads constructor(
         }
 
     private val textPaint = TextPaint().apply {
-        color = resources.getColor(R.color.gray_light)
+        color = resources.getColor(R.color.gray_234)
         textSize = resources.getDimension(R.dimen.emoji_text_size)
     }
 

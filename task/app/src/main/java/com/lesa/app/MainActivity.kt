@@ -18,9 +18,6 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.containerFragment, ChatFragment(), ChatFragment.TAG)
                 .addToBackStack(null)
                 .commit()
-
-
         }
     }
-
 }

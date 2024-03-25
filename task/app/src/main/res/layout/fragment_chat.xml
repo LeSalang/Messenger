@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,22 +8,23 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_400"
+        android:background="@color/gray_18"
         >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/message_view"
-            >
-
-        </androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:stackFromEnd="true"
+            tools:listitem="@layout/message_item" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -30,42 +32,43 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/small_padding"
-            android:background="@color/gray_light"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <Button
-                android:id="@+id/setAvatarButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Open emoji picker" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/nameEditText"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/messageEditText"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/message_input_field_bg"
                     android:ems="10"
+                    android:hint="@string/message_hint"
                     android:inputType="text"
                     android:minHeight="48dp"
+                    android:paddingHorizontal="@dimen/medium_padding"
+                    android:paddingVertical="@dimen/small_padding"
+                    android:textColor="@color/gray_234"
+                    android:textColorHint="@color/gray_153"
                     tools:ignore="SpeakableTextPresentCheck" />
 
-                <Button
-                    android:id="@+id/setNameButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/set_name_button_title" />
+                <ImageButton
+                    android:id="@+id/sendButton"
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
+                    android:layout_marginLeft="@dimen/small_padding"
+                    android:background="@drawable/circle_button_add_file_bg"
+                    android:src="@drawable/circle_button_add_message_icon"
+                    tools:ignore="RtlHardcoded" />
             </LinearLayout>
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </FrameLayout>
