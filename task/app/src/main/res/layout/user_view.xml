@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/gray_18"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/userLogoCard"
+        android:layout_width="@dimen/profile_user_logo_card_size"
+        android:layout_height="@dimen/profile_user_logo_card_size"
+        android:layout_margin="@dimen/profile_user_logo_card_margin"
+        app:cardCornerRadius="@dimen/profile_user_logo_card_radius"
+        app:cardElevation="0dp"
+        >
+
+        <ImageView
+            android:id="@+id/userLogoImage"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/userNameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/profile_user_name_text_size"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:text="User name"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/userChatStatusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/profile_user_chat_status_text_size"
+            android:textColor="@color/gray_188"
+            android:gravity="center_horizontal"
+            android:text="Chat status"
+            />
+        <Space
+            android:layout_width="@dimen/medium_padding"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/userNetStatusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/profile_user_net_status_text_size"
+            android:textColor="@color/green"
+            android:gravity="center_horizontal"
+            android:text="net status"
+            />
+
+    </LinearLayout>
+
+
+
+
+    
+
+</LinearLayout>

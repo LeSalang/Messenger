@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/channels_screen"
+        android:enabled="true"
+        android:icon="@drawable/channels_icon"
+        android:title="@string/title_channels"
+        />
+    <item
+        android:id="@+id/people_screen"
+        android:enabled="true"
+        android:icon="@drawable/people_icon"
+        android:title="@string/title_profile"
+        />
+    <item
+        android:id="@+id/profile_screen"
+        android:enabled="true"
+        android:icon="@drawable/profile_icon"
+        android:title="@string/title_profile"
+        />
+</menu>
