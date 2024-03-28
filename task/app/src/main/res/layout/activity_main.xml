@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_18"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/containerFragment"
@@ -21,10 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gray_30"
-        app:itemIconTint="@color/gray_145"
-        app:itemTextColor="@color/gray_145"
-        app:menu="@menu/bottom_navigation_menu"
+        app:itemRippleColor="@color/gray_18"
+        app:itemActiveIndicatorStyle="@color/gray_30"
+        app:itemIconTint="@drawable/selector_bottom_menu_icon_color"
+        app:itemTextColor="@drawable/selector_bottom_menu_icon_color"
         app:labelVisibilityMode="labeled"
-        />
+        app:menu="@menu/bottom_navigation_menu" />
 
 </LinearLayout>
