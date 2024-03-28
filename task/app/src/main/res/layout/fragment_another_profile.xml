@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gray_18"
+    android:gravity="center_horizontal"
+    >
+
+    <Toolbar
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_30"
+        android:logo="@drawable/icon_arrow_back"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/title_profile"
+            android:textColor="@color/white"
+            android:textSize="@dimen/appbar_title_text_size" />
+    </Toolbar>
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/user_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="113dp"
+        />
+
+
+</LinearLayout>

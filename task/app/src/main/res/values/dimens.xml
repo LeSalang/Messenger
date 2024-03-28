@@ -15,6 +15,8 @@
 
     <dimen name="profile_log_out_button_text_size">20sp</dimen>
 
+    <dimen name="appbar_title_text_size">24sp</dimen>
+
 
 
     <dimen name="user_name_text_size">14sp</dimen>
