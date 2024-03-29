@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.lesa.app.R
-import com.lesa.app.databinding.UserViewBinding
+import com.lesa.app.databinding.ItemProfileBinding
 import com.lesa.app.model.UserNetStatus
 import com.squareup.picasso.Picasso
 
@@ -19,13 +19,13 @@ class UserView @JvmOverloads constructor(
     defStyleRes: Int = 0,
     attachToRoot: Boolean = true
 ) : LinearLayout(context, attributeSet, defStyleAttr, defStyleRes) {
-    private var binding: UserViewBinding
+    private var binding: ItemProfileBinding
     private var model: Model? = null
 
     init {
         val inflater = LayoutInflater.from(context)
-        inflater.inflate(R.layout.user_view, this, attachToRoot)
-        binding = UserViewBinding.bind(this)
+        inflater.inflate(R.layout.item_profile, this, attachToRoot)
+        binding = ItemProfileBinding.bind(this)
     }
 
     private val logoImage: ImageView
