@@ -24,6 +24,7 @@ class MessageView @JvmOverloads constructor(
     attachToRoot: Boolean = true
 ) : ViewGroup(context, attributeSet, defStyleAttr, defStyleRes) {
     private var binding: MessageViewBinding
+    private val messageWidthFactor = 0.8
 
     private var model: Model? = null
 
@@ -57,7 +58,7 @@ class MessageView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         measureChildren(widthMeasureSpec, heightMeasureSpec)
         val originalWidth = MeasureSpec.getSize(widthMeasureSpec)- paddingLeft - paddingRight
-        val width = (originalWidth * 0.8).toInt()
+        val width = (originalWidth * messageWidthFactor).toInt()
 
         linearLayout.measure(
             MeasureSpec.makeMeasureSpec(
@@ -121,7 +122,7 @@ class MessageView @JvmOverloads constructor(
         this.model = model
         textCard.setOnLongClickListener {
             model.onLongClick.invoke()
-            return@setOnLongClickListener true
+            true
         }
         emojiFlexBox.addEmojiClickListener(model.onEmojiClick)
         emojiFlexBox.addPlusButtonClickListener(model.onPlusButtonClick)

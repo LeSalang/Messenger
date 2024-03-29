@@ -19,5 +19,19 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        /*if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.containerFragment, ProfileFragment(), ProfileFragment.TAG)
+                .addToBackStack(null)
+                .commit()
+        }*/
+
+        /*if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.containerFragment, AnotherProfileFragment(), AnotherProfileFragment.TAG)
+                .addToBackStack(null)
+                .commit()
+        }*/
     }
 }

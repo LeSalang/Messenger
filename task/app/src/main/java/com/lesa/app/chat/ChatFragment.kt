@@ -11,11 +11,11 @@ import com.lesa.app.R
 import com.lesa.app.chat.date.DateDelegateAdapter
 import com.lesa.app.chat.message.MessageDelegateAdapter
 import com.lesa.app.chat.message.MessageView
-import com.lesa.app.compositeAdapter.CompositeAdapter
-import com.lesa.app.compositeAdapter.DelegateAdapter
-import com.lesa.app.compositeAdapter.DelegateItem
+import com.lesa.app.composite_adapter.CompositeAdapter
+import com.lesa.app.composite_adapter.DelegateAdapter
+import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.databinding.FragmentChatBinding
-import com.lesa.app.emojiPicker.EmojiPickerBottomSheetFragment
+import com.lesa.app.emoji_picker.EmojiPickerBottomSheetFragment
 import com.lesa.app.model.Emoji
 import com.lesa.app.model.EmojiCNCS
 import com.lesa.app.model.Message

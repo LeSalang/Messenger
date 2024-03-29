@@ -1,4 +1,4 @@
-package com.lesa.app.emojiPicker
+package com.lesa.app.emoji_picker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -27,7 +27,7 @@ class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>): RecyclerView.A
     }
 
     class ViewHolder(_binding: EmojiItemBinding) : RecyclerView.ViewHolder(_binding.root) {
-        private var binding = EmojiItemBinding.bind(itemView)
+        private var binding = _binding
 
         fun bind(emoji: String) {
             binding.emojiTextView.text = emoji

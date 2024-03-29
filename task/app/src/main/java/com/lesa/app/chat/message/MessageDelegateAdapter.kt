@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
-import com.lesa.app.compositeAdapter.DelegateAdapter
+import com.lesa.app.composite_adapter.DelegateAdapter
 import com.lesa.app.databinding.MessageItemBinding
 
 class MessageDelegateAdapter:

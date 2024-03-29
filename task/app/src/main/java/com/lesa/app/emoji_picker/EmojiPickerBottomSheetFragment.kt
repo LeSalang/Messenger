@@ -1,4 +1,4 @@
-package com.lesa.app.emojiPicker
+package com.lesa.app.emoji_picker
 
 import android.content.Context
 import android.os.Bundle

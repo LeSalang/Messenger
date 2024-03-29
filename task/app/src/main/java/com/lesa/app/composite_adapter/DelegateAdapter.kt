@@ -1,4 +1,4 @@
-package com.lesa.app.compositeAdapter
+package com.lesa.app.composite_adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

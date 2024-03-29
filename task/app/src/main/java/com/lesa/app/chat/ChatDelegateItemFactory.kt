@@ -2,10 +2,10 @@ package com.lesa.app.chat
 
 import com.lesa.app.R
 import com.lesa.app.chat.date.DateDelegateItem
-import com.lesa.app.chat.message.emoji.EmojiView
 import com.lesa.app.chat.message.MessageDelegateItem
 import com.lesa.app.chat.message.MessageView
-import com.lesa.app.compositeAdapter.DelegateItem
+import com.lesa.app.chat.message.emoji.EmojiView
+import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.model.Message
 import java.text.SimpleDateFormat
 
