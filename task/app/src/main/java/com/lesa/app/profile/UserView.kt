@@ -1,7 +1,6 @@
 package com.lesa.app.profile
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -12,19 +11,15 @@ import com.lesa.app.databinding.ItemProfileBinding
 import com.lesa.app.model.UserNetStatus
 import com.squareup.picasso.Picasso
 
-class UserView @JvmOverloads constructor(
-    context: Context,
-    attributeSet: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0,
-    attachToRoot: Boolean = true
-) : LinearLayout(context, attributeSet, defStyleAttr, defStyleRes) {
+class UserView (
+    context: Context
+) : LinearLayout(context) {
     private var binding: ItemProfileBinding
     private var model: Model? = null
 
     init {
         val inflater = LayoutInflater.from(context)
-        inflater.inflate(R.layout.item_profile, this, attachToRoot)
+        inflater.inflate(R.layout.item_profile, this)
         binding = ItemProfileBinding.bind(this)
     }
 
@@ -64,6 +59,4 @@ class UserView @JvmOverloads constructor(
         }
         this.model = model
     }
-
-
 }

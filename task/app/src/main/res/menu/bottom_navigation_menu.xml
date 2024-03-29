@@ -3,19 +3,19 @@
     <item
         android:id="@+id/channels_screen"
         android:enabled="true"
-        android:icon="@drawable/channels_icon"
+        android:icon="@drawable/icon_channels"
         android:title="@string/title_channels"
         />
     <item
         android:id="@+id/people_screen"
         android:enabled="true"
-        android:icon="@drawable/people_icon"
+        android:icon="@drawable/icon_people"
         android:title="@string/title_profile"
         />
     <item
         android:id="@+id/profile_screen"
         android:enabled="true"
-        android:icon="@drawable/profile_icon"
+        android:icon="@drawable/icon_profile"
         android:title="@string/title_profile"
         />
 </menu>
