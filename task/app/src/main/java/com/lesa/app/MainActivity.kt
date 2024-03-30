@@ -2,32 +2,22 @@ package com.lesa.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.github.terrakok.cicerone.NavigatorHolder
-import com.github.terrakok.cicerone.androidx.AppNavigator
-import com.lesa.app.App.Companion.INSTANCE
+import com.lesa.app.chat.ChatFragment
 import com.lesa.app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private var navigatorHolder: NavigatorHolder = App.INSTANCE.navigatorHolder
-    private val navigator = AppNavigator(this, R.id.containerFragment)
-    private val router = INSTANCE.router
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        router.newRootScreen(Screens.Main())
-    }
 
-    override fun onResumeFragments() {
-        super.onResumeFragments()
-        navigatorHolder.setNavigator(navigator)
-    }
-
-    override fun onPause() {
-        navigatorHolder.removeNavigator()
-        super.onPause()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.containerFragment, ChatFragment(), ChatFragment.TAG)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

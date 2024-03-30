@@ -9,5 +9,5 @@ data class Message(
     val message: String,
     val emojiList: List<Emoji>,
     val date: Date,
-    val type: MessageView.Model.Type,
+    val type: MessageView.Model.Type
 )

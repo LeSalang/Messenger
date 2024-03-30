@@ -8,25 +8,4 @@
     <string name="sample_message">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
 
     <string name="message_hint">Write…</string>
-    <string name="users_hint">Users…</string>
-    <string name="search_hint">Search…</string>
-
-    <string name="log_out_button_title">Log out</string>
-
-    <string name="title_channels">Channels</string>
-    <string name="title_people">People</string>
-    <string name="title_profile">Profile</string>
-    <string name="title_chat">Chat</string>
-
-    <string name="channels_subscribed">Subscribed</string>
-    <string name="channels_all_streams">All streams</string>
-    <string name="channels_channel_sample">#channelSample</string>
-    <string name="channels_topic_sample">TopicSample</string>
-    <string name="channels_mes_count_sample">1000 mes</string>
-
-    <string name="status_active">Active</string>
-    <string name="status_idle">Idle</string>
-    <string name="status_offline">Offline</string>
-
-
 </resources>

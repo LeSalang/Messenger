@@ -1,6 +1,6 @@
 package com.lesa.app.chat.date
 
-import com.lesa.app.composite_adapter.DelegateItem
+import com.lesa.app.compositeAdapter.DelegateItem
 import java.util.Date
 
 class DateDelegateItem(

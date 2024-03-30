@@ -7,18 +7,19 @@
     android:orientation="vertical"
     android:background="@drawable/emoji_picker_bg"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    tools:context=".emoji_picker.EmojiPickerBottomSheetFragment">
+    tools:context=".emojiPicker.EmojiPickerBottomSheetFragment">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/emojiPickerRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        tools:listitem="@layout/item_emoji">
+        tools:listitem="@layout/emoji_item">
 
     </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

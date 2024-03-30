@@ -21,10 +21,9 @@ class MessageView @JvmOverloads constructor(
     attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0,
-    attachToRoot: Boolean = true,
+    attachToRoot: Boolean = true
 ) : ViewGroup(context, attributeSet, defStyleAttr, defStyleRes) {
     private var binding: MessageViewBinding
-    private val messageWidthFactor = 0.8
 
     private var model: Model? = null
 
@@ -57,16 +56,17 @@ class MessageView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         measureChildren(widthMeasureSpec, heightMeasureSpec)
-        val originalWidth = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight
-        val width = (originalWidth * messageWidthFactor).toInt()
+        val originalWidth = MeasureSpec.getSize(widthMeasureSpec)- paddingLeft - paddingRight
+        val width = (originalWidth * 0.8).toInt()
 
         linearLayout.measure(
             MeasureSpec.makeMeasureSpec(
-                width - logoCard.measuredWidth, MeasureSpec.EXACTLY
-            ), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+                width - logoCard.measuredWidth,
+                MeasureSpec.EXACTLY
+            ),
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
-        val height =
-            maxOf(linearLayout.measuredHeight, logoCard.measuredHeight) + paddingTop + paddingBottom
+        val height = maxOf(linearLayout.measuredHeight, logoCard.measuredHeight) + paddingTop + paddingBottom
         setMeasuredDimension(originalWidth, height)
     }
 
@@ -112,7 +112,6 @@ class MessageView @JvmOverloads constructor(
                 nameTextView.visibility = VISIBLE
                 textCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.gray_28))
             }
-
             Model.Type.OUTGOING -> {
                 logoCard.visibility = INVISIBLE
                 nameTextView.visibility = GONE
@@ -122,7 +121,7 @@ class MessageView @JvmOverloads constructor(
         this.model = model
         textCard.setOnLongClickListener {
             model.onLongClick.invoke()
-            true
+            return@setOnLongClickListener true
         }
         emojiFlexBox.addEmojiClickListener(model.onEmojiClick)
         emojiFlexBox.addPlusButtonClickListener(model.onPlusButtonClick)
@@ -137,10 +136,11 @@ class MessageView @JvmOverloads constructor(
         val type: Type,
         val onLongClick: () -> Unit,
         val onEmojiClick: (String) -> Unit,
-        val onPlusButtonClick: () -> Unit,
+        val onPlusButtonClick: () -> Unit
     ) {
         enum class Type {
-            INCOMING, OUTGOING
+            INCOMING,
+            OUTGOING
         }
     }
 }
