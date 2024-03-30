@@ -34,7 +34,8 @@ class EmojiFlexBox @JvmOverloads constructor(
     private var onEmojiClick: ((String) -> Unit)? = null
     private var onPlusButtonClick: (() -> Unit)? = null
 
-    private val interItemSpacing = resources.getDimensionPixelOffset(R.dimen.emoji_flex_box_interitem_spacing)
+    private val interItemSpacing =
+        resources.getDimensionPixelOffset(R.dimen.emoji_flex_box_interitem_spacing)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight
@@ -48,11 +49,10 @@ class EmojiFlexBox @JvmOverloads constructor(
         var xPos = paddingLeft
         var yPos = paddingTop
         val childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-        for (i in 0..< count) {
+        for (i in 0..<count) {
             val child = getChildAt(i)
             child.measure(
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST),
-                childHeightMeasureSpec
+                MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST), childHeightMeasureSpec
             )
             if (xPos + child.measuredWidth > width) {
                 xPos = paddingLeft
@@ -68,7 +68,7 @@ class EmojiFlexBox @JvmOverloads constructor(
         val width = r - l - paddingLeft - paddingRight
         var xPos = paddingLeft
         var yPos = paddingTop
-        for (i in 0 ..< childCount) {
+        for (i in 0..<childCount) {
             val child = getChildAt(i)
             val childw = child.measuredWidth
             val childh = sampleEmojiView.measuredHeight

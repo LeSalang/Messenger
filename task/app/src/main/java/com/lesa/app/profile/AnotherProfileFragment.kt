@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.lesa.app.databinding.FragmentAnotherProfileBinding
 
-class AnotherProfileFragment: Fragment() {
+class AnotherProfileFragment : Fragment() {
     private var _binding: FragmentAnotherProfileBinding? = null
     private val binding
         get() = _binding!! // TODO

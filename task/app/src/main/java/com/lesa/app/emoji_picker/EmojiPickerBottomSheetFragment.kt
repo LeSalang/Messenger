@@ -16,7 +16,7 @@ import com.lesa.app.model.EmojiCNCS
 
 class EmojiPickerBottomSheetFragment(
     private val emojiList: List<EmojiCNCS>,
-    private val onSelect: (EmojiCNCS) -> Unit
+    private val onSelect: (EmojiCNCS) -> Unit,
 ) : BottomSheetDialogFragment() {
     private var _binding: FragmentEmojiPickerBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -47,35 +47,36 @@ class EmojiPickerBottomSheetFragment(
         behavior.maxHeight = screenSize - 200
         behavior.peekHeight = screenSize / 2
 
-        val itemTouchListener = RecyclerTouchListener(
-            requireContext(),
-            object : RecyclerTouchListener.ClickListener {
+        val itemTouchListener =
+            RecyclerTouchListener(requireContext(), object : RecyclerTouchListener.ClickListener {
                 override fun onClick(view: View, position: Int) {
                     val emoji = emojiList[position]
                     onSelect.invoke(emoji)
                     dismiss()
                 }
-            }
-        )
+            })
         emojiPicker.addOnItemTouchListener(itemTouchListener)
     }
 
     class RecyclerTouchListener(
         context: Context,
-        private val clickListener: ClickListener
+        private val clickListener: ClickListener,
     ) : RecyclerView.OnItemTouchListener {
 
-        private val gestureDetector: GestureDetector = GestureDetector(
-            context, object : GestureDetector.SimpleOnGestureListener() {
+        private val gestureDetector: GestureDetector =
+            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
                 override fun onSingleTapUp(e: MotionEvent): Boolean = true
-            }
-        )
+            })
+
         override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
             val child: View? = rv.findChildViewUnder(e.x, e.y)
-            if (child != null && gestureDetector.onTouchEvent(e))
-                clickListener.onClick(child, rv.getChildAdapterPosition(child))
+            if (child != null && gestureDetector.onTouchEvent(e)) clickListener.onClick(
+                child,
+                rv.getChildAdapterPosition(child)
+            )
             return false
         }
+
         override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
         override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
         interface ClickListener {

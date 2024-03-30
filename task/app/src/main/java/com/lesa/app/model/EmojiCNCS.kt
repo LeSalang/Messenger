@@ -3,7 +3,7 @@ package com.lesa.app.model
 data class EmojiCNCS(
     val category: String,
     val name: String,
-    val code: String
+    val code: String,
 ) {
     fun getCodeString() = String(Character.toChars(code.toInt(16)))
 }

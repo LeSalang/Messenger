@@ -10,8 +10,8 @@ import com.lesa.app.databinding.ItemPeopleBinding
 import com.lesa.app.model.UserNetStatus
 import com.squareup.picasso.Picasso
 
-class PeopleView  (
-    context: Context
+class PeopleView(
+    context: Context,
 ) : ConstraintLayout(context) {
     private var binding: ItemPeopleBinding
     private var model: Model? = null
@@ -38,7 +38,7 @@ class PeopleView  (
         val logo: Int,
         val name: String,
         val email: String,
-        val netStatus: UserNetStatus
+        val netStatus: UserNetStatus,
     )
 
     fun update(model: Model) {

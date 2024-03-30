@@ -5,8 +5,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 class CompositeAdapter(
-    private val delegates: List<DelegateAdapter<DelegateItem, RecyclerView.ViewHolder>>
-): ListAdapter<DelegateItem, RecyclerView.ViewHolder>(DelegateItemDiffCallback()) {
+    private val delegates: List<DelegateAdapter<DelegateItem, RecyclerView.ViewHolder>>,
+) : ListAdapter<DelegateItem, RecyclerView.ViewHolder>(DelegateItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return delegates[viewType].onCreateViewHolder(parent)

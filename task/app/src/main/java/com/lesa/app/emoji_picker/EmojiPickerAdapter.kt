@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.databinding.EmojiItemBinding
 import com.lesa.app.model.EmojiCNCS
 
-class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>): RecyclerView.Adapter<EmojiPickerAdapter.ViewHolder>() {
+class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>) :
+    RecyclerView.Adapter<EmojiPickerAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): ViewHolder {
         return ViewHolder(
             EmojiItemBinding.inflate(

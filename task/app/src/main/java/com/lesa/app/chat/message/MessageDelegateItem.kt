@@ -3,8 +3,8 @@ package com.lesa.app.chat.message
 import com.lesa.app.composite_adapter.DelegateItem
 
 class MessageDelegateItem(
-    val message: MessageView.Model
-    ) : DelegateItem {
+    val message: MessageView.Model,
+) : DelegateItem {
     override val id: Int
         get() = message.id
 

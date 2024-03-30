@@ -11,7 +11,7 @@ import com.lesa.app.databinding.ItemProfileBinding
 import com.lesa.app.model.UserNetStatus
 import com.squareup.picasso.Picasso
 
-class UserView (
+class UserView(
     context: Context
 ) : LinearLayout(context) {
     private var binding: ItemProfileBinding
@@ -39,7 +39,7 @@ class UserView (
         val logo: Int,
         val name: String,
         val chatStatus: String,
-        val netStatus: UserNetStatus
+        val netStatus: UserNetStatus,
     )
 
     fun update(model: Model) {

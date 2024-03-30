@@ -9,13 +9,13 @@ import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.model.Message
 import java.text.SimpleDateFormat
 
-class ChatDelegateItemFactory() {
+class ChatDelegateItemFactory {
     fun makeDelegateItems(
         list: List<Message>,
         userId: Int,
         showEmojiPicker: (Message) -> Unit,
-        onSelectEmoji: (message: Message, emojiCode: String) -> Unit
-    ) : MutableList<DelegateItem> {
+        onSelectEmoji: (message: Message, emojiCode: String) -> Unit,
+    ): MutableList<DelegateItem> {
         val formatter = SimpleDateFormat("yyyyMMdd")
         val messagesGroupedByDates = list.groupBy {
             formatter.format(it.date)
@@ -26,8 +26,7 @@ class ChatDelegateItemFactory() {
                 DateDelegateItem(messages[0].date)
             )
             messages.forEach { message ->
-                val itemModel = MessageView.Model(
-                    id = message.id,
+                val itemModel = MessageView.Model(id = message.id,
                     avatar = R.drawable.avatar,
                     userName = message.senderName,
                     text = message.message,
@@ -42,14 +41,12 @@ class ChatDelegateItemFactory() {
                     onLongClick = { showEmojiPicker(message) },
                     onEmojiClick = {
                         onSelectEmoji(
-                            message,
-                            it
+                            message, it
                         )
                     },
                     onPlusButtonClick = {
                         showEmojiPicker(message)
-                    }
-                )
+                    })
                 result.add(
                     MessageDelegateItem(itemModel)
                 )

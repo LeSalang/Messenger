@@ -13,7 +13,7 @@ class EmojiView @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
+    defStyleRes: Int = 0,
 ) : View(
     context, attributeSet, defStyleAttr, defStyleRes
 ) {
@@ -50,8 +50,10 @@ class EmojiView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         textPaint.getTextBounds(textToDraw, 0, textToDraw.length, textRect)
 
-        val actualWidth = resolveSize(textRect.width() + paddingLeft + paddingRight, widthMeasureSpec)
-        val actualHeight = resolveSize(textRect.height() + paddingTop + paddingBottom, heightMeasureSpec)
+        val actualWidth =
+            resolveSize(textRect.width() + paddingLeft + paddingRight, widthMeasureSpec)
+        val actualHeight =
+            resolveSize(textRect.height() + paddingTop + paddingBottom, heightMeasureSpec)
         setMeasuredDimension(actualWidth, actualHeight)
     }
 
@@ -63,6 +65,6 @@ class EmojiView @JvmOverloads constructor(
     data class Model(
         val emoji: String,
         val count: Int,
-        val isSelected: Boolean
+        val isSelected: Boolean,
     )
 }

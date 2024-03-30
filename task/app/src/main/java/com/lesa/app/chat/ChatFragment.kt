@@ -79,8 +79,7 @@ class ChatFragment : Fragment() {
         val userId = userRepository.currentUserId ?: return
         adapter.submitList(
             makeDelegateItems(
-                list = messages,
-                userId = userId
+                list = messages, userId = userId
             )
         )
     }
@@ -106,10 +105,9 @@ class ChatFragment : Fragment() {
 
     private fun makeDelegateItems(
         list: List<Message>,
-        userId: Int
-    ) : MutableList<DelegateItem> {
-        return ChatDelegateItemFactory().makeDelegateItems(
-            list = list,
+        userId: Int,
+    ): MutableList<DelegateItem> {
+        return ChatDelegateItemFactory().makeDelegateItems(list = list,
             userId = userId,
             showEmojiPicker = { message ->
                 showEmojiPicker(
@@ -118,53 +116,43 @@ class ChatFragment : Fragment() {
             },
             onSelectEmoji = { message, emojiCode ->
                 onSelectEmoji(
-                    message = message,
-                    emojiCode = emojiCode
+                    message = message, emojiCode = emojiCode
                 )
-            }
-        )
+            })
     }
 
     private fun showEmojiPicker(message: Message) {
-        val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment(
-            emojiList = emojiSetCNCS,
-            onSelect = {
+        val emojiPickerBottomSheetFragment =
+            EmojiPickerBottomSheetFragment(emojiList = emojiSetCNCS, onSelect = {
                 onSelectEmoji(
-                    message = message,
-                    selectedEmojiCNCS = it
+                    message = message, selectedEmojiCNCS = it
                 )
-            }
-        )
+            })
         emojiPickerBottomSheetFragment.show(
-            childFragmentManager,
-            EmojiPickerBottomSheetFragment.TAG
+            childFragmentManager, EmojiPickerBottomSheetFragment.TAG
         )
     }
 
     private fun onSelectEmoji(
         message: Message,
-        selectedEmojiCNCS: EmojiCNCS
+        selectedEmojiCNCS: EmojiCNCS,
     ) {
         val emojiCode = selectedEmojiCNCS.getCodeString()
         onSelectEmoji(
-            message = message,
-            emojiCode = emojiCode
+            message = message, emojiCode = emojiCode
         )
     }
 
     private fun onSelectEmoji(
         message: Message,
-        emojiCode: String
+        emojiCode: String,
     ) {
         val userId = userRepository.currentUserId ?: return
         val selectedEmoji = Emoji(
-            emojiCode = emojiCode,
-            userIds = setOf(userId)
+            emojiCode = emojiCode, userIds = setOf(userId)
         )
         val newEmojiList = updateEmojiList(
-            message = message,
-            userId = userId,
-            selectedEmoji = selectedEmoji
+            message = message, userId = userId, selectedEmoji = selectedEmoji
         )
         val newMessage = message.copy(emojiList = newEmojiList)
         val messageIndex = messages.indexOf(message)
@@ -175,8 +163,8 @@ class ChatFragment : Fragment() {
     private fun updateEmojiList(
         message: Message,
         userId: Int,
-        selectedEmoji: Emoji
-    ) : List<Emoji> {
+        selectedEmoji: Emoji,
+    ): List<Emoji> {
         val emojiIndex = message.emojiList.indexOfFirst {
             it.emojiCode == selectedEmoji.emojiCode
         }
@@ -185,19 +173,15 @@ class ChatFragment : Fragment() {
             val emoji = message.emojiList[emojiIndex]
             val isEmojiClicked = emoji.userIds.contains(userRepository.currentUserId)
             if (isEmojiClicked) {
-                emojiList[emojiIndex] = emoji.copy(
-                    count = emoji.count - 1,
+                emojiList[emojiIndex] = emoji.copy(count = emoji.count - 1,
                     userIds = emoji.userIds.toMutableSet().apply {
                         this.remove(userId)
-                    }
-                )
+                    })
             } else {
-                emojiList[emojiIndex] = emoji.copy(
-                    count = emoji.count + 1,
+                emojiList[emojiIndex] = emoji.copy(count = emoji.count + 1,
                     userIds = emoji.userIds.toMutableSet().apply {
                         this.add(userId)
-                    }
-                )
+                    })
             }
             if (emojiList[emojiIndex].count == 0) emojiList.removeAt(emojiIndex)
             emojiList
