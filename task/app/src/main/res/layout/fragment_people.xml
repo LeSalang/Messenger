@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/gray_18"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <Toolbar
-        android:id="@+id/backButton"
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gray_30"
-        android:logo="@drawable/icon_arrow_back"
+        android:title="@string/users_hint"
+        android:titleTextColor="@color/white"
         android:gravity="center_horizontal">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/title_profile"
-            android:textColor="@color/white"
-            android:textSize="@dimen/appbar_title_text_size" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_search"></ImageView>
     </Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/peopleRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_people" />
 
 </LinearLayout>

@@ -3,7 +3,7 @@ package com.lesa.app.emoji_picker
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lesa.app.databinding.EmojiItemBinding
+import com.lesa.app.databinding.ItemEmojiBinding
 import com.lesa.app.model.EmojiCNCS
 
 class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>) :
@@ -13,7 +13,7 @@ class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>) :
         viewType: Int,
     ): ViewHolder {
         return ViewHolder(
-            EmojiItemBinding.inflate(
+            ItemEmojiBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
@@ -27,7 +27,7 @@ class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>) :
         return holder.bind(emojiList[position].getCodeString())
     }
 
-    class ViewHolder(_binding: EmojiItemBinding) : RecyclerView.ViewHolder(_binding.root) {
+    class ViewHolder(_binding: ItemEmojiBinding) : RecyclerView.ViewHolder(_binding.root) {
         private var binding = _binding
 
         fun bind(emoji: String) {

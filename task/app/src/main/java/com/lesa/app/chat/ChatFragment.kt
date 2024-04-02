@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.lesa.app.App
 import com.lesa.app.R
+import com.lesa.app.Screens
 import com.lesa.app.chat.date.DateDelegateAdapter
 import com.lesa.app.chat.message.MessageDelegateAdapter
 import com.lesa.app.chat.message.MessageView
@@ -19,8 +21,10 @@ import com.lesa.app.emoji_picker.EmojiPickerBottomSheetFragment
 import com.lesa.app.model.Emoji
 import com.lesa.app.model.EmojiCNCS
 import com.lesa.app.model.Message
+import com.lesa.app.model.Topic
 import com.lesa.app.model.emojiSetCNCS
 import com.lesa.app.repositories.UserRepository
+import com.lesa.app.stubChannels
 import com.lesa.app.stubMessageList
 import java.util.Date
 
@@ -43,11 +47,13 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
+        setUpTitle(requireArguments().getInt(CHANNEL_ID_KEY))
     }
 
     private fun setUpViews() {
         setUpRecycleView()
         setUpSendButton()
+        setUpBackButton()
     }
 
     private fun setUpRecycleView() {
@@ -61,7 +67,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun setUpSendButton() {
-        binding.messageEditText.doOnTextChanged { text, start, before, count ->
+        binding.messageEditText.doOnTextChanged { _, _, _, _ ->
             if (binding.messageEditText.text.toString().isBlank()) {
                 binding.sendButton.setImageResource(R.drawable.circle_button_add_message_icon)
                 binding.sendButton.setBackgroundResource(R.drawable.circle_button_add_file_bg)
@@ -72,6 +78,12 @@ class ChatFragment : Fragment() {
         }
         binding.sendButton.setOnClickListener {
             addMessage()
+        }
+    }
+
+    private fun setUpBackButton() {
+        binding.backButton.setOnClickListener {
+            App.INSTANCE.router.backTo(Screens.Channels())
         }
     }
 
@@ -193,7 +205,29 @@ class ChatFragment : Fragment() {
         return newEmojiList
     }
 
+    private fun setUpTitle(id: Int) {
+        val topics = mutableListOf<Topic>()
+        stubChannels.map { channel ->
+            channel.topics.forEach {
+                topics.add(it)
+            }
+        }
+        val topic = topics.first {
+            it.id == id
+        }
+        binding.toolBar.setBackgroundResource(topic.color)
+        binding.title.text = topic.name
+    }
+
     companion object {
-        const val TAG = "ChatFragment"
+        private const val CHANNEL_ID_KEY = "user_id_key"
+
+        fun getNewInstance(channelId: Int): ChatFragment {
+            return ChatFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(CHANNEL_ID_KEY, channelId)
+                }
+            }
+        }
     }
 }

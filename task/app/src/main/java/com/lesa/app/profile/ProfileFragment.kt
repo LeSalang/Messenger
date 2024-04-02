@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.lesa.app.databinding.FragmentProfileBinding
+import com.lesa.app.model.User
+import com.lesa.app.stubPeople
+import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -21,7 +24,18 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
-    companion object {
-        const val TAG = "ProfileFragment"
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpUserView(stubPeople.first())
+    }
+
+    private fun setUpUserView(user: User) {
+        binding.include.apply {
+            userNameTextView.text = user.name
+            userChatStatusTextView.text = user.chatStatus
+            userNetStatusTextView.text = resources.getString(user.netStatus.text)
+            userNetStatusTextView.setTextColor(resources.getColor(user.netStatus.color))
+            Picasso.get().load(user.avatar).into(userLogoImage)
+        }
     }
 }

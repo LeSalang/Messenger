@@ -21,7 +21,9 @@
     <dimen name="people_user_name_text_size">22sp</dimen>
     <dimen name="people_user_email_text_size">16sp</dimen>
 
-
+    <dimen name="channels_channel_text_size">18sp</dimen>
+    <dimen name="channels_topic_text_size">18sp</dimen>
+    <dimen name="channels_mes_count_text_size">16sp</dimen>
 
     <dimen name="user_name_text_size">14sp</dimen>
     <dimen name="date_text_size">14sp</dimen>

@@ -5,8 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_18"
-    tools:context=".chat.ChatFragment"
-    >
+    tools:context=".chat.ChatFragment">
+
+    <Toolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/chatRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/gray_30"
+        android:titleTextColor="@color/white"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_arrow_back"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/medium_padding"
+            android:gravity="left"
+            android:text="@string/title_profile"
+            android:textColor="@color/white"
+            android:textSize="@dimen/appbar_title_text_size" />
+
+    </Toolbar>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
@@ -15,9 +45,9 @@
         app:layout_constraintBottom_toTopOf="@+id/messageEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
         app:stackFromEnd="true"
-        tools:listitem="@layout/message_item" />
+        tools:listitem="@layout/item_message" />
 
     <EditText
         android:id="@+id/messageEditText"

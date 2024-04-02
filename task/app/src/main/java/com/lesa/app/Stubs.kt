@@ -1,12 +1,95 @@
 package com.lesa.app
 
 import com.lesa.app.chat.message.MessageView
+import com.lesa.app.model.Channel
 import com.lesa.app.model.Emoji
 import com.lesa.app.model.Message
+import com.lesa.app.model.Topic
+import com.lesa.app.model.User
+import com.lesa.app.model.UserNetStatus
 import java.util.Date
 
 val currentDate = Date()
 val currentDateInMills = currentDate.time
+
+val stubChannels: MutableList<Channel>
+    get() = mutableListOf(
+        Channel(
+            id = 7730, name = "Orville Wong", topics = listOf(
+                Topic(id = 7591, name = "Merlin Navarro", count = 6097, color = R.color.dark_blue),
+                Topic(id = 3372, name = "Basil Pratt", count = 3247, color = R.color.dark_green),
+                Topic(id = 2703, name = "Louie O'Neil", count = 2324, color = R.color.dark_orange),
+                Topic(id = 3, name = "Tuck", count = 3, color = R.color.dark_purple),
+            ), isSubscribed = true, isExpanded = false
+        ), Channel(
+            id = 5000, name = "Chelsea Hewitt", topics = listOf(
+                Topic(id = 2703, name = "Louie O'Neil", count = 2324, color = R.color.dark_orange),
+                Topic(id = 3, name = "Tuck", count = 3, color = R.color.dark_red),
+            ), isSubscribed = true, isExpanded = false
+        ), Channel(
+            id = 5480,
+            name = "Warren Olson",
+            topics = listOf(),
+            isSubscribed = true,
+            isExpanded = false
+        ), Channel(
+            id = 2277, name = "Rene Travis", topics = listOf(
+                Topic(id = 7591, name = "Merlin Navarro", count = 6097, color = R.color.dark_blue),
+                Topic(id = 3372, name = "Basil Pratt", count = 3247, color = R.color.dark_green),
+                Topic(id = 2703, name = "Louie O'Neil", count = 2324, color = R.color.dark_orange),
+                Topic(id = 3, name = "Tuck", count = 3, color = R.color.dark_purple),
+            ), isSubscribed = false, isExpanded = false
+        ), Channel(
+            id = 7076, name = "Leroy Wolf", topics = listOf(
+                Topic(id = 2703, name = "Louie O'Neil", count = 2324, color = R.color.dark_orange),
+                Topic(id = 3, name = "Tuck", count = 3, color = R.color.dark_purple),
+            ), isSubscribed = false, isExpanded = false
+        ), Channel(
+            id = 6987, name = "Gena Gibson", topics = listOf(
+                Topic(id = 7591, name = "Merlin Navarro", count = 6097, color = R.color.dark_blue)
+            ), isSubscribed = false, isExpanded = false
+        )
+    )
+
+val stubPeople: List<User>
+    get() = mutableListOf(
+        User(
+            id = 7484,
+            name = "Josh Heath",
+            email = "jamie.caldwell@example.com",
+            avatar = R.drawable.avatar,
+            chatStatus = "vestibulum",
+            netStatus = UserNetStatus.ACTIVE
+        ), User(
+            id = 2332,
+            name = "Darius Shepherd",
+            email = "marquis.benjamin@example.com",
+            avatar = R.drawable.avatar,
+            chatStatus = "feugait",
+            netStatus = UserNetStatus.IDLE
+        ), User(
+            id = 1161,
+            name = "Erwin Koch",
+            email = "agustin.harper@example.com",
+            avatar = R.drawable.cat_1,
+            chatStatus = "patrioque",
+            netStatus = UserNetStatus.OFFLINE
+        ), User(
+            id = 4158,
+            name = "Kasey Hardin",
+            email = "dewayne.ryan@example.com",
+            avatar = R.drawable.cat_1,
+            chatStatus = "docendi",
+            netStatus = UserNetStatus.ACTIVE
+        ), User(
+            id = 7738,
+            name = "Greta Bell",
+            email = "deborah.pittman@example.com",
+            avatar = R.drawable.cat_1,
+            chatStatus = "sit",
+            netStatus = UserNetStatus.ACTIVE
+        )
+    )
 
 val stubMessageList: List<Message>
     get() = mutableListOf(

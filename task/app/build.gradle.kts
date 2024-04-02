@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.viewpager2)
     implementation(libs.cicerone)
     implementation(libs.google.android.flexbox)
     implementation(libs.picasso)

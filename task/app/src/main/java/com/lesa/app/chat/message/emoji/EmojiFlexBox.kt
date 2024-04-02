@@ -24,7 +24,7 @@ class EmojiFlexBox @JvmOverloads constructor(
 
     private val plusButton: ImageView = ImageView(context).apply {
         setBackgroundResource(R.drawable.emoji_selected_bg)
-        setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.add, null))
+        setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.icon_add, null))
     }
 
     private val sampleEmojiView: EmojiView = EmojiView(context).apply {

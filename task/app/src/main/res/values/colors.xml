@@ -25,4 +25,10 @@
     <color name="orange">#FFB300</color>
     <color name="red">#F4511E</color>
 
+    <color name="dark_red">#BF360C</color>
+    <color name="dark_orange">#F57F17</color>
+    <color name="dark_green">#1B5E20</color>
+    <color name="dark_blue">#01579B</color>
+    <color name="dark_purple">#4A148C</color>
+
 </resources>
