@@ -1,9 +1,6 @@
 package com.lesa.app.people
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +46,7 @@ class PeopleFragment: Fragment() {
         binding.toolBar.inflateMenu(R.menu.search_menu)
         setHasOptionsMenu(true)
         val searchItem = binding.toolBar.menu.findItem(R.id.search)
-        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        /*val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         if (searchItem != null) {
             searchView = searchItem.actionView as SearchView
         }
@@ -67,7 +64,7 @@ class PeopleFragment: Fragment() {
                 }
             }
             searchView!!.setOnQueryTextListener(queryTextListener)
-        }
+        }*/
     }
 
     private fun setUpRecycleView() {

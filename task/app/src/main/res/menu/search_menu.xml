@@ -6,7 +6,6 @@
         android:title="@string/users_hint"
         android:enabled="true"
         android:icon="@drawable/icon_search"
-        android:actionViewClass="androidx.appcompat.widget.SearchView"
         android:showAsAction="ifRoom"
         tools:ignore="AppCompatResource"
         />

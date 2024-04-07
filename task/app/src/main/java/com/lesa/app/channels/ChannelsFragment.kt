@@ -1,11 +1,10 @@
 package com.lesa.app.channels
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -20,6 +19,7 @@ class ChannelsFragment : Fragment() {
 
     private var searchView: SearchView? = null
     private lateinit var queryTextListener: SearchView.OnQueryTextListener
+    private var isSearch = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,10 +59,25 @@ class ChannelsFragment : Fragment() {
     }
 
     private fun setUpSearchView() {
-        binding.toolBar.inflateMenu(R.menu.search_menu)
+        binding.apply {
+            searchIcon.setOnClickListener {
+                if (isSearch) {
+                    searchIcon.setImageResource(R.drawable.icon_close)
+                    searchTitle.visibility = GONE
+                    searchEditText.visibility = VISIBLE
+                } else {
+                    searchIcon.setImageResource(R.drawable.icon_search)
+                    searchTitle.visibility = VISIBLE
+                    searchEditText.visibility = GONE
+                }
+                isSearch = !isSearch
+            }
+        }
+
+       /* binding.toolBar.inflateMenu(R.menu.search_menu)
         setHasOptionsMenu(true)
-        val searchItem = binding.toolBar.menu.findItem(R.id.search)
-        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = binding.toolBar.menu.findItem(R.id.search)*/
+        /*val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         if (searchItem != null) {
             searchView = searchItem.actionView as SearchView
         }
@@ -79,7 +94,7 @@ class ChannelsFragment : Fragment() {
                 }
             }
             searchView!!.setOnQueryTextListener(queryTextListener)
-        }
+        }*/
     }
 
     companion object {
