@@ -51,7 +51,7 @@
         android:background="@color/gray_30"
         app:tabTextColor="@color/gray_250"
         app:tabSelectedTextColor="@color/gray_250"
-        app:tabIndicatorColor="@color/green"
+        app:tabIndicatorColor="@color/cyan"
         app:tabIndicatorFullWidth="true" />
 
     <androidx.viewpager2.widget.ViewPager2

@@ -1,4 +1,4 @@
-package com.lesa.app.emoji_picker
+package com.lesa.app.chat.emoji_picker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.databinding.ItemEmojiBinding
 import com.lesa.app.model.EmojiCNCS
 
-class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>) :
-    RecyclerView.Adapter<EmojiPickerAdapter.ViewHolder>() {
+class EmojiPickerAdapter(
+    private val emojiList: List<EmojiCNCS>,
+    private val onSelect: (EmojiCNCS) -> Unit,
+) : RecyclerView.Adapter<EmojiPickerAdapter.ViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -15,7 +17,7 @@ class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>) :
         return ViewHolder(
             ItemEmojiBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            )
+            ), onSelect
         )
     }
 
@@ -24,14 +26,18 @@ class EmojiPickerAdapter(private val emojiList: List<EmojiCNCS>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(emojiList[position].getCodeString())
+        return holder.bind(emojiList[position])
     }
 
-    class ViewHolder(_binding: ItemEmojiBinding) : RecyclerView.ViewHolder(_binding.root) {
+    class ViewHolder(_binding: ItemEmojiBinding, val onSelect: (EmojiCNCS) -> Unit) :
+        RecyclerView.ViewHolder(_binding.root) {
         private var binding = _binding
 
-        fun bind(emoji: String) {
-            binding.emojiTextView.text = emoji
+        fun bind(emoji: EmojiCNCS) {
+            binding.emojiTextView.text = emoji.getCodeString()
+            itemView.setOnClickListener {
+                onSelect(emoji)
+            }
         }
     }
 }

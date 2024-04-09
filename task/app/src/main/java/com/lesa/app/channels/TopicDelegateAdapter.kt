@@ -28,7 +28,10 @@ class TopicDelegateAdapter (
 
         fun bind(topic: Topic) {
             binding.topicNameTextView.text = topic.name
-            binding.topicMesCountTextView.text = topic.count.toString() + " mes"
+            binding.topicMesCountTextView.text = String.format(
+                itemView.context.getString(R.string.channels_mes_count_pattern),
+                topic.count
+            )
             binding.root.setBackgroundResource(topic.color)
             itemView.setOnClickListener {
                 onClick(topic.id)

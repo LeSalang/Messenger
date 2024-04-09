@@ -5,6 +5,8 @@
     <dimen name="emoji_flex_box_interitem_spacing">10dp</dimen>
     <dimen name="message_user_logo_size">37dp</dimen>
 
+    <dimen name="message_width_factor">0.8</dimen>
+
     <dimen name="profile_user_logo_card_size">185dp</dimen>
     <dimen name="profile_user_logo_card_margin">16dp</dimen>
     <dimen name="profile_user_logo_card_radius">15dp</dimen>
@@ -30,4 +32,6 @@
     <dimen name="date_text_size">14sp</dimen>
     <dimen name="emoji_text_size">14sp</dimen>
     <dimen name="message_text_size">16sp</dimen>
+
+    <dimen name="error_text_size">40sp</dimen>
 </resources>

@@ -22,3 +22,8 @@ class CompositeAdapter(
         }
     }
 }
+
+@Suppress("UNCHECKED_CAST")
+fun delegatesList(vararg delegates: DelegateAdapter<*, *>): List<DelegateAdapter<DelegateItem, RecyclerView.ViewHolder>> {
+    return delegates.asList() as List<DelegateAdapter<DelegateItem, RecyclerView.ViewHolder>>
+}

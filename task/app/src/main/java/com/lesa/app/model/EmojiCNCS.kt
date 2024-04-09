@@ -1,10 +1,14 @@
 package com.lesa.app.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class EmojiCNCS(
     val category: String,
     val name: String,
-    val code: String
-) {
+    val code: String,
+) : Parcelable {
     fun getCodeString() = String(Character.toChars(code.toInt(16)))
 }
 

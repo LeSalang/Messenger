@@ -20,34 +20,32 @@ val stubChannels: MutableList<Channel>
                 Topic(id = 3372, name = "Basil Pratt", count = 3247, color = R.color.dark_green),
                 Topic(id = 2703, name = "Louie O'Neil", count = 2324, color = R.color.dark_orange),
                 Topic(id = 3, name = "Tuck", count = 3, color = R.color.dark_purple),
-            ), isSubscribed = true, isExpanded = false
+            ), isSubscribed = true
         ), Channel(
             id = 5000, name = "Chelsea Hewitt", topics = listOf(
                 Topic(id = 2703, name = "Louie O'Neil", count = 2324, color = R.color.dark_orange),
                 Topic(id = 3, name = "Tuck", count = 3, color = R.color.dark_red),
-            ), isSubscribed = true, isExpanded = false
+            ), isSubscribed = true
         ), Channel(
             id = 5480,
             name = "Warren Olson",
-            topics = listOf(),
-            isSubscribed = true,
-            isExpanded = false
+            topics = listOf(), isSubscribed = true
         ), Channel(
             id = 2277, name = "Rene Travis", topics = listOf(
                 Topic(id = 7591, name = "Merlin Navarro", count = 6097, color = R.color.dark_blue),
                 Topic(id = 3372, name = "Basil Pratt", count = 3247, color = R.color.dark_green),
                 Topic(id = 2703, name = "Louie O'Neil", count = 2324, color = R.color.dark_orange),
                 Topic(id = 3, name = "Tuck", count = 3, color = R.color.dark_purple),
-            ), isSubscribed = false, isExpanded = false
+            ), isSubscribed = false
         ), Channel(
             id = 7076, name = "Leroy Wolf", topics = listOf(
                 Topic(id = 2703, name = "Louie O'Neil", count = 2324, color = R.color.dark_orange),
                 Topic(id = 3, name = "Tuck", count = 3, color = R.color.dark_purple),
-            ), isSubscribed = false, isExpanded = false
+            ), isSubscribed = false
         ), Channel(
             id = 6987, name = "Gena Gibson", topics = listOf(
                 Topic(id = 7591, name = "Merlin Navarro", count = 6097, color = R.color.dark_blue)
-            ), isSubscribed = false, isExpanded = false
+            ), isSubscribed = false
         )
     )
 
@@ -120,14 +118,14 @@ val stubMessageList: List<Message>
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 5),
             type = MessageView.Model.Type.INCOMING
         ), Message(
-            id = 3481,
+            id = 12,
             senderName = "Джэйсон Стэтхэм",
             message = "Если заблудился в лесу, иди домой.",
             emojiList = listOf(),
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 4),
             type = MessageView.Model.Type.INCOMING
         ), Message(
-            id = 3481,
+            id = 1234,
             senderName = "Джэйсон Стэтхэм",
             message = "Запомни: всего одна ошибка – и ты ошибся.",
             emojiList = listOf(
@@ -140,7 +138,7 @@ val stubMessageList: List<Message>
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 1),
             type = MessageView.Model.Type.INCOMING
         ), Message(
-            id = 3481,
+            id = 12345,
             senderName = "Джэйсон Стэтхэм",
             message = "Я вообще делаю что хочу. Хочу импланты — звоню врачу.",
             emojiList = listOf(
@@ -153,7 +151,7 @@ val stubMessageList: List<Message>
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 8),
             type = MessageView.Model.Type.INCOMING
         ), Message(
-            id = 3481,
+            id = 67,
             senderName = "Джэйсон Стэтхэм",
             message = "Делай, как надо. Как не надо, не делай.",
             emojiList = listOf(
@@ -164,7 +162,7 @@ val stubMessageList: List<Message>
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 5),
             type = MessageView.Model.Type.INCOMING
         ), Message(
-            id = 3481,
+            id = 78,
             senderName = "Джэйсон Стэтхэм",
             message = "Жи-ши пиши от души.",
             emojiList = listOf(
@@ -186,7 +184,7 @@ val stubMessageList: List<Message>
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 5),
             type = MessageView.Model.Type.OUTGOING
         ), Message(
-            id = 245,
+            id = 89,
             senderName = "Я",
             message = "Жиза...",
             emojiList = listOf(
@@ -197,7 +195,7 @@ val stubMessageList: List<Message>
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 6),
             type = MessageView.Model.Type.OUTGOING
         ), Message(
-            id = 245,
+            id = 890,
             senderName = "Я",
             message = "понял)",
             emojiList = listOf(
@@ -208,7 +206,7 @@ val stubMessageList: List<Message>
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 4),
             type = MessageView.Model.Type.OUTGOING
         ), Message(
-            id = 245,
+            id = 891,
             senderName = "Я",
             message = "нипонял(",
             emojiList = listOf(
@@ -219,7 +217,7 @@ val stubMessageList: List<Message>
             date = Date(currentDateInMills - 1000 * 60 * 60 * 24 * 4),
             type = MessageView.Model.Type.OUTGOING
         ), Message(
-            id = 245,
+            id = 892,
             senderName = "Я",
             message = "Хватит мне писать!",
             emojiList = listOf(),

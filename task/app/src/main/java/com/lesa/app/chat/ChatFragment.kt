@@ -1,26 +1,33 @@
 package com.lesa.app.chat
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import com.lesa.app.App
 import com.lesa.app.R
+import com.lesa.app.Screens
 import com.lesa.app.chat.date.DateDelegateAdapter
+import com.lesa.app.chat.emoji_picker.EmojiPickerBottomSheetFragment
+import com.lesa.app.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.ON_SELECT_EMOJI_REQUEST_KEY
+import com.lesa.app.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_EMOJI_KEY
+import com.lesa.app.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_MESSAGE_KEY
 import com.lesa.app.chat.message.MessageDelegateAdapter
 import com.lesa.app.chat.message.MessageView
-import com.lesa.app.compositeAdapter.CompositeAdapter
-import com.lesa.app.compositeAdapter.DelegateAdapter
-import com.lesa.app.compositeAdapter.DelegateItem
+import com.lesa.app.composite_adapter.CompositeAdapter
+import com.lesa.app.composite_adapter.DelegateItem
+import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentChatBinding
-import com.lesa.app.emojiPicker.EmojiPickerBottomSheetFragment
 import com.lesa.app.model.Emoji
 import com.lesa.app.model.EmojiCNCS
 import com.lesa.app.model.Message
-import com.lesa.app.model.emojiSetCNCS
+import com.lesa.app.model.Topic
 import com.lesa.app.repositories.UserRepository
+import com.lesa.app.stubChannels
 import com.lesa.app.stubMessageList
 import java.util.Date
 
@@ -31,6 +38,7 @@ class ChatFragment : Fragment() {
     private val messages = stubMessageList.toMutableList() // TODO: move to VM
     private val userRepository = UserRepository() // TODO: move to VM
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,28 +48,43 @@ class ChatFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
+        setUpTitle(requireArguments().getInt(CHANNEL_ID_KEY))
+
+        childFragmentManager.setFragmentResultListener(
+            ON_SELECT_EMOJI_REQUEST_KEY, this
+        ) { requestKey, bundle ->
+            val emoji: EmojiCNCS? = bundle.getParcelable(SELECTED_EMOJI_KEY)
+            val messageId = bundle.getInt(SELECTED_MESSAGE_KEY)
+            if (emoji != null) {
+                onSelectEmoji(
+                    messageId = messageId, selectedEmojiCNCS = emoji
+                )
+            }
+        }
     }
 
     private fun setUpViews() {
         setUpRecycleView()
         setUpSendButton()
+        setUpBackButton()
     }
 
     private fun setUpRecycleView() {
-        val delegates: List<DelegateAdapter<DelegateItem, RecyclerView.ViewHolder>> = listOf(
-            MessageDelegateAdapter() as DelegateAdapter<DelegateItem, RecyclerView.ViewHolder>,
-            DateDelegateAdapter() as DelegateAdapter<DelegateItem, RecyclerView.ViewHolder>,
+        adapter = CompositeAdapter(
+            delegatesList(
+                MessageDelegateAdapter(), DateDelegateAdapter()
+            )
         )
-        adapter = CompositeAdapter(delegates)
         binding.chatRecyclerView.adapter = adapter
         updateList()
     }
 
     private fun setUpSendButton() {
-        binding.messageEditText.doOnTextChanged { text, start, before, count ->
+        binding.messageEditText.doOnTextChanged { _, _, _, _ ->
             if (binding.messageEditText.text.toString().isBlank()) {
                 binding.sendButton.setImageResource(R.drawable.circle_button_add_message_icon)
                 binding.sendButton.setBackgroundResource(R.drawable.circle_button_add_file_bg)
@@ -75,12 +98,18 @@ class ChatFragment : Fragment() {
         }
     }
 
+    private fun setUpBackButton() {
+        binding.backButton.setOnClickListener {
+            App.INSTANCE.router.backTo(Screens.Channels())
+            activity?.window?.statusBarColor = resources.getColor(R.color.gray_18)
+        }
+    }
+
     private fun updateList() {
         val userId = userRepository.currentUserId ?: return
         adapter.submitList(
             makeDelegateItems(
-                list = messages,
-                userId = userId
+                list = messages, userId = userId
             )
         )
     }
@@ -106,10 +135,9 @@ class ChatFragment : Fragment() {
 
     private fun makeDelegateItems(
         list: List<Message>,
-        userId: Int
-    ) : MutableList<DelegateItem> {
-        return ChatDelegateItemFactory().makeDelegateItems(
-            list = list,
+        userId: Int,
+    ): MutableList<DelegateItem> {
+        return ChatDelegateItemFactory().makeDelegateItems(list = list,
             userId = userId,
             showEmojiPicker = { message ->
                 showEmojiPicker(
@@ -118,53 +146,41 @@ class ChatFragment : Fragment() {
             },
             onSelectEmoji = { message, emojiCode ->
                 onSelectEmoji(
-                    message = message,
-                    emojiCode = emojiCode
+                    message = message, emojiCode = emojiCode
                 )
-            }
-        )
+            })
     }
 
     private fun showEmojiPicker(message: Message) {
-        val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment(
-            emojiList = emojiSetCNCS,
-            onSelect = {
-                onSelectEmoji(
-                    message = message,
-                    selectedEmojiCNCS = it
-                )
-            }
-        )
+        val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment.newInstance(message.id)
         emojiPickerBottomSheetFragment.show(
-            childFragmentManager,
-            EmojiPickerBottomSheetFragment.TAG
+            childFragmentManager, EmojiPickerBottomSheetFragment.TAG
         )
     }
 
     private fun onSelectEmoji(
-        message: Message,
-        selectedEmojiCNCS: EmojiCNCS
+        messageId: Int,
+        selectedEmojiCNCS: EmojiCNCS,
     ) {
+        val message: Message = messages.firstOrNull {
+            it.id == messageId
+        } ?: return
         val emojiCode = selectedEmojiCNCS.getCodeString()
         onSelectEmoji(
-            message = message,
-            emojiCode = emojiCode
+            message = message, emojiCode = emojiCode
         )
     }
 
     private fun onSelectEmoji(
         message: Message,
-        emojiCode: String
+        emojiCode: String,
     ) {
         val userId = userRepository.currentUserId ?: return
         val selectedEmoji = Emoji(
-            emojiCode = emojiCode,
-            userIds = setOf(userId)
+            emojiCode = emojiCode, userIds = setOf(userId)
         )
         val newEmojiList = updateEmojiList(
-            message = message,
-            userId = userId,
-            selectedEmoji = selectedEmoji
+            message = message, userId = userId, selectedEmoji = selectedEmoji
         )
         val newMessage = message.copy(emojiList = newEmojiList)
         val messageIndex = messages.indexOf(message)
@@ -175,8 +191,8 @@ class ChatFragment : Fragment() {
     private fun updateEmojiList(
         message: Message,
         userId: Int,
-        selectedEmoji: Emoji
-    ) : List<Emoji> {
+        selectedEmoji: Emoji,
+    ): List<Emoji> {
         val emojiIndex = message.emojiList.indexOfFirst {
             it.emojiCode == selectedEmoji.emojiCode
         }
@@ -185,19 +201,15 @@ class ChatFragment : Fragment() {
             val emoji = message.emojiList[emojiIndex]
             val isEmojiClicked = emoji.userIds.contains(userRepository.currentUserId)
             if (isEmojiClicked) {
-                emojiList[emojiIndex] = emoji.copy(
-                    count = emoji.count - 1,
+                emojiList[emojiIndex] = emoji.copy(count = emoji.count - 1,
                     userIds = emoji.userIds.toMutableSet().apply {
                         this.remove(userId)
-                    }
-                )
+                    })
             } else {
-                emojiList[emojiIndex] = emoji.copy(
-                    count = emoji.count + 1,
+                emojiList[emojiIndex] = emoji.copy(count = emoji.count + 1,
                     userIds = emoji.userIds.toMutableSet().apply {
                         this.add(userId)
-                    }
-                )
+                    })
             }
             if (emojiList[emojiIndex].count == 0) emojiList.removeAt(emojiIndex)
             emojiList
@@ -209,7 +221,30 @@ class ChatFragment : Fragment() {
         return newEmojiList
     }
 
+    private fun setUpTitle(id: Int) {
+        val topics = mutableListOf<Topic>()
+        stubChannels.map { channel ->
+            channel.topics.forEach {
+                topics.add(it)
+            }
+        }
+        val topic = topics.first {
+            it.id == id
+        }
+        binding.toolBar.setBackgroundResource(topic.color)
+        activity?.window?.statusBarColor = resources.getColor(topic.color)
+        binding.title.text = topic.name
+    }
+
     companion object {
-        const val TAG = "ChatFragment"
+        private const val CHANNEL_ID_KEY = "user_id_key"
+
+        fun getNewInstance(channelId: Int): ChatFragment {
+            return ChatFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(CHANNEL_ID_KEY, channelId)
+                }
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if (savedInstanceState == null) router.newRootScreen(Screens.Main())
+        window?.statusBarColor = resources.getColor(R.color.gray_18)
     }
 
     override fun onResumeFragments() {

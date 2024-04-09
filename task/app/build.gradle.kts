@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -39,6 +40,11 @@ android {
 }
 
 dependencies {
+    implementation(libs.facebook.shimmer)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.fragment)
+    implementation(libs.viewpager2)
+    implementation(libs.cicerone)
     implementation(libs.google.android.flexbox)
     implementation(libs.picasso)
     implementation(libs.androidx.core.ktx)

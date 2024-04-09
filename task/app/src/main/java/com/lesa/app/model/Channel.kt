@@ -5,5 +5,4 @@ data class Channel(
     val name: String,
     val topics: List<Topic>,
     val isSubscribed: Boolean,
-    val isExpanded: Boolean
 )

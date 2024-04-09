@@ -6,20 +6,22 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentChannelsBinding
+import kotlinx.coroutines.launch
 
 class ChannelsFragment : Fragment() {
     private var _binding: FragmentChannelsBinding? = null
     private val binding
         get() = _binding!! // TODO
 
-    private var searchView: SearchView? = null
-    private lateinit var queryTextListener: SearchView.OnQueryTextListener
-    private var isSearch = false
+    private val viewModel: ChannelsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,36 +34,47 @@ class ChannelsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpSearchView() // TODO: It hasn't worked yet((
+        setUpSearchView()
         setUpPager()
+        lifecycleScope.launch {
+            viewModel.loadChannels()
+        }
+
+        binding.searchEditText.addTextChangedListener {
+            it?.let {
+                viewModel.searchQuery.tryEmit(it.toString())
+            }
+        }
     }
 
     private fun setUpPager() {
-        val tabsNames: List<Int> = listOf(R.string.channels_subscribed, R.string.channels_all_streams)
+        val pages = listOf(ChannelsScreenType.SUBSCRIBED, ChannelsScreenType.ALL)
         val pagerAdapter = PagerAdapter(childFragmentManager, lifecycle)
         val tabLayout = binding.tabLayout
         val fragmentViewPager = binding.fragmentViewPager
         binding.fragmentViewPager.adapter = pagerAdapter
-        pagerAdapter.update(listOf(
-            createPagerFragment(ChannelsPagerFragment(), PAGER_SUBSCRIBED),
-            createPagerFragment(ChannelsPagerFragment(), PAGER_ALL)
-        ))
+        pagerAdapter.update(
+            listOf(
+            ChannelsPagerFragment(),
+            ChannelsPagerFragment()
+            )
+        )
         TabLayoutMediator(tabLayout, fragmentViewPager) { tab, position ->
-            tab.text = resources.getString(tabsNames[position])
+            tab.text = resources.getString(pages[position].title)
         }.attach()
-    }
-
-    private fun createPagerFragment(fragment: Fragment, arg: String) : Fragment {
-        val arguments = Bundle()
-        arguments.putString(PAGER_KEY, arg)
-        fragment.arguments = arguments
-        return fragment
+        binding.fragmentViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                viewModel.setUpScreenType(pages[position])
+            }
+        })
     }
 
     private fun setUpSearchView() {
         binding.apply {
             searchIcon.setOnClickListener {
-                if (isSearch) {
+                if (viewModel.isTitleSearch) {
                     searchIcon.setImageResource(R.drawable.icon_close)
                     searchTitle.visibility = GONE
                     searchEditText.visibility = VISIBLE
@@ -69,37 +82,10 @@ class ChannelsFragment : Fragment() {
                     searchIcon.setImageResource(R.drawable.icon_search)
                     searchTitle.visibility = VISIBLE
                     searchEditText.visibility = GONE
+                    searchEditText.text.clear()
                 }
-                isSearch = !isSearch
+                viewModel.isTitleSearch = !viewModel.isTitleSearch
             }
         }
-
-       /* binding.toolBar.inflateMenu(R.menu.search_menu)
-        setHasOptionsMenu(true)
-        val searchItem = binding.toolBar.menu.findItem(R.id.search)*/
-        /*val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        if (searchItem != null) {
-            searchView = searchItem.actionView as SearchView
-        }
-        if (searchView != null) {
-            searchView!!.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-            queryTextListener = object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    Log.i("onQueryTextChange", newText!!)
-                    return true
-                }
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    Log.i("onQueryTextSubmit", query!!)
-                    return true
-                }
-            }
-            searchView!!.setOnQueryTextListener(queryTextListener)
-        }*/
-    }
-
-    companion object {
-        const val PAGER_KEY = "PagerKey"
-        const val PAGER_SUBSCRIBED = "PagerSubscribedStreams"
-        const val PAGER_ALL = "PagerAllStreams"
     }
 }

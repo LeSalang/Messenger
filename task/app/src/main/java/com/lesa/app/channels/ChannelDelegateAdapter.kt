@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
 import com.lesa.app.composite_adapter.DelegateAdapter
 import com.lesa.app.databinding.ItemChannelBinding
-import com.lesa.app.model.Channel
 
 class ChannelDelegateAdapter (
     private val onClick: (Int) -> Unit
@@ -20,17 +19,17 @@ class ChannelDelegateAdapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, item: ChannelDelegateItem) {
-        holder.bind(item.channel)
+        holder.bind(item)
     }
 
     class ViewHolder(view: View, val onClick: (Int) -> Unit) : RecyclerView.ViewHolder(view) {
         private val binding = ItemChannelBinding.bind(itemView)
 
-        fun bind(channel: Channel) {
-            binding.channelNameTextView.text = channel.name
-            binding.channelExpandIcon.isSelected = channel.isExpanded
+        fun bind(item: ChannelDelegateItem) {
+            binding.channelNameTextView.text = item.channel.name
+            binding.channelExpandIcon.isSelected = item.isExpanded
             itemView.setOnClickListener {
-                onClick(channel.id)
+                onClick(item.channel.id)
             }
         }
     }
