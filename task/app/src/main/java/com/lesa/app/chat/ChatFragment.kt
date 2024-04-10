@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.App
 import com.lesa.app.R
 import com.lesa.app.Screens
@@ -107,11 +109,11 @@ class ChatFragment : Fragment() {
 
     private fun updateList() {
         val userId = userRepository.currentUserId ?: return
-        adapter.submitList(
-            makeDelegateItems(
-                list = messages, userId = userId
-            )
-        )
+        val delegateItems = makeDelegateItems(list = messages, userId = userId)
+        adapter.submitList(delegateItems) {
+            binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
+        }
+
     }
 
     private fun addMessage() {
@@ -120,7 +122,7 @@ class ChatFragment : Fragment() {
             // TODO: show attachments picker
         } else {
             val message = Message(
-                id = id,
+                id = Date().time.toInt(),
                 senderName = "", // TODO: implement in the future homeworks
                 message = messageText,
                 emojiList = emptyList(),
