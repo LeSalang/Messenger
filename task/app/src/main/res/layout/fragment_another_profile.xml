@@ -24,6 +24,7 @@
             android:gravity="center"
             android:text="@string/title_profile"
             android:textColor="@color/white"
+            android:paddingRight="50dp"
             android:textSize="@dimen/appbar_title_text_size" />
 
     </Toolbar>
@@ -31,8 +32,8 @@
     <include
         android:id="@+id/include"
         layout="@layout/item_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="113dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>

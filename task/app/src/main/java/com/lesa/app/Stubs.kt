@@ -56,35 +56,30 @@ val stubPeople: List<User>
             name = "Josh Heath",
             email = "jamie.caldwell@example.com",
             avatar = R.drawable.avatar,
-            chatStatus = "vestibulum",
             netStatus = UserNetStatus.ACTIVE
         ), User(
             id = 2332,
             name = "Darius Shepherd",
             email = "marquis.benjamin@example.com",
             avatar = R.drawable.avatar,
-            chatStatus = "feugait",
             netStatus = UserNetStatus.IDLE
         ), User(
             id = 1161,
             name = "Erwin Koch",
             email = "agustin.harper@example.com",
             avatar = R.drawable.avatar,
-            chatStatus = "patrioque",
             netStatus = UserNetStatus.OFFLINE
         ), User(
             id = 4158,
             name = "Kasey Hardin",
             email = "dewayne.ryan@example.com",
             avatar = R.drawable.avatar,
-            chatStatus = "docendi",
             netStatus = UserNetStatus.ACTIVE
         ), User(
             id = 7738,
             name = "Greta Bell",
             email = "deborah.pittman@example.com",
             avatar = R.drawable.avatar,
-            chatStatus = "sit",
             netStatus = UserNetStatus.ACTIVE
         )
     )

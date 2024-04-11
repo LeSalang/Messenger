@@ -5,6 +5,5 @@ data class User(
     val name: String,
     val email: String,
     val avatar: Int,
-    val chatStatus: String,
     val netStatus: UserNetStatus
 )

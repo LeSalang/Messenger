@@ -31,7 +31,6 @@ class ProfileFragment : Fragment() {
     private fun setUpUserView(user: User) {
         binding.include.apply {
             userNameTextView.text = user.name
-            userChatStatusTextView.text = user.chatStatus
             userNetStatusTextView.text = resources.getString(user.netStatus.text)
             userNetStatusTextView.setTextColor(resources.getColor(user.netStatus.color))
             Picasso.get().load(user.avatar).into(userLogoImage)
