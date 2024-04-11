@@ -1,35 +1,35 @@
 [versions]
-picasso = "2.8"
-agp = "8.3.1"
-kotlin = "1.9.0"
-coreKtx = "1.12.0"
-appcompat = "1.6.1"
-material = "1.11.0"
 activity = "1.8.2"
-constraintlayout = "2.1.4"
-kotlinPlugin = "1.8.10"
-flexbox = "3.0.0"
+agp = "8.3.1"
+appcompat = "1.6.1"
 cicerone = "7.1"
-viewpager2 = "1.0.0"
-fragment = "1.6.2"
-kotlinx-coroutines-android = "1.6.4"
+constraintlayout = "2.1.4"
+coreKtx = "1.12.0"
 facebook-shimmer = "0.5.0"
+flexbox = "3.0.0"
+fragment = "1.6.2"
 kirich1409-viewbindingpropertydelegate = "1.5.9"
+kotlin = "1.9.0"
+kotlinPlugin = "1.8.10"
+kotlinx-coroutines-android = "1.6.4"
+material = "1.11.0"
+picasso = "2.8"
+viewpager2 = "1.0.0"
 
 [libraries]
-kirich1409-viewbindingpropertydelegate = { group = "com.github.kirich1409", name = "viewbindingpropertydelegate", version.ref = "kirich1409-viewbindingpropertydelegate"}
-facebook-shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "facebook-shimmer"}
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android"}
-fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment"}
-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2"}
-cicerone = { group = "com.github.terrakok", name = "cicerone", version.ref = "cicerone"}
-google-android-flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox"}
-picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso"}
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+cicerone = { group = "com.github.terrakok", name = "cicerone", version.ref = "cicerone"}
+facebook-shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "facebook-shimmer"}
+fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment"}
+google-android-flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox"}
+kirich1409-viewbindingpropertydelegate = { group = "com.github.kirich1409", name = "viewbindingpropertydelegate", version.ref = "kirich1409-viewbindingpropertydelegate"}
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android"}
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso"}
+viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
