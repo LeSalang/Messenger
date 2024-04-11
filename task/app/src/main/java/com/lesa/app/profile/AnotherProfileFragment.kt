@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App.Companion.INSTANCE
 import com.lesa.app.Screens
 import com.lesa.app.databinding.FragmentAnotherProfileBinding
@@ -12,16 +14,13 @@ import com.lesa.app.stubPeople
 import com.squareup.picasso.Picasso
 
 class AnotherProfileFragment : Fragment() {
-    private var _binding: FragmentAnotherProfileBinding? = null
-    private val binding
-        get() = _binding!! // TODO
+    private val binding: FragmentAnotherProfileBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentAnotherProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 

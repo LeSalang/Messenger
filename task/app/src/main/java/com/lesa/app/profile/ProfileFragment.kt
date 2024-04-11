@@ -5,22 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.databinding.FragmentProfileBinding
 import com.lesa.app.model.User
 import com.lesa.app.stubPeople
 import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
-    private var _binding: FragmentProfileBinding? = null
-    private val binding
-        get() = _binding!! // TODO
+    private val binding: FragmentProfileBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 

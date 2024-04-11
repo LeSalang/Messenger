@@ -14,9 +14,10 @@ viewpager2 = "1.0.0"
 fragment = "1.6.2"
 kotlinx-coroutines-android = "1.6.4"
 facebook-shimmer = "0.5.0"
-
+kirich1409-viewbindingpropertydelegate = "1.5.9"
 
 [libraries]
+kirich1409-viewbindingpropertydelegate = { group = "com.github.kirich1409", name = "viewbindingpropertydelegate", version.ref = "kirich1409-viewbindingpropertydelegate"}
 facebook-shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "facebook-shimmer"}
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android"}
 fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment"}

@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App
 import com.lesa.app.R
 import com.lesa.app.Screens
@@ -18,10 +20,8 @@ import com.lesa.app.databinding.FragmentChannelsPagerBinding
 import kotlinx.coroutines.launch
 
 class ChannelsPagerFragment : Fragment() {
-    private var _binding: FragmentChannelsPagerBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentChannelsPagerBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private lateinit var adapter: CompositeAdapter
-
     private val viewModel: ChannelsViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -29,7 +29,6 @@ class ChannelsPagerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentChannelsPagerBinding.inflate(inflater, container, false)
         return binding.root
     }
 

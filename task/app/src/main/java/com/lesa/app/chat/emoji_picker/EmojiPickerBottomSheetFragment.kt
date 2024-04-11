@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -13,8 +15,7 @@ import com.lesa.app.model.EmojiCNCS
 import com.lesa.app.model.emojiSetCNCS
 
 class EmojiPickerBottomSheetFragment : BottomSheetDialogFragment() {
-    private var _binding: FragmentEmojiPickerBottomSheetBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentEmojiPickerBottomSheetBinding by viewBinding(createMethod = CreateMethod.INFLATE)
 
     private lateinit var adapter: EmojiPickerAdapter
 
@@ -23,7 +24,6 @@ class EmojiPickerBottomSheetFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentEmojiPickerBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
     }
 

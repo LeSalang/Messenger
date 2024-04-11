@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App.Companion.INSTANCE
 import com.lesa.app.Screens
 import com.lesa.app.composite_adapter.CompositeAdapter
@@ -15,10 +17,7 @@ import com.lesa.app.model.User
 import com.lesa.app.stubPeople
 
 class PeopleFragment: Fragment() {
-    private var _binding: FragmentPeopleBinding? = null
-    private val binding
-        get() = _binding!! // TODO
-
+    private val binding: FragmentPeopleBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private lateinit var adapter: CompositeAdapter
 
     override fun onCreateView(
@@ -26,7 +25,6 @@ class PeopleFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentPeopleBinding.inflate(inflater, container, false)
         return binding.root
     }
 

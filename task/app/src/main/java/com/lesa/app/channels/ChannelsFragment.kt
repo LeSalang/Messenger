@@ -11,16 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentChannelsBinding
 import kotlinx.coroutines.launch
 
 class ChannelsFragment : Fragment() {
-    private var _binding: FragmentChannelsBinding? = null
-    private val binding
-        get() = _binding!! // TODO
-
+    private val binding: FragmentChannelsBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: ChannelsViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -28,7 +27,6 @@ class ChannelsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentChannelsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

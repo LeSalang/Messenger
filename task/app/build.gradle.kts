@@ -40,16 +40,17 @@ android {
 }
 
 dependencies {
-    implementation(libs.facebook.shimmer)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.fragment)
-    implementation(libs.viewpager2)
-    implementation(libs.cicerone)
-    implementation(libs.google.android.flexbox)
-    implementation(libs.picasso)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.cicerone)
+    implementation(libs.facebook.shimmer)
+    implementation(libs.fragment)
+    implementation(libs.google.android.flexbox)
+    implementation(libs.kirich1409.viewbindingpropertydelegate)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.material)
+    implementation(libs.picasso)
+    implementation(libs.viewpager2)
 }

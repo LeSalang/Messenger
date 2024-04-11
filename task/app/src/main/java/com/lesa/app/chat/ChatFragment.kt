@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App
 import com.lesa.app.R
 import com.lesa.app.Screens
@@ -34,19 +34,16 @@ import com.lesa.app.stubMessageList
 import java.util.Date
 
 class ChatFragment : Fragment() {
-    private var _binding: FragmentChatBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentChatBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private lateinit var adapter: CompositeAdapter
     private val messages = stubMessageList.toMutableList() // TODO: move to VM
     private val userRepository = UserRepository() // TODO: move to VM
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentChatBinding.inflate(inflater, container, false)
         return binding.root
     }
 
