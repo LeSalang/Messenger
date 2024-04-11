@@ -91,7 +91,10 @@ class MessageView @JvmOverloads constructor(
         )
     }
 
-    fun update(model: Model) {
+    fun update(
+        model: Model,
+        actions: Actions
+    ) {
         if (this.model?.avatar != model.avatar) {
             Picasso.get().load(model.avatar).into(logoImageView)
         }
@@ -120,11 +123,15 @@ class MessageView @JvmOverloads constructor(
         }
         this.model = model
         textCard.setOnLongClickListener {
-            model.onLongClick.invoke()
+            actions.onLongClick(model.id)
             true
         }
-        emojiFlexBox.addEmojiClickListener(model.onEmojiClick)
-        emojiFlexBox.addPlusButtonClickListener(model.onPlusButtonClick)
+        emojiFlexBox.addEmojiClickListener { emojiCode ->
+            actions.onEmojiClick(model.id, emojiCode)
+        }
+        emojiFlexBox.addPlusButtonClickListener {
+            actions.onPlusButtonClick(model.id)
+        }
     }
 
     data class Model(
@@ -134,14 +141,17 @@ class MessageView @JvmOverloads constructor(
         val text: String,
         val emojiList: List<EmojiView.Model>,
         val type: Type,
-        val onLongClick: () -> Unit,
-        val onEmojiClick: (String) -> Unit,
-        val onPlusButtonClick: () -> Unit,
     ) {
         enum class Type {
             INCOMING, OUTGOING
         }
     }
+
+    data class Actions(
+        val onLongClick: (Int) -> Unit,
+        val onEmojiClick: (Int, String) -> Unit,
+        val onPlusButtonClick: (Int) -> Unit,
+    )
 
     companion object {
         private const val MESSAGE_WIDTH_FACTOR = 0.8

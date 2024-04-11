@@ -15,9 +15,10 @@ class EmojiPickerAdapter(
         viewType: Int,
     ): ViewHolder {
         return ViewHolder(
-            ItemEmojiBinding.inflate(
+            _binding = ItemEmojiBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onSelect
+            ),
+            onSelect = onSelect
         )
     }
 

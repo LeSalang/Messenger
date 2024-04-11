@@ -75,7 +75,33 @@ class ChatFragment : Fragment() {
     private fun setUpRecycleView() {
         adapter = CompositeAdapter(
             delegatesList(
-                MessageDelegateAdapter(), DateDelegateAdapter()
+                MessageDelegateAdapter(
+                    actions = MessageView.Actions(
+                        onLongClick = { id ->
+                            showEmojiPicker(
+                                message = messages.first {
+                                    it.id == id
+                                }
+                            )
+                        },
+                        onEmojiClick = { id, emojiCode ->
+                            onSelectEmoji(
+                                message = messages.first {
+                                    it.id == id
+                                },
+                                emojiCode = emojiCode
+                            )
+                        },
+                        onPlusButtonClick = { id ->
+                            showEmojiPicker(
+                                message = messages.first {
+                                    it.id == id
+                                }
+                            )
+                        }
+                    )
+                ),
+                DateDelegateAdapter()
             )
         )
         binding.chatRecyclerView.adapter = adapter
@@ -136,18 +162,10 @@ class ChatFragment : Fragment() {
         list: List<Message>,
         userId: Int,
     ): MutableList<DelegateItem> {
-        return ChatDelegateItemFactory().makeDelegateItems(list = list,
-            userId = userId,
-            showEmojiPicker = { message ->
-                showEmojiPicker(
-                    message = message
-                )
-            },
-            onSelectEmoji = { message, emojiCode ->
-                onSelectEmoji(
-                    message = message, emojiCode = emojiCode
-                )
-            })
+        return ChatDelegateItemFactory().makeDelegateItems(
+            list = list,
+            userId = userId
+        )
     }
 
     private fun showEmojiPicker(message: Message) {

@@ -2,20 +2,18 @@ package com.lesa.app.chat
 
 import com.lesa.app.R
 import com.lesa.app.chat.date.DateDelegateItem
-import com.lesa.app.chat.message.emoji.EmojiView
 import com.lesa.app.chat.message.MessageDelegateItem
 import com.lesa.app.chat.message.MessageView
-import com.lesa.app.compositeAdapter.DelegateItem
+import com.lesa.app.chat.message.emoji.EmojiView
+import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.model.Message
 import java.text.SimpleDateFormat
 
-class ChatDelegateItemFactory() {
+class ChatDelegateItemFactory {
     fun makeDelegateItems(
         list: List<Message>,
         userId: Int,
-        showEmojiPicker: (Message) -> Unit,
-        onSelectEmoji: (message: Message, emojiCode: String) -> Unit
-    ) : MutableList<DelegateItem> {
+    ): MutableList<DelegateItem> {
         val formatter = SimpleDateFormat("yyyyMMdd")
         val messagesGroupedByDates = list.groupBy {
             formatter.format(it.date)
@@ -38,17 +36,7 @@ class ChatDelegateItemFactory() {
                             isSelected = it.userIds.contains(userId)
                         )
                     },
-                    type = message.type,
-                    onLongClick = { showEmojiPicker(message) },
-                    onEmojiClick = {
-                        onSelectEmoji(
-                            message,
-                            it
-                        )
-                    },
-                    onPlusButtonClick = {
-                        showEmojiPicker(message)
-                    }
+                    type = message.type
                 )
                 result.add(
                     MessageDelegateItem(itemModel)
