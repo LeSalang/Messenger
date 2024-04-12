@@ -28,7 +28,6 @@ import com.lesa.app.model.Emoji
 import com.lesa.app.model.EmojiCNCS
 import com.lesa.app.model.Message
 import com.lesa.app.model.Topic
-import com.lesa.app.repositories.UserRepository
 import com.lesa.app.stubChannels
 import com.lesa.app.stubMessageList
 import java.util.Date
@@ -37,7 +36,6 @@ class ChatFragment : Fragment() {
     private val binding: FragmentChatBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private lateinit var adapter: CompositeAdapter
     private val messages = stubMessageList.toMutableList() // TODO: move to VM
-    private val userRepository = UserRepository() // TODO: move to VM
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -131,7 +129,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun updateList() {
-        val userId = userRepository.currentUserId ?: return
+        val userId = 1234
         val delegateItems = makeDelegateItems(list = messages, userId = userId)
         adapter.submitList(delegateItems) {
             binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
@@ -192,7 +190,7 @@ class ChatFragment : Fragment() {
         message: Message,
         emojiCode: String,
     ) {
-        val userId = userRepository.currentUserId ?: return
+        val userId = 1234
         val selectedEmoji = Emoji(
             emojiCode = emojiCode, userIds = setOf(userId)
         )
@@ -216,7 +214,7 @@ class ChatFragment : Fragment() {
         val newEmojiList = if (emojiIndex != -1) {
             val emojiList = message.emojiList.toMutableList()
             val emoji = message.emojiList[emojiIndex]
-            val isEmojiClicked = emoji.userIds.contains(userRepository.currentUserId)
+            val isEmojiClicked = emoji.userIds.contains(1234)
             if (isEmojiClicked) {
                 emojiList[emojiIndex] = emoji.copy(count = emoji.count - 1,
                     userIds = emoji.userIds.toMutableSet().apply {

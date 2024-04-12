@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -51,6 +52,11 @@ dependencies {
     implementation(libs.kirich1409.viewbindingpropertydelegate)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.material)
+    implementation(libs.okhttp3)
+    implementation(libs.okhttp3.interceptor)
     implementation(libs.picasso)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter)
+    implementation(libs.serialization)
     implementation(libs.viewpager2)
 }
