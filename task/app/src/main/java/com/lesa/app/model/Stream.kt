@@ -1,8 +1,9 @@
 package com.lesa.app.model
 
-data class Channel(
+data class Stream(
     val id: Int,
     val name: String,
-    val topics: List<Topic>,
     val isSubscribed: Boolean,
+    val topics: List<Topic>,
+    val color: String?
 )

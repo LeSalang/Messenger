@@ -3,6 +3,8 @@ package com.lesa.app
 import android.content.Context
 import com.lesa.app.api.Api
 import com.lesa.app.interceptors.AuthHeaderInterceptor
+import com.lesa.app.repositories.StreamsRepository
+import com.lesa.app.repositories.StreamsRepositoryImpl
 import com.lesa.app.repositories.UserRepository
 import com.lesa.app.repositories.UserRepositoryImpl
 import kotlinx.serialization.json.Json
@@ -14,9 +16,10 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 interface AppContainer {
     val userRepository: UserRepository
+    val streamsRepository: StreamsRepository
 }
 
-class DefaultAppContainer(private val context: Context) : AppContainer {
+class DefaultAppContainer() : AppContainer {
     private val baseUrl = "https://tinkoff-android-spring-2024.zulipchat.com/api/v1/"
 
     private val authClient = OkHttpClient
@@ -44,10 +47,14 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         .build()
 
     private val api: Api by lazy {
-        retrofit.create(Api :: class.java)
+        retrofit.create(Api::class.java)
     }
 
     override val userRepository: UserRepository by lazy {
         UserRepositoryImpl(api = api)
+    }
+
+    override val streamsRepository: StreamsRepository by lazy {
+        StreamsRepositoryImpl(api = api)
     }
 }

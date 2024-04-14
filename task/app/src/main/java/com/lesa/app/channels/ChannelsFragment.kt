@@ -8,19 +8,17 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentChannelsBinding
-import kotlinx.coroutines.launch
 
 class ChannelsFragment : Fragment() {
     private val binding: FragmentChannelsBinding by viewBinding(createMethod = CreateMethod.INFLATE)
-    private val viewModel: ChannelsViewModel by activityViewModels()
+    private val viewModel: ChannelsViewModel by viewModels { ChannelsViewModelFactory(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +32,7 @@ class ChannelsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpSearchView()
         setUpPager()
-        lifecycleScope.launch {
-            viewModel.loadChannels()
-        }
+        viewModel.loadChannels()
 
         binding.searchEditText.addTextChangedListener {
             it?.let {

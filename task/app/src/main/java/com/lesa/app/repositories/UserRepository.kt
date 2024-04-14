@@ -5,7 +5,8 @@ import com.lesa.app.model.User
 import com.lesa.app.model.api_models.toUser
 
 interface UserRepository {
-    suspend fun getAllUsers(): List<User>
+    suspend fun getAllUsers() : List<User>
+    suspend fun getOwnUser() : User
 }
 
 class UserRepositoryImpl(
@@ -17,5 +18,9 @@ class UserRepositoryImpl(
         return api.getAllUsers().users.map {
             it.toUser()
         }
+    }
+
+    override suspend fun getOwnUser(): User {
+        return api.getOwnUser().toUser()
     }
 }

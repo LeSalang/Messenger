@@ -1,11 +1,11 @@
 package com.lesa.app.channels
 
 import com.lesa.app.composite_adapter.DelegateItem
-import com.lesa.app.model.Channel
+import com.lesa.app.model.Stream
 
 class ChannelsDelegateItemFactory {
     fun makeDelegateItems(
-        list: List<Channel>,
+        list: List<Stream>,
         expandedChannelId: Int?,
     ): MutableList<DelegateItem> {
         val result = mutableListOf<DelegateItem>()

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class PeopleFragment: Fragment() {
     private val binding: FragmentPeopleBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private lateinit var adapter: CompositeAdapter
-    private val viewModel: UserViewModel by viewModels { UserViewModelFactory(requireContext()) }
+    private val viewModel: PeopleViewModel by viewModels { UserViewModelFactory(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +36,7 @@ class PeopleFragment: Fragment() {
         setUpRecyclerView()
         viewModel.getAllUsers()
         lifecycleScope.launch {
-            viewModel.users.collect(::updateList)
+            viewModel.state.collect(::render)
         }
     }
 
@@ -50,7 +50,38 @@ class PeopleFragment: Fragment() {
     }
 
     private fun openProfile(userId: Int) {
-        INSTANCE.router.navigateTo(Screens.AnotherProfile(userId = userId))
+        val users = viewModel.state.value.users
+        val user = users.firstOrNull {
+            it.id == userId
+        }
+        if (user != null) INSTANCE.router.navigateTo(Screens.AnotherProfile(user = user))
+    }
+
+    private fun render(state: PeopleScreenState) {
+        when (state) {
+            is PeopleScreenState.DataLoaded -> {
+                binding.apply {
+                    peopleRecyclerView.visibility = View.VISIBLE
+                    error.errorItem.visibility = View.GONE
+                    shimmerLayout.visibility = View.GONE
+                }
+                updateList(list = state.users)
+            }
+            PeopleScreenState.Error -> {
+                binding.apply {
+                    peopleRecyclerView.visibility = View.GONE
+                    error.errorItem.visibility = View.VISIBLE
+                    shimmerLayout.visibility = View.GONE
+                }
+            }
+            PeopleScreenState.Loading -> {
+                binding.apply {
+                    peopleRecyclerView.visibility = View.GONE
+                    error.errorItem.visibility = View.GONE
+                    shimmerLayout.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     private fun updateList(list: List<User>) {

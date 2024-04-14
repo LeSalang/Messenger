@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/gray_18"
     android:layout_width="match_parent"
@@ -36,15 +35,9 @@
     </com.facebook.shimmer.ShimmerFrameLayout>
 
 
-    <TextView
-        android:id="@+id/renderStatusMessage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/error"
-        android:textColor="@color/gray_234"
-        android:gravity="center"
-        android:textSize="@dimen/error_text_size"
-        android:visibility="invisible"
-        />
+    <include
+        android:id="@+id/error"
+        layout="@layout/item_error"
+        android:visibility="gone"/>
 
 </FrameLayout>

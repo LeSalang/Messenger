@@ -15,6 +15,8 @@ data class AllUsersApiDto(
 data class UserApiDto(
     @SerialName("user_id")
     val id: Int,
+    @SerialName("delivery_email")
+    val deliveryEmail: String?,
     @SerialName("email")
     val email: String,
     @SerialName("full_name")
@@ -31,7 +33,7 @@ fun UserApiDto.toUser() : User {
     return User(
         id = id,
         name = name,
-        email = email,
+        email = deliveryEmail ?: email,
         avatar = avatar,
         netStatus = UserNetStatus.ACTIVE
     )

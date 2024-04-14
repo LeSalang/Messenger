@@ -28,7 +28,6 @@ import com.lesa.app.model.Emoji
 import com.lesa.app.model.EmojiCNCS
 import com.lesa.app.model.Message
 import com.lesa.app.model.Topic
-import com.lesa.app.stubChannels
 import com.lesa.app.stubMessageList
 import java.util.Date
 
@@ -134,7 +133,6 @@ class ChatFragment : Fragment() {
         adapter.submitList(delegateItems) {
             binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
         }
-
     }
 
     private fun addMessage() {
@@ -238,17 +236,17 @@ class ChatFragment : Fragment() {
 
     private fun setUpTitle(id: Int) {
         val topics = mutableListOf<Topic>()
-        stubChannels.map { channel ->
+        /*stubStreams.map { channel ->
             channel.topics.forEach {
                 topics.add(it)
             }
-        }
-        val topic = topics.first {
+        }*/
+        /*val topic = topics.first {
             it.id == id
         }
         binding.toolBar.setBackgroundResource(topic.color)
         activity?.window?.statusBarColor = resources.getColor(topic.color)
-        binding.title.text = topic.name
+        binding.title.text = topic.name*/
     }
 
     companion object {

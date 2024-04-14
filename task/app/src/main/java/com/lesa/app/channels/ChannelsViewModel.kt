@@ -1,10 +1,13 @@
 package com.lesa.app.channels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.lesa.app.App
 import com.lesa.app.R
-import com.lesa.app.model.Channel
-import com.lesa.app.stubChannels
+import com.lesa.app.model.Stream
+import com.lesa.app.repositories.StreamsRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -19,15 +22,18 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
-class ChannelsViewModel : ViewModel() {
+class ChannelsViewModel(
+    private val streamsRepository: StreamsRepository
+) : ViewModel() {
     private val _state: MutableStateFlow<ChannelsScreenState> =
         MutableStateFlow(ChannelsScreenState.Initial)
     val state: StateFlow<ChannelsScreenState>
         get() = _state.asStateFlow()
     val searchQuery = MutableSharedFlow<String>(extraBufferCapacity = 1)
 
-    private var allChannels = mutableListOf<Channel>()
+    private var allStreams = mutableListOf<Stream>()
 
     var isTitleSearch: Boolean = false
     private var channelScreenType = ChannelsScreenType.SUBSCRIBED
@@ -48,7 +54,7 @@ class ChannelsViewModel : ViewModel() {
 
     }
 
-    private suspend fun search(query: String): ChannelsScreenState {
+    private fun search(query: String): ChannelsScreenState {
         runCatchingNonCancellation {
             searchChannels(query = query)
         }.fold(onSuccess = {
@@ -58,14 +64,13 @@ class ChannelsViewModel : ViewModel() {
         })
     }
 
-    private suspend fun searchChannels(query: String): List<Channel> { // TODO: move to repository
+    private fun searchChannels(query: String): List<Stream> { // TODO: move to repository
         val refactoredQuery = query.trim(' ')
-        val list = allChannels.filter { channel ->
+        val list = allStreams.filter { channel ->
             channel.topics.any { topic ->
                 topic.name.contains(refactoredQuery, ignoreCase = true)
             } || channel.name.contains(refactoredQuery, ignoreCase = true)
         }
-        delay(3000)
         return list
     }
 
@@ -74,12 +79,12 @@ class ChannelsViewModel : ViewModel() {
             is ChannelsScreenState.DataLoaded -> {
                 val list = when (channelScreenType) {
                     ChannelsScreenType.SUBSCRIBED -> {
-                        allChannels.filter {
+                        allStreams.filter {
                             it.isSubscribed
                         }.toMutableList()
                     }
 
-                    ChannelsScreenType.ALL -> allChannels
+                    ChannelsScreenType.ALL -> allStreams
                 }
                 _state.value = ChannelsScreenState.DataLoaded(list = list)
             }
@@ -90,15 +95,17 @@ class ChannelsViewModel : ViewModel() {
         }
     }
 
-    suspend fun loadChannels() {
-        allChannels = stubChannels
-        delay(500) // imitation of downloading
-        if ((0..2).random() == 0) {
-            _state.value = ChannelsScreenState.Error
-        } else {
-            _state.value = ChannelsScreenState.DataLoaded(list = allChannels)
+    fun loadChannels() {
+        viewModelScope.launch {
+            _state.value = ChannelsScreenState.Loading
+            try {
+                allStreams = streamsRepository.getAllStreams().toMutableList()
+                _state.value = ChannelsScreenState.DataLoaded(allStreams)
+                filterChannels()
+            } catch (e: Exception) {
+                _state.value = ChannelsScreenState.Error
+            }
         }
-        filterChannels()
     }
 
     fun setUpScreenType(screenType: ChannelsScreenType) {
@@ -114,11 +121,22 @@ class ChannelsViewModel : ViewModel() {
                 val expandedChannelId = if (state.expandedChannelId == id) null else id
                 _state.value = ChannelsScreenState.DataLoaded(list = list, expandedChannelId = expandedChannelId)
             }
-
             ChannelsScreenState.Error -> return
             ChannelsScreenState.Initial -> return
             ChannelsScreenState.Loading -> return
         }
+    }
+}
+
+class ChannelsViewModelFactory(
+    private val context: Context
+): ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        val application = context.applicationContext as App
+        val streamRepository = application.appContainer.streamsRepository
+        return ChannelsViewModel(
+            streamsRepository = streamRepository
+        ) as T
     }
 }
 

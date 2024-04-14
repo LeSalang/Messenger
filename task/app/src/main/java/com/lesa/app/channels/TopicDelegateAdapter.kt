@@ -1,8 +1,10 @@
 package com.lesa.app.channels
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
 import com.lesa.app.composite_adapter.DelegateAdapter
@@ -28,14 +30,18 @@ class TopicDelegateAdapter (
 
         fun bind(topic: Topic) {
             binding.topicNameTextView.text = topic.name
-            binding.topicMesCountTextView.text = String.format(
+            val color = topic.color?.let {
+                Color.parseColor(it)
+            } ?: itemView.resources.getColor(R.color.gray_18)
+            val alfaColor = ColorUtils.setAlphaComponent(color, 80)
+            binding.root.setBackgroundColor(alfaColor)
+            /*binding.topicMesCountTextView.text = String.format(
                 itemView.context.getString(R.string.channels_mes_count_pattern),
                 topic.count
             )
-            binding.root.setBackgroundResource(topic.color)
             itemView.setOnClickListener {
                 onClick(topic.id)
-            }
+            }*/
         }
     }
 }

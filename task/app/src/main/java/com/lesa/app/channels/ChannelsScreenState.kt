@@ -1,6 +1,6 @@
 package com.lesa.app.channels
 
-import com.lesa.app.model.Channel
+import com.lesa.app.model.Stream
 
 sealed interface ChannelsScreenState {
 
@@ -10,5 +10,8 @@ sealed interface ChannelsScreenState {
 
     object Error : ChannelsScreenState
 
-    class DataLoaded(val list: List<Channel>, val expandedChannelId: Int? = null) : ChannelsScreenState
+    class DataLoaded(
+        val list: List<Stream>,
+        val expandedChannelId: Int? = null
+    ) : ChannelsScreenState
 }

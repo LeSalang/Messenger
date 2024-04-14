@@ -1,8 +1,10 @@
 package com.lesa.app.channels
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
 import com.lesa.app.composite_adapter.DelegateAdapter
@@ -26,11 +28,16 @@ class ChannelDelegateAdapter (
         private val binding = ItemChannelBinding.bind(itemView)
 
         fun bind(item: ChannelDelegateItem) {
-            binding.channelNameTextView.text = item.channel.name
+            binding.channelNameTextView.text = item.stream.name
             binding.channelExpandIcon.isSelected = item.isExpanded
             itemView.setOnClickListener {
-                onClick(item.channel.id)
+                onClick(item.stream.id)
             }
+            val color = item.stream.color?.let {
+                Color.parseColor(it)
+            } ?: itemView.resources.getColor(R.color.gray_18)
+            val alfaColor = ColorUtils.setAlphaComponent(color, 100)
+            binding.root.setBackgroundColor(alfaColor)
         }
     }
 }

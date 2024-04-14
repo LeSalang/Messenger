@@ -16,7 +16,7 @@ internal class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appContainer = DefaultAppContainer(context = this)
+        appContainer = DefaultAppContainer()
         INSTANCE = this
     }
 

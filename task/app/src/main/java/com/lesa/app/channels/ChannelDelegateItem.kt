@@ -1,21 +1,21 @@
 package com.lesa.app.channels
 
 import com.lesa.app.composite_adapter.DelegateItem
-import com.lesa.app.model.Channel
+import com.lesa.app.model.Stream
 
 class ChannelDelegateItem(
-    val channel: Channel,
+    val stream: Stream,
     val isExpanded: Boolean,
 ) : DelegateItem {
     override val id: Any
-        get() = channel.id
+        get() = stream.id
 
     override val content: Any
-        get() = Pair(channel, isExpanded)
+        get() = Pair(stream, isExpanded)
 
     override fun compareToOther(other: DelegateItem): Boolean {
         return if (other is ChannelDelegateItem) {
-            other.channel == channel && other.isExpanded == isExpanded
+            other.stream == stream && other.isExpanded == isExpanded
         } else {
             false
         }

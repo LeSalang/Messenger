@@ -2,6 +2,8 @@
 <resources>
     <dimen name="small_padding">8dp</dimen>
     <dimen name="medium_padding">16dp</dimen>
+    <dimen name="huge_padding">120dp</dimen>
+
     <dimen name="emoji_flex_box_interitem_spacing">10dp</dimen>
     <dimen name="message_user_logo_size">37dp</dimen>
 

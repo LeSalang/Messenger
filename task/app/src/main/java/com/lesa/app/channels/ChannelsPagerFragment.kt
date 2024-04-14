@@ -7,12 +7,11 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App
-import com.lesa.app.R
 import com.lesa.app.Screens
 import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.delegatesList
@@ -22,7 +21,11 @@ import kotlinx.coroutines.launch
 class ChannelsPagerFragment : Fragment() {
     private val binding: FragmentChannelsPagerBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private lateinit var adapter: CompositeAdapter
-    private val viewModel: ChannelsViewModel by activityViewModels()
+    private val viewModel: ChannelsViewModel by viewModels(
+        ownerProducer = {
+            parentFragment ?: this
+        }
+    ) { ChannelsViewModelFactory(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,33 +49,29 @@ class ChannelsPagerFragment : Fragment() {
             is ChannelsScreenState.DataLoaded -> {
                 binding.apply {
                     channelsRecycleView.visibility = VISIBLE
-                    renderStatusMessage.visibility = GONE
+                    error.errorItem.visibility = GONE
                     shimmerLayout.visibility = GONE
                 }
                 updateList(state = state)
             }
-
             ChannelsScreenState.Error -> {
                 binding.apply {
                     channelsRecycleView.visibility = GONE
-                    renderStatusMessage.visibility = VISIBLE
+                    error.errorItem.visibility = VISIBLE
                     shimmerLayout.visibility = GONE
-                    renderStatusMessage.text = resources.getString(R.string.error)
                 }
             }
-
             ChannelsScreenState.Initial -> {
                 binding.apply {
                     channelsRecycleView.visibility = GONE
-                    renderStatusMessage.visibility = GONE
+                    error.errorItem.visibility = GONE
                     shimmerLayout.visibility = GONE
                 }
             }
-
             ChannelsScreenState.Loading -> {
                 binding.apply {
                     channelsRecycleView.visibility = GONE
-                    renderStatusMessage.visibility = GONE
+                    error.errorItem.visibility = GONE
                     shimmerLayout.visibility = VISIBLE
                 }
             }
@@ -104,5 +103,4 @@ class ChannelsPagerFragment : Fragment() {
         )
         adapter.submitList(items)
     }
-
 }
