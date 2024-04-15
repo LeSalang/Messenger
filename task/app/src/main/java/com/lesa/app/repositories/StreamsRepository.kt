@@ -16,9 +16,13 @@ class StreamsRepositoryImpl(
         val subscribedStreams = api.getAllSubscribedStreams().streams.associateBy {
             it.id
         }
-        val allStreams = api.getAllStreams().streams.map {stream ->
+        val allStreams = api.getAllStreams().streams.map { stream ->
             val topics = api.getTopicsInStream(stream.id).topics.map {
-                it.toTopic(subscribedStreams[stream.id]?.color)
+                it.toTopic(
+                    color = subscribedStreams[stream.id]?.color,
+                    streamId = stream.id,
+                    streamName = stream.name
+                )
             }
             stream.toStream(
                 subscribedStreams = subscribedStreams,

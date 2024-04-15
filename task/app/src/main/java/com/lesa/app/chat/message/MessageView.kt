@@ -1,6 +1,7 @@
 package com.lesa.app.chat.message
 
 import android.content.Context
+import android.text.Html
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -102,7 +103,7 @@ class MessageView @JvmOverloads constructor(
             nameTextView.text = model.userName
         }
         if (this.model?.text != model.text) {
-            messageTextView.text = model.text
+            messageTextView.text = Html.fromHtml(model.text, Html.FROM_HTML_MODE_LEGACY).trimEnd()
         }
         if (this.model?.emojiList != model.emojiList) {
             emojiFlexBox.emojiList = model.emojiList
@@ -136,7 +137,7 @@ class MessageView @JvmOverloads constructor(
 
     data class Model(
         val id: Int,
-        val avatar: Int,
+        val avatar: String?,
         val userName: String,
         val text: String,
         val emojiList: List<EmojiView.Model>,

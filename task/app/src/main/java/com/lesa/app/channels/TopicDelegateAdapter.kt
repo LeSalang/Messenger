@@ -12,7 +12,7 @@ import com.lesa.app.databinding.ItemTopicBinding
 import com.lesa.app.model.Topic
 
 class TopicDelegateAdapter (
-    private val onClick: (Int) -> Unit
+    private val onClick: (Topic) -> Unit
 ) :
     DelegateAdapter<TopicDelegateItem, TopicDelegateAdapter.ViewHolder>(TopicDelegateItem::class.java) {
 
@@ -25,23 +25,23 @@ class TopicDelegateAdapter (
         holder.bind(item.topic)
     }
 
-    class ViewHolder(view: View, val onClick: (Int) -> Unit) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, val onClick: (Topic) -> Unit) : RecyclerView.ViewHolder(view) {
         private val binding = ItemTopicBinding.bind(itemView)
 
         fun bind(topic: Topic) {
             binding.topicNameTextView.text = topic.name
-            val color = topic.color?.let {
+            val color = topic.color.let {
                 Color.parseColor(it)
-            } ?: itemView.resources.getColor(R.color.gray_18)
+            }
             val alfaColor = ColorUtils.setAlphaComponent(color, 80)
             binding.root.setBackgroundColor(alfaColor)
             /*binding.topicMesCountTextView.text = String.format(
                 itemView.context.getString(R.string.channels_mes_count_pattern),
                 topic.count
-            )
+            )*/
             itemView.setOnClickListener {
-                onClick(topic.id)
-            }*/
+                onClick(topic)
+            }
         }
     }
 }

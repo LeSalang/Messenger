@@ -1,8 +1,9 @@
 package com.lesa.app
 
-import android.content.Context
 import com.lesa.app.api.Api
 import com.lesa.app.interceptors.AuthHeaderInterceptor
+import com.lesa.app.repositories.MessagesRepository
+import com.lesa.app.repositories.MessagesRepositoryImpl
 import com.lesa.app.repositories.StreamsRepository
 import com.lesa.app.repositories.StreamsRepositoryImpl
 import com.lesa.app.repositories.UserRepository
@@ -17,6 +18,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 interface AppContainer {
     val userRepository: UserRepository
     val streamsRepository: StreamsRepository
+    val messagesRepository: MessagesRepository
 }
 
 class DefaultAppContainer() : AppContainer {
@@ -56,5 +58,9 @@ class DefaultAppContainer() : AppContainer {
 
     override val streamsRepository: StreamsRepository by lazy {
         StreamsRepositoryImpl(api = api)
+    }
+
+    override val messagesRepository: MessagesRepository by lazy {
+        MessagesRepositoryImpl(api = api)
     }
 }

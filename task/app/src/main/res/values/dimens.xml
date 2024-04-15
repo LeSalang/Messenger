@@ -9,6 +9,8 @@
 
     <dimen name="message_width_factor">0.8</dimen>
 
+    <dimen name="chat_topic_name_text_size">20sp</dimen>
+
     <dimen name="profile_user_logo_card_size">185dp</dimen>
     <dimen name="profile_user_logo_card_margin">16dp</dimen>
     <dimen name="profile_user_logo_card_radius">15dp</dimen>
@@ -35,5 +37,5 @@
     <dimen name="emoji_text_size">14sp</dimen>
     <dimen name="message_text_size">16sp</dimen>
 
-    <dimen name="error_text_size">40sp</dimen>
+    <dimen name="error_text_size">20sp</dimen>
 </resources>

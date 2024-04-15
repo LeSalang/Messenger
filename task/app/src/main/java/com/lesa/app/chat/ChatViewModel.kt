@@ -28,7 +28,8 @@ class ChatViewModel(
             try {
                 _state.value = ChatScreenState.DataLoaded(
                     list = messagesRepository.getAllMessagesInStream(
-                        streamName = topic!!.streamName
+                        streamName = topic!!.streamName,
+                        topicName = topic!!.name
                     )
                 )
             } catch (e: Exception) {

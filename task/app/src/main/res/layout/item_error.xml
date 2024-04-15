@@ -19,12 +19,21 @@
         android:id="@+id/userNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_padding"
+        android:layout_marginVertical="@dimen/medium_padding"
         android:gravity="center_horizontal"
         android:textColor="@color/white"
         android:text="@string/error"
-        android:textSize="@dimen/profile_user_name_text_size"
+        android:textSize="@dimen/error_text_size"
         android:textStyle="bold"
+        />
+
+    <Button
+        android:id="@+id/refreshButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:text="@string/refresh"
+        android:textColor="@color/black"
         />
 
 </LinearLayout>

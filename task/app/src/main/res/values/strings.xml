@@ -17,6 +17,7 @@
     <string name="title_people">People</string>
     <string name="title_profile">Profile</string>
     <string name="title_chat">Chat</string>
+    <string name="title_chat_Topic_name">Topic: #%s</string>
 
     <string name="channels_subscribed">Subscribed</string>
     <string name="channels_all_streams">All streams</string>
@@ -29,8 +30,9 @@
     <string name="status_idle">Idle</string>
     <string name="status_offline">Offline</string>
 
-    <string name="error">Error!</string>
+    <string name="error">ERROR!\nCheck your internet connection</string>
     <string name="loading">Loading…</string>
+    <string name="refresh">Refresh</string>
 
 
 

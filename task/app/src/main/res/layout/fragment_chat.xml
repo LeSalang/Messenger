@@ -11,31 +11,46 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/chatRecyclerView"
+        android:background="@color/gray_30"
+        android:gravity="center_horizontal"
+        android:titleTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/gray_30"
-        android:titleTextColor="@color/white"
-        android:gravity="center_horizontal">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_arrow_back"/>
+            android:src="@drawable/icon_arrow_back" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/streamName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/medium_padding"
             android:gravity="left"
+            android:paddingLeft="@dimen/medium_padding"
             android:text="@string/title_profile"
             android:textColor="@color/white"
             android:textSize="@dimen/appbar_title_text_size" />
 
     </Toolbar>
+
+    <TextView
+        android:id="@+id/topicName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_30"
+        android:gravity="center"
+        android:padding="@dimen/small_padding"
+        android:text="@string/title_chat_Topic_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/chat_topic_name_text_size"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
@@ -46,8 +61,44 @@
         app:layout_constraintBottom_toTopOf="@+id/messageEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topicName"
+        tools:listitem="@layout/item_message"
+        android:visibility="gone"
+        />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/messageEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topicName">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/item_shimmer_chat" />
+            <include layout="@layout/item_shimmer_chat" />
+            <include layout="@layout/item_shimmer_chat" />
+            <include layout="@layout/item_shimmer_chat" />
+            <include layout="@layout/item_shimmer_chat" />
+            <include layout="@layout/item_shimmer_chat" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <include
+        android:id="@+id/error"
+        layout="@layout/item_error"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/messageEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolBar"
-        tools:listitem="@layout/item_message" />
+        android:visibility="gone"
+
+        />
 
     <EditText
         android:id="@+id/messageEditText"
@@ -69,7 +120,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:visibility="visible"
+        />
 
     <ImageButton
         android:id="@+id/sendButton"

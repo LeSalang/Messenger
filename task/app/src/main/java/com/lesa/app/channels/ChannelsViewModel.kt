@@ -10,7 +10,6 @@ import com.lesa.app.model.Stream
 import com.lesa.app.repositories.StreamsRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,25 +42,31 @@ class ChannelsViewModel(
     }
 
     private fun listenToSearchQuery() {
-        searchQuery.filter {
-                it.isNotEmpty()
-            }.distinctUntilChanged().debounce(500).mapLatest {
+        searchQuery
+            .filter { it.isNotEmpty() }
+            .distinctUntilChanged()
+            .debounce(500)
+            .mapLatest {
                 _state.value = ChannelsScreenState.Loading
                 search(it)
-            }.flowOn(Dispatchers.Default).onEach {
-                _state.value = it
-            }.launchIn(viewModelScope)
+            }
+            .flowOn(Dispatchers.Default)
+            .onEach { _state.value = it }
+            .launchIn(viewModelScope)
 
     }
 
     private fun search(query: String): ChannelsScreenState {
         runCatchingNonCancellation {
             searchChannels(query = query)
-        }.fold(onSuccess = {
-            return ChannelsScreenState.DataLoaded(list = it)
-        }, onFailure = {
-            return ChannelsScreenState.Error
-        })
+        }.fold(
+            onSuccess = {
+                return ChannelsScreenState.DataLoaded(list = it)
+            },
+            onFailure = {
+                return ChannelsScreenState.Error
+            }
+        )
     }
 
     private fun searchChannels(query: String): List<Stream> { // TODO: move to repository

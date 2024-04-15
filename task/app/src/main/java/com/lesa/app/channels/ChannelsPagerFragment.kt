@@ -1,39 +1,30 @@
 package com.lesa.app.channels
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App
+import com.lesa.app.R
 import com.lesa.app.Screens
 import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentChannelsPagerBinding
+import com.lesa.app.model.Topic
 import kotlinx.coroutines.launch
 
-class ChannelsPagerFragment : Fragment() {
-    private val binding: FragmentChannelsPagerBinding by viewBinding(createMethod = CreateMethod.INFLATE)
+class ChannelsPagerFragment : Fragment(R.layout.fragment_channels_pager) {
+    private val binding: FragmentChannelsPagerBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
     private val viewModel: ChannelsViewModel by viewModels(
         ownerProducer = {
             parentFragment ?: this
         }
     ) { ChannelsViewModelFactory(requireContext()) }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,6 +50,11 @@ class ChannelsPagerFragment : Fragment() {
                     channelsRecycleView.visibility = GONE
                     error.errorItem.visibility = VISIBLE
                     shimmerLayout.visibility = GONE
+                    error.refreshButton.setOnClickListener {
+
+                        TODO()
+
+                    }
                 }
             }
             ChannelsScreenState.Initial -> {
@@ -86,15 +82,15 @@ class ChannelsPagerFragment : Fragment() {
         adapter = CompositeAdapter(
             delegatesList(
                 ChannelDelegateAdapter(onClick = { viewModel.expandChannel(it) }),
-                TopicDelegateAdapter(onClick = { openProfile(it) })
+                TopicDelegateAdapter(onClick = { openChat(it) })
             )
         )
         binding.channelsRecycleView.adapter = adapter
 
     }
 
-    private fun openProfile(userId: Int) {
-        App.INSTANCE.router.navigateTo(Screens.Chat(topicId = userId))
+    private fun openChat(topic: Topic) {
+        App.INSTANCE.router.navigateTo(Screens.Chat(topic = topic))
     }
 
     private fun updateList(state: ChannelsScreenState.DataLoaded) {

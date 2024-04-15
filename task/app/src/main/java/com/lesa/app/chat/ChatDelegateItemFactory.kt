@@ -1,6 +1,5 @@
 package com.lesa.app.chat
 
-import com.lesa.app.R
 import com.lesa.app.chat.date.DateDelegateItem
 import com.lesa.app.chat.message.MessageDelegateItem
 import com.lesa.app.chat.message.MessageView
@@ -12,7 +11,6 @@ import java.text.SimpleDateFormat
 class ChatDelegateItemFactory {
     fun makeDelegateItems(
         list: List<Message>,
-        userId: Int,
     ): MutableList<DelegateItem> {
         val formatter = SimpleDateFormat("yyyyMMdd")
         val messagesGroupedByDates = list.groupBy {
@@ -26,17 +24,23 @@ class ChatDelegateItemFactory {
             messages.forEach { message ->
                 val itemModel = MessageView.Model(
                     id = message.id,
-                    avatar = R.drawable.avatar,
+                    avatar = message.avatar,
                     userName = message.senderName,
-                    text = message.message,
-                    emojiList = message.emojiList.map {
-                        EmojiView.Model(
-                            emoji = it.emojiCode,
-                            count = it.count,
-                            isSelected = it.userIds.contains(userId)
-                        )
-                    },
-                    type = message.type
+                    text = message.content,
+                    emojiList = message.reactions
+                        .map {
+                            EmojiView.Model(
+                                emoji = String(Character.toChars(it.key.toInt(16))),
+                                count = it.value.count,
+                                isSelected = it.value.isOwn
+                            )
+                        }
+                        .sortedByDescending { it.count },
+                    type = if (message.isOwn) {
+                        MessageView.Model.Type.OUTGOING
+                    } else {
+                        MessageView.Model.Type.INCOMING
+                    }
                 )
                 result.add(
                     MessageDelegateItem(itemModel)

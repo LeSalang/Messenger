@@ -47,13 +47,21 @@ fun StreamApiDto.toStream(
         name = name,
         isSubscribed = subscribedStreams.containsKey(id),
         topics = topics,
-        color = subscribedStreams[id]?.color
+        color = subscribedStreams[id]?.color ?: FALLBACK_STREAM_COLOR
     )
 }
 
-fun TopicApiDto.toTopic(color: String?) : Topic {
+fun TopicApiDto.toTopic(
+    color: String?,
+    streamId: Int,
+    streamName: String
+) : Topic {
     return Topic(
         name = name,
-        color = color
+        color = color ?: FALLBACK_STREAM_COLOR,
+        streamName = streamName,
+        streamId = streamId
     )
 }
+
+const val FALLBACK_STREAM_COLOR = "#464646"

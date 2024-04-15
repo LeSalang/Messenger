@@ -1,32 +1,21 @@
 package com.lesa.app.channels
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
-import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentChannelsBinding
 
-class ChannelsFragment : Fragment() {
-    private val binding: FragmentChannelsBinding by viewBinding(createMethod = CreateMethod.INFLATE)
+class ChannelsFragment : Fragment(R.layout.fragment_channels) {
+    private val binding: FragmentChannelsBinding by viewBinding()
     private val viewModel: ChannelsViewModel by viewModels { ChannelsViewModelFactory(requireContext()) }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

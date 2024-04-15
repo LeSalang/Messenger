@@ -1,14 +1,14 @@
 package com.lesa.app.chat
 
-import android.os.Build
+import android.graphics.Color
+import android.graphics.Color.BLACK
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.RequiresApi
+import androidx.core.graphics.ColorUtils
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import by.kirich1409.viewbindingdelegate.CreateMethod
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App
 import com.lesa.app.R
@@ -28,27 +28,28 @@ import com.lesa.app.model.Emoji
 import com.lesa.app.model.EmojiCNCS
 import com.lesa.app.model.Message
 import com.lesa.app.model.Topic
-import com.lesa.app.stubMessageList
-import java.util.Date
+import kotlinx.coroutines.launch
 
-class ChatFragment : Fragment() {
-    private val binding: FragmentChatBinding by viewBinding(createMethod = CreateMethod.INFLATE)
+class ChatFragment : Fragment(R.layout.fragment_chat) {
+    private val binding: FragmentChatBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
-    private val messages = stubMessageList.toMutableList() // TODO: move to VM
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return binding.root
+    private val viewModel: ChatViewModel by viewModels() {
+        ChatViewModelFactory(
+            context = requireContext()
+        )
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
-        setUpTitle(requireArguments().getInt(CHANNEL_ID_KEY))
+        val topic: Topic? = requireArguments().getParcelable(TOPIC_KEY)
+        viewModel.topic = topic
+        topic?.let { setUpTitle(it) }
+
+        lifecycleScope.launch {
+            viewModel.state.collect(::render)
+        }
 
         childFragmentManager.setFragmentResultListener(
             ON_SELECT_EMOJI_REQUEST_KEY, this
@@ -61,6 +62,7 @@ class ChatFragment : Fragment() {
                 )
             }
         }
+        viewModel.loadChannels()
     }
 
     private fun setUpViews() {
@@ -69,32 +71,79 @@ class ChatFragment : Fragment() {
         setUpBackButton()
     }
 
+    private fun render(state: ChatScreenState) {
+        when (state) {
+            is ChatScreenState.DataLoaded -> {
+                binding.apply {
+                    chatRecyclerView.visibility = View.VISIBLE
+                    error.errorItem.visibility = View.GONE
+                    shimmerLayout.visibility = View.GONE
+                }
+            }
+            ChatScreenState.Error -> {
+                binding.apply {
+                    chatRecyclerView.visibility = View.GONE
+                    error.errorItem.visibility = View.VISIBLE
+                    shimmerLayout.visibility = View.GONE
+                    messageEditText.visibility = View.GONE
+                    sendButton.visibility = View.GONE
+                }
+            }
+            ChatScreenState.Loading -> {
+                binding.apply {
+                    chatRecyclerView.visibility = View.GONE
+                    error.errorItem.visibility = View.GONE
+                    shimmerLayout.visibility = View.VISIBLE
+                }
+            }
+        }
+        updateList()
+    }
+
+    private fun setUpTitle(topic: Topic) {
+        val color = ColorUtils.blendARGB(Color.parseColor(topic.color), BLACK, 0.6f)
+        binding.toolBar.setBackgroundColor(color)
+        activity?.window?.statusBarColor = color
+        binding.streamName.text = topic.streamName
+        binding.topicName.text = String.format(
+            requireContext().getString(R.string.title_chat_Topic_name),
+            topic.name
+        )
+    }
+
+    private fun setUpBackButton() {
+        binding.backButton.setOnClickListener {
+            activity?.window?.statusBarColor = BLACK
+            App.INSTANCE.router.navigateTo(Screens.Main()) // TODO: 'exit()' doesn't work :c
+        }
+    }
+
     private fun setUpRecycleView() {
         adapter = CompositeAdapter(
             delegatesList(
                 MessageDelegateAdapter(
                     actions = MessageView.Actions(
                         onLongClick = { id ->
-                            showEmojiPicker(
+                            /*showEmojiPicker(
                                 message = messages.first {
                                     it.id == id
                                 }
-                            )
+                            )*/
                         },
                         onEmojiClick = { id, emojiCode ->
-                            onSelectEmoji(
+                            /*onSelectEmoji(
                                 message = messages.first {
                                     it.id == id
                                 },
                                 emojiCode = emojiCode
-                            )
+                            )*/
                         },
                         onPlusButtonClick = { id ->
-                            showEmojiPicker(
+                            /*showEmojiPicker(
                                 message = messages.first {
                                     it.id == id
                                 }
-                            )
+                            )*/
                         }
                     )
                 ),
@@ -102,7 +151,6 @@ class ChatFragment : Fragment() {
             )
         )
         binding.chatRecyclerView.adapter = adapter
-        updateList()
     }
 
     private fun setUpSendButton() {
@@ -116,26 +164,20 @@ class ChatFragment : Fragment() {
             }
         }
         binding.sendButton.setOnClickListener {
-            addMessage()
+            //addMessage()
         }
     }
 
-    private fun setUpBackButton() {
-        binding.backButton.setOnClickListener {
-            App.INSTANCE.router.backTo(Screens.Channels())
-            activity?.window?.statusBarColor = resources.getColor(R.color.gray_18)
-        }
-    }
+
 
     private fun updateList() {
-        val userId = 1234
-        val delegateItems = makeDelegateItems(list = messages, userId = userId)
+        val delegateItems = makeDelegateItems(list = viewModel.state.value.messages)
         adapter.submitList(delegateItems) {
             binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
         }
     }
 
-    private fun addMessage() {
+    /*private fun addMessage() {
         val messageText = binding.messageEditText.text.toString()
         if (messageText.isBlank()) {
             // TODO: show attachments picker
@@ -152,15 +194,13 @@ class ChatFragment : Fragment() {
             updateList()
             binding.messageEditText.text.clear()
         }
-    }
+    }*/
 
     private fun makeDelegateItems(
         list: List<Message>,
-        userId: Int,
     ): MutableList<DelegateItem> {
         return ChatDelegateItemFactory().makeDelegateItems(
-            list = list,
-            userId = userId
+            list = list
         )
     }
 
@@ -175,20 +215,20 @@ class ChatFragment : Fragment() {
         messageId: Int,
         selectedEmojiCNCS: EmojiCNCS,
     ) {
-        val message: Message = messages.firstOrNull {
+        /*val message: Message = messages.firstOrNull {
             it.id == messageId
         } ?: return
         val emojiCode = selectedEmojiCNCS.getCodeString()
         onSelectEmoji(
             message = message, emojiCode = emojiCode
-        )
+        )*/
     }
 
     private fun onSelectEmoji(
         message: Message,
         emojiCode: String,
     ) {
-        val userId = 1234
+        /*val userId = 1234
         val selectedEmoji = Emoji(
             emojiCode = emojiCode, userIds = setOf(userId)
         )
@@ -198,7 +238,7 @@ class ChatFragment : Fragment() {
         val newMessage = message.copy(emojiList = newEmojiList)
         val messageIndex = messages.indexOf(message)
         messages[messageIndex] = newMessage
-        updateList()
+        updateList()*/
     }
 
     private fun updateEmojiList(
@@ -206,7 +246,7 @@ class ChatFragment : Fragment() {
         userId: Int,
         selectedEmoji: Emoji,
     ): List<Emoji> {
-        val emojiIndex = message.emojiList.indexOfFirst {
+        /*val emojiIndex = message.emojiList.indexOfFirst {
             it.emojiCode == selectedEmoji.emojiCode
         }
         val newEmojiList = if (emojiIndex != -1) {
@@ -231,31 +271,19 @@ class ChatFragment : Fragment() {
         }.sortedByDescending {
             it.count
         }
-        return newEmojiList
+        return newEmojiList*/
+        return emptyList()
     }
 
-    private fun setUpTitle(id: Int) {
-        val topics = mutableListOf<Topic>()
-        /*stubStreams.map { channel ->
-            channel.topics.forEach {
-                topics.add(it)
-            }
-        }*/
-        /*val topic = topics.first {
-            it.id == id
-        }
-        binding.toolBar.setBackgroundResource(topic.color)
-        activity?.window?.statusBarColor = resources.getColor(topic.color)
-        binding.title.text = topic.name*/
-    }
+
 
     companion object {
-        private const val CHANNEL_ID_KEY = "user_id_key"
+        private const val TOPIC_KEY = "topic_key"
 
-        fun getNewInstance(channelId: Int): ChatFragment {
+        fun getNewInstance(topic: Topic): ChatFragment {
             return ChatFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(CHANNEL_ID_KEY, channelId)
+                    putParcelable(TOPIC_KEY, topic)
                 }
             }
         }

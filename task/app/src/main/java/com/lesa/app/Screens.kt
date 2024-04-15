@@ -3,6 +3,7 @@ package com.lesa.app
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.lesa.app.channels.ChannelsFragment
 import com.lesa.app.chat.ChatFragment
+import com.lesa.app.model.Topic
 import com.lesa.app.model.User
 import com.lesa.app.people.PeopleFragment
 import com.lesa.app.profile.AnotherProfileFragment
@@ -17,8 +18,8 @@ object Screens {
         ChannelsFragment()
     }
 
-    fun Chat(topicId: Int) = FragmentScreen {
-        ChatFragment.getNewInstance(topicId)
+    fun Chat(topic: Topic) = FragmentScreen {
+        ChatFragment.getNewInstance(topic)
     }
 
     fun Main() = FragmentScreen {

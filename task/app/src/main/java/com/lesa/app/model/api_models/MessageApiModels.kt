@@ -1,7 +1,10 @@
 package com.lesa.app.model.api_models
 
+import com.lesa.app.model.Emoji
+import com.lesa.app.model.Message
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.Date
 
 @Serializable
 data class AllMessagesApiDto(
@@ -23,6 +26,29 @@ data class MessageApiDto(
     val senderId: Int,
     @SerialName("sender_full_name")
     val senderFullName: String,
+    @SerialName("subject")
+    val topic: String,
     @SerialName("timestamp")
     val timestamp: Int
 )
+
+fun MessageApiDto.toMessage(ownId: Int) : Message {
+    return Message(
+        id = id,
+        avatar = avatar,
+        content = content,
+        senderName = senderFullName,
+        reactions = reactions
+            .groupingBy { it.emojiCode }
+            .aggregate { emojiCode, emoji: Emoji?, apiDto, first ->
+                return@aggregate Emoji(
+                    emojiCode = emojiCode,
+                    isOwn = (apiDto.userId == ownId) || (emoji?.isOwn ?: false),
+                    count = 1 + (emoji?.count ?: 0)
+                )
+            },
+        date = Date(timestamp.toLong() * 1000),
+        topic = topic,
+        isOwn = senderId == ownId
+    )
+}
