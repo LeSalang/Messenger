@@ -25,8 +25,8 @@ class AnotherProfileFragment : Fragment(R.layout.fragment_another_profile) {
         if (user == null) return
         binding.user.apply{
             userNameTextView.text = user.name
-            userNetStatusTextView.text = resources.getString(user.netStatus.text)
-            userNetStatusTextView.setTextColor(resources.getColor(user.netStatus.color))
+            userNetStatusTextView.text = resources.getString(user.presence.text)
+            userNetStatusTextView.setTextColor(resources.getColor(user.presence.color))
             Picasso.get().load(user.avatar).into(userLogoImage)
         }
     }

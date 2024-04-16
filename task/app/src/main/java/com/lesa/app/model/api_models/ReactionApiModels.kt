@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class ReactionApiDto(
     @SerialName("emoji_code")
     val emojiCode: String,
+    @SerialName("emoji_name")
+    val emojiName: String,
     @SerialName("user_id")
     val userId: Int
 )

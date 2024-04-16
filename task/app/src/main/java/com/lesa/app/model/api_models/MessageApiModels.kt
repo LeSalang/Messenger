@@ -13,6 +13,12 @@ data class AllMessagesApiDto(
 )
 
 @Serializable
+data class MessageResponseApiDto(
+    @SerialName("message")
+    val message: MessageApiDto
+)
+
+@Serializable
 data class MessageApiDto(
     @SerialName("avatar_url")
     val avatar: String?,
@@ -43,6 +49,7 @@ fun MessageApiDto.toMessage(ownId: Int) : Message {
             .aggregate { emojiCode, emoji: Emoji?, apiDto, first ->
                 return@aggregate Emoji(
                     emojiCode = emojiCode,
+                    emojiName = apiDto.emojiName,
                     isOwn = (apiDto.userId == ownId) || (emoji?.isOwn ?: false),
                     count = 1 + (emoji?.count ?: 0)
                 )

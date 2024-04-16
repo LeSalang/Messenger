@@ -28,7 +28,7 @@ class EmojiFlexBox @JvmOverloads constructor(
     }
 
     private val sampleEmojiView: EmojiView = EmojiView(context).apply {
-        this.emoji = EmojiView.Model("🐒", 1, true)
+        this.emoji = EmojiView.Model("1f389", 1, true)
     }
 
     private var onEmojiClick: ((String) -> Unit)? = null
@@ -95,7 +95,7 @@ class EmojiFlexBox @JvmOverloads constructor(
             val emojiView = EmojiView(context)
             emojiView.emoji = it
             emojiView.setOnClickListener { clickedView ->
-                val emoji = (clickedView as EmojiView).emoji.emoji
+                val emoji = (clickedView as EmojiView).emoji.emojiCode
                 onEmojiClick?.invoke(emoji)
             }
             addView(emojiView)

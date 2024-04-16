@@ -24,7 +24,6 @@ import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentChatBinding
-import com.lesa.app.model.Emoji
 import com.lesa.app.model.EmojiCNCS
 import com.lesa.app.model.Message
 import com.lesa.app.model.Topic
@@ -62,7 +61,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 )
             }
         }
-        viewModel.loadChannels()
+        viewModel.loadMessages()
     }
 
     private fun setUpViews() {
@@ -124,26 +123,26 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 MessageDelegateAdapter(
                     actions = MessageView.Actions(
                         onLongClick = { id ->
-                            /*showEmojiPicker(
-                                message = messages.first {
+                            showEmojiPicker(
+                                message = viewModel.state.value.messages.first {
                                     it.id == id
                                 }
-                            )*/
+                            )
                         },
                         onEmojiClick = { id, emojiCode ->
-                            /*onSelectEmoji(
-                                message = messages.first {
+                            onSelectEmoji(
+                                message = viewModel.state.value.messages.first {
                                     it.id == id
                                 },
                                 emojiCode = emojiCode
-                            )*/
+                            )
                         },
                         onPlusButtonClick = { id ->
-                            /*showEmojiPicker(
-                                message = messages.first {
+                            showEmojiPicker(
+                                message = viewModel.state.value.messages.first {
                                     it.id == id
                                 }
-                            )*/
+                            )
                         }
                     )
                 ),
@@ -164,11 +163,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             }
         }
         binding.sendButton.setOnClickListener {
-            //addMessage()
+            addMessage()
         }
     }
-
-
 
     private fun updateList() {
         val delegateItems = makeDelegateItems(list = viewModel.state.value.messages)
@@ -177,24 +174,18 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         }
     }
 
-    /*private fun addMessage() {
+    private fun addMessage() {
         val messageText = binding.messageEditText.text.toString()
         if (messageText.isBlank()) {
             // TODO: show attachments picker
         } else {
-            val message = Message(
-                id = Date().time.toInt(),
-                senderName = "", // TODO: implement in the future homeworks
-                message = messageText,
-                emojiList = emptyList(),
-                date = Date(),
-                type = MessageView.Model.Type.OUTGOING
+            viewModel.sendMessages(
+                content = messageText,
             )
-            messages.add(message)
             updateList()
             binding.messageEditText.text.clear()
         }
-    }*/
+    }
 
     private fun makeDelegateItems(
         list: List<Message>,
@@ -215,71 +206,32 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         messageId: Int,
         selectedEmojiCNCS: EmojiCNCS,
     ) {
-        /*val message: Message = messages.firstOrNull {
-            it.id == messageId
-        } ?: return
-        val emojiCode = selectedEmojiCNCS.getCodeString()
+        val message: Message = viewModel
+            .state
+            .value
+            .messages
+            .firstOrNull {
+                it.id == messageId
+            } ?: return
+        val emojiCode = selectedEmojiCNCS.code
         onSelectEmoji(
-            message = message, emojiCode = emojiCode
-        )*/
+            message = message,
+            emojiCode = emojiCode
+        )
     }
 
     private fun onSelectEmoji(
         message: Message,
         emojiCode: String,
     ) {
-        /*val userId = 1234
-        val selectedEmoji = Emoji(
-            emojiCode = emojiCode, userIds = setOf(userId)
+        viewModel.onSelectEmoji(
+            message = message,
+            emojiCode = emojiCode
         )
-        val newEmojiList = updateEmojiList(
-            message = message, userId = userId, selectedEmoji = selectedEmoji
-        )
-        val newMessage = message.copy(emojiList = newEmojiList)
-        val messageIndex = messages.indexOf(message)
-        messages[messageIndex] = newMessage
-        updateList()*/
     }
-
-    private fun updateEmojiList(
-        message: Message,
-        userId: Int,
-        selectedEmoji: Emoji,
-    ): List<Emoji> {
-        /*val emojiIndex = message.emojiList.indexOfFirst {
-            it.emojiCode == selectedEmoji.emojiCode
-        }
-        val newEmojiList = if (emojiIndex != -1) {
-            val emojiList = message.emojiList.toMutableList()
-            val emoji = message.emojiList[emojiIndex]
-            val isEmojiClicked = emoji.userIds.contains(1234)
-            if (isEmojiClicked) {
-                emojiList[emojiIndex] = emoji.copy(count = emoji.count - 1,
-                    userIds = emoji.userIds.toMutableSet().apply {
-                        this.remove(userId)
-                    })
-            } else {
-                emojiList[emojiIndex] = emoji.copy(count = emoji.count + 1,
-                    userIds = emoji.userIds.toMutableSet().apply {
-                        this.add(userId)
-                    })
-            }
-            if (emojiList[emojiIndex].count == 0) emojiList.removeAt(emojiIndex)
-            emojiList
-        } else {
-            message.emojiList + selectedEmoji
-        }.sortedByDescending {
-            it.count
-        }
-        return newEmojiList*/
-        return emptyList()
-    }
-
-
 
     companion object {
         private const val TOPIC_KEY = "topic_key"
-
         fun getNewInstance(topic: Topic): ChatFragment {
             return ChatFragment().apply {
                 arguments = Bundle().apply {

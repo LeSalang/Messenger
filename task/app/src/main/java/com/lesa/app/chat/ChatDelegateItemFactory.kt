@@ -30,7 +30,7 @@ class ChatDelegateItemFactory {
                     emojiList = message.reactions
                         .map {
                             EmojiView.Model(
-                                emoji = String(Character.toChars(it.key.toInt(16))),
+                                emojiCode = it.value.emojiCode,
                                 count = it.value.count,
                                 isSelected = it.value.isOwn
                             )

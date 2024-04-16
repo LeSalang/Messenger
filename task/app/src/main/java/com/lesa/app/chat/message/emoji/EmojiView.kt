@@ -63,8 +63,19 @@ class EmojiView @JvmOverloads constructor(
     }
 
     data class Model(
-        val emoji: String,
+        val emojiCode: String,
         val count: Int,
         val isSelected: Boolean,
-    )
+    ) {
+        val emoji: String
+            get() {
+                return runCatching {
+                    val codeParts = emojiCode
+                        .split("-")
+                        .map { it.toInt(16) }
+                        .toIntArray()
+                    String(codeParts, 0, codeParts.size)
+                }.getOrElse { "💩" }
+            }
+    }
 }

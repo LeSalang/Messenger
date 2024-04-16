@@ -1,6 +1,7 @@
 package com.lesa.app.channels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -53,7 +54,6 @@ class ChannelsViewModel(
             .flowOn(Dispatchers.Default)
             .onEach { _state.value = it }
             .launchIn(viewModelScope)
-
     }
 
     private fun search(query: String): ChannelsScreenState {
@@ -88,7 +88,6 @@ class ChannelsViewModel(
                             it.isSubscribed
                         }.toMutableList()
                     }
-
                     ChannelsScreenType.ALL -> allStreams
                 }
                 _state.value = ChannelsScreenState.DataLoaded(list = list)

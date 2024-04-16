@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.lesa.app.App
+import com.lesa.app.model.Message
 import com.lesa.app.model.Topic
+import com.lesa.app.model.emojiSetCNCS
 import com.lesa.app.repositories.MessagesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +24,7 @@ class ChatViewModel(
 
     var topic: Topic? = null
 
-    fun loadChannels() {
+    fun loadMessages() {
         viewModelScope.launch {
             _state.value = ChatScreenState.Loading
             try {
@@ -36,6 +38,72 @@ class ChatViewModel(
                 _state.value = ChatScreenState.Error
             }
         }
+    }
+
+    fun sendMessages(
+        content: String,
+    ) {
+        viewModelScope.launch {
+            val id = messagesRepository.sendMessage(
+                content = content,
+                topicName = topic!!.name,
+                streamId = topic!!.streamId
+            )
+            loadMessage(id)
+        }
+    }
+
+    fun onSelectEmoji( // TODO: crash on fast clicks
+        message: Message,
+        emojiCode: String,
+    ) {
+        val emoji = message.reactions[emojiCode]
+        viewModelScope.launch {
+            if (emoji != null) {
+                val emojiName = emoji.emojiName
+                if (emoji.isOwn) {
+                    messagesRepository.deleteReaction(
+                        messageId = message.id,
+                        emojiName = emojiName
+                    )
+                } else {
+                    messagesRepository.addReaction(
+                        messageId = message.id,
+                        emojiName = emojiName
+                    )
+                }
+            } else {
+                val emojiName = emojiSetCNCS.firstOrNull {
+                    it.code == emojiCode
+                }?.name ?: return@launch
+                messagesRepository.addReaction(
+                    messageId = message.id,
+                    emojiName = emojiName
+                )
+            }
+            updateMessage(message.id)
+        }
+    }
+
+    private suspend fun updateMessage(id: Int) {
+        val newMessage = messagesRepository.getMessage(id)
+        val index = state.value.messages.indexOfFirst {
+            it.id == id
+        }
+        val messages = state.value.messages.toMutableList()
+        messages[index] = newMessage
+        _state.value = ChatScreenState.DataLoaded(
+            list = messages
+        )
+    }
+
+    private suspend fun loadMessage(id: Int) {
+        val newMessage = messagesRepository.getMessage(id)
+        val messages = state.value.messages.toMutableList()
+        messages.add(newMessage)
+        _state.value = ChatScreenState.DataLoaded(
+            list = messages
+        )
     }
 }
 

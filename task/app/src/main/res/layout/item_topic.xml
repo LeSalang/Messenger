@@ -25,6 +25,8 @@
         android:paddingHorizontal="@dimen/small_padding"
         android:textSize="@dimen/channels_mes_count_text_size"
         android:text="@string/channels_mes_count_sample"
-        android:textColor="@color/gray_250" />
+        android:textColor="@color/gray_250"
+        android:visibility="gone"
+        />
 
 </LinearLayout>

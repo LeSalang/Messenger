@@ -12,3 +12,7 @@ data class Message(
     val topic: String,
     val isOwn: Boolean
 )
+
+data class SentMessage(
+    val content: String,
+)

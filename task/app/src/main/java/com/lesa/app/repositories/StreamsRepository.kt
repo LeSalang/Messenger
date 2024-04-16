@@ -17,7 +17,9 @@ class StreamsRepositoryImpl(
             it.id
         }
         val allStreams = api.getAllStreams().streams.map { stream ->
-            val topics = api.getTopicsInStream(stream.id).topics.map {
+            val allTopicsInStreamsApiDto = api.getTopicsInStream(stream.id)
+            val topicApiDtos = allTopicsInStreamsApiDto.topics
+            val topics = topicApiDtos.map {
                 it.toTopic(
                     color = subscribedStreams[stream.id]?.color,
                     streamId = stream.id,
