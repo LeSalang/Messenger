@@ -69,6 +69,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         setUpRecycleView()
         setUpActions()
         setUpBackButton()
+        setupRefreshButton()
     }
 
     private fun render(state: ChatScreenState) {
@@ -235,6 +236,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             message = message,
             emojiCode = emojiCode
         )
+    }
+
+    private fun setupRefreshButton() {
+        binding.error.refreshButton.setOnClickListener {
+            viewModel.loadMessages()
+        }
     }
 
     companion object {

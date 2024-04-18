@@ -50,11 +50,6 @@ class ChannelsPagerFragment : Fragment(R.layout.fragment_channels_pager) {
                     channelsRecycleView.visibility = GONE
                     error.errorItem.visibility = VISIBLE
                     shimmerLayout.visibility = GONE
-                    error.refreshButton.setOnClickListener {
-
-                        TODO()
-
-                    }
                 }
             }
             ChannelsScreenState.Initial -> {
@@ -76,6 +71,7 @@ class ChannelsPagerFragment : Fragment(R.layout.fragment_channels_pager) {
 
     private fun setUpViews() {
         setUpRecycleView()
+        setupRefreshButton()
     }
 
     private fun setUpRecycleView() {
@@ -98,5 +94,11 @@ class ChannelsPagerFragment : Fragment(R.layout.fragment_channels_pager) {
             list = state.list, expandedChannelId = state.expandedChannelId
         )
         adapter.submitList(items)
+    }
+
+    private fun setupRefreshButton() {
+        binding.error.refreshButton.setOnClickListener {
+            viewModel.loadChannels()
+        }
     }
 }

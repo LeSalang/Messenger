@@ -23,6 +23,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         lifecycleScope.launch {
             viewModel.state.collect(::setUpUserView)
         }
+        setupRefreshButton()
     }
 
     private fun setUpUserView(userState: ProfileScreenState) {
@@ -49,6 +50,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 binding.error.errorItem.visibility = GONE
                 binding.shimmer.visibility = VISIBLE
             }
+        }
+    }
+
+    private fun setupRefreshButton() {
+        binding.error.refreshButton.setOnClickListener {
+            viewModel.getUser()
         }
     }
 }

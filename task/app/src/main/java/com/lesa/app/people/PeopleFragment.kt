@@ -23,11 +23,16 @@ class PeopleFragment: Fragment(R.layout.fragment_people) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpRecyclerView()
+        setUpViews()
         viewModel.getAllUsers()
         lifecycleScope.launch {
             viewModel.state.collect(::render)
         }
+    }
+
+    private fun setUpViews() {
+        setUpRecyclerView()
+        setupRefreshButton()
     }
 
     private fun setUpRecyclerView() {
@@ -87,6 +92,12 @@ class PeopleFragment: Fragment(R.layout.fragment_people) {
     ): List<DelegateItem> {
         return list.map {
             UserDelegateItem(it)
+        }
+    }
+
+    private fun setupRefreshButton() {
+        binding.error.refreshButton.setOnClickListener {
+            viewModel.getAllUsers()
         }
     }
 }
