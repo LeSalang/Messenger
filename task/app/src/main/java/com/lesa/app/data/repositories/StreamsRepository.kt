@@ -1,9 +1,9 @@
 package com.lesa.app.data.repositories
 
-import com.lesa.app.data.api.Api
-import com.lesa.app.domain.model.Stream
+import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.models.toStream
 import com.lesa.app.data.network.models.toTopic
+import com.lesa.app.domain.model.Stream
 
 interface StreamsRepository {
     suspend fun getAllStreams() : List<Stream>

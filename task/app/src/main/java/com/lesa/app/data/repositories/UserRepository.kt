@@ -1,10 +1,10 @@
 package com.lesa.app.data.repositories
 
-import com.lesa.app.data.api.Api
-import com.lesa.app.domain.model.User
+import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.models.AllPresenceApiDto
 import com.lesa.app.data.network.models.toPresence
 import com.lesa.app.data.network.models.toUser
+import com.lesa.app.domain.model.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 

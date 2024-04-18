@@ -1,8 +1,8 @@
 package com.lesa.app.data.repositories
 
-import com.lesa.app.data.api.Api
-import com.lesa.app.domain.model.Message
+import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.models.toMessage
+import com.lesa.app.domain.model.Message
 
 interface MessagesRepository {
     suspend fun getAllMessagesInStream(
