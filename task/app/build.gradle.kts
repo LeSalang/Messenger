@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     implementation(libs.cicerone)
+    implementation(libs.elmslie)
     implementation(libs.facebook.shimmer)
     implementation(libs.fragment)
     implementation(libs.google.android.flexbox)

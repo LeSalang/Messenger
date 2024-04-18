@@ -1,10 +1,11 @@
 [versions]
-activity = "1.8.2"
+activity = "1.9.0"
 agp = "8.3.2"
 appcompat = "1.6.1"
 cicerone = "7.1"
 constraintlayout = "2.1.4"
-coreKtx = "1.12.0"
+coreKtx = "1.13.0"
+elmslie = "2.1.1"
 facebook-shimmer = "0.5.0"
 flexbox = "3.0.0"
 fragment = "1.6.2"
@@ -13,7 +14,7 @@ kotlin-parselable = "1.8.10"
 kotlin-serialization = "1.9.22"
 kotlinx-coroutines-android = "1.6.4"
 material = "1.11.0"
-okhttp3 = "4.11.0"
+okhttp3 = "4.12.0"
 okhttp3-interceptor = "4.12.0"
 picasso = "2.8"
 retrofit = "2.11.0"
@@ -21,13 +22,13 @@ serialization = "1.6.3"
 viewbindingpropertydelegate = "1.5.9"
 viewpager2 = "1.0.0"
 
-
 [libraries]
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 cicerone = { group = "com.github.terrakok", name = "cicerone", version.ref = "cicerone"}
+elmslie = { group = "com.github.vivid-money.elmslie", name = "elmslie-android", version.ref = "elmslie"}
 facebook-shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "facebook-shimmer"}
 fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment"}
 google-android-flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox"}
