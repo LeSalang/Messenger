@@ -1,13 +1,13 @@
 package com.lesa.app
 
-import com.lesa.app.api.Api
-import com.lesa.app.interceptors.AuthHeaderInterceptor
-import com.lesa.app.repositories.MessagesRepository
-import com.lesa.app.repositories.MessagesRepositoryImpl
-import com.lesa.app.repositories.StreamsRepository
-import com.lesa.app.repositories.StreamsRepositoryImpl
-import com.lesa.app.repositories.UserRepository
-import com.lesa.app.repositories.UserRepositoryImpl
+import com.lesa.app.data.network.Api
+import com.lesa.app.data.network.interceptors.AuthHeaderInterceptor
+import com.lesa.app.data.repositories.MessagesRepository
+import com.lesa.app.data.repositories.MessagesRepositoryImpl
+import com.lesa.app.data.repositories.StreamsRepository
+import com.lesa.app.data.repositories.StreamsRepositoryImpl
+import com.lesa.app.data.repositories.UserRepository
+import com.lesa.app.data.repositories.UserRepositoryImpl
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

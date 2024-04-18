@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/emoji_picker_bg"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    tools:context=".chat.emoji_picker.EmojiPickerBottomSheetFragment">
+    tools:context=".presenation.chat.emoji_picker.EmojiPickerBottomSheetFragment">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:layout_width="match_parent"

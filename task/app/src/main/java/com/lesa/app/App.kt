@@ -2,7 +2,7 @@ package com.lesa.app
 
 import android.app.Application
 import com.github.terrakok.cicerone.Cicerone
-import com.lesa.app.api.Api
+import com.lesa.app.data.network.Api
 
 internal class App : Application() {
     private val cicerone = Cicerone.create()
