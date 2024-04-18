@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_18"
+    android:fitsSystemWindows="true"
     tools:context=".chat.ChatFragment">
 
     <Toolbar
@@ -51,12 +52,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/small_padding"
+        android:paddingBottom="@dimen/small_padding"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/messageEditText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,14 +97,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolBar"
         android:visibility="gone"
-
         />
 
     <EditText
         android:id="@+id/messageEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/medium_padding"
+        android:layout_marginBottom="@dimen/small_padding"
         android:layout_marginLeft="@dimen/small_padding"
         android:layout_marginRight="@dimen/small_padding"
         android:layout_weight="1"
