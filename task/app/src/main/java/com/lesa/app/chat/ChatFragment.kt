@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.graphics.ColorUtils
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -66,7 +67,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private fun setUpViews() {
         setUpRecycleView()
-        setUpSendButton()
+        setUpActions()
         setUpBackButton()
     }
 
@@ -152,7 +153,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         binding.chatRecyclerView.adapter = adapter
     }
 
-    private fun setUpSendButton() {
+    private fun setUpActions() {
         binding.messageEditText.doOnTextChanged { _, _, _, _ ->
             if (binding.messageEditText.text.toString().isBlank()) {
                 binding.sendButton.setImageResource(R.drawable.circle_button_add_message_icon)
@@ -161,6 +162,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 binding.sendButton.setImageResource(R.drawable.circle_button_add_file_icon)
                 binding.sendButton.setBackgroundResource(R.drawable.circle_button_add_message_bg)
             }
+        }
+        binding.messageEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                addMessage()
+            }
+            return@setOnEditorActionListener true
         }
         binding.sendButton.setOnClickListener {
             addMessage()

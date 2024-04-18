@@ -121,6 +121,7 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="SpeakableTextPresentCheck"
         android:visibility="visible"
+        android:imeOptions="actionSend"
         />
 
     <ImageButton
