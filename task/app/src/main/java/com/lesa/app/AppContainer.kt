@@ -8,6 +8,9 @@ import com.lesa.app.data.repositories.StreamsRepository
 import com.lesa.app.data.repositories.StreamsRepositoryImpl
 import com.lesa.app.data.repositories.UserRepository
 import com.lesa.app.data.repositories.UserRepositoryImpl
+import com.lesa.app.domain.use_cases.profile.LoadProfileUseCase
+import com.lesa.app.presentation.profile.ProfileActor
+import com.lesa.app.presentation.profile.ProfileStoreFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -16,6 +19,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 interface AppContainer {
+    val storeFactory: ProfileStoreFactory
     val userRepository: UserRepository
     val streamsRepository: StreamsRepository
     val messagesRepository: MessagesRepository
@@ -63,4 +67,18 @@ class DefaultAppContainer() : AppContainer {
     override val messagesRepository: MessagesRepository by lazy {
         MessagesRepositoryImpl(api = api)
     }
+
+    override val storeFactory by lazyNone {
+        ProfileStoreFactory(profileActor)
+    }
+
+    private val profileActor by lazyNone {
+        ProfileActor(loadProfileUseCase)
+    }
+
+    private val loadProfileUseCase by lazyNone {
+        LoadProfileUseCase(userRepository)
+    }
 }
+
+private fun <T> lazyNone(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)

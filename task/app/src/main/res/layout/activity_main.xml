@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_18"
-    tools:context=".presenation.main.MainActivity">
+    tools:context=".presentation.main.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/containerFragment"
-        android:name="com.lesa.app.presenation.channels.ChannelsFragment"
+        android:name="com.lesa.app.presentation.channels.ChannelsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
