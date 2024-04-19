@@ -9,8 +9,8 @@ import com.lesa.app.data.repositories.StreamsRepositoryImpl
 import com.lesa.app.data.repositories.UserRepository
 import com.lesa.app.data.repositories.UserRepositoryImpl
 import com.lesa.app.domain.use_cases.profile.LoadProfileUseCase
-import com.lesa.app.presentation.profile.ProfileActor
-import com.lesa.app.presentation.profile.ProfileStoreFactory
+import com.lesa.app.presentation.features.profile.ProfileActor
+import com.lesa.app.presentation.features.profile.ProfileStoreFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -42,7 +42,7 @@ class DefaultAppContainer() : AppContainer {
         ignoreUnknownKeys = true
     }
 
-    val retrofit = Retrofit.Builder()
+    private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(
             jsonSerializer.asConverterFactory(

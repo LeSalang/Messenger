@@ -1,6 +1,6 @@
-package com.lesa.app.presentation.profile
+package com.lesa.app.presentation.features.profile
 
-import com.lesa.app.presentation.profile.model.ProfileUi
+import com.lesa.app.presentation.features.profile.model.ProfileUi
 
 sealed interface ProfileEvent {
     sealed interface Ui : ProfileEvent {

@@ -1,7 +1,7 @@
-package com.lesa.app.presentation.profile
+package com.lesa.app.presentation.features.profile
 
 import com.lesa.app.domain.use_cases.profile.LoadProfileUseCase
-import com.lesa.app.presentation.profile.model.ProfileMapper
+import com.lesa.app.presentation.features.profile.model.ProfileMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import vivid.money.elmslie.core.store.Actor

@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.profile.model
+package com.lesa.app.presentation.features.profile.model
 
 import com.lesa.app.domain.model.User
 

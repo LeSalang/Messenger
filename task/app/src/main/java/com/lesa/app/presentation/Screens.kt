@@ -7,12 +7,12 @@ import com.lesa.app.presentation.channels.ChannelsFragment
 import com.lesa.app.presentation.chat.ChatFragment
 import com.lesa.app.presentation.main.MainFragment
 import com.lesa.app.presentation.people.PeopleFragment
-import com.lesa.app.presentation.another_profile.AnotherProfileFragment
-import com.lesa.app.presentation.profile.ProfileFragment
+import com.lesa.app.presentation.features.user.UserFragment
+import com.lesa.app.presentation.features.profile.ProfileFragment
 
 object Screens {
     fun AnotherProfile(user: User) = FragmentScreen {
-        AnotherProfileFragment.getNewInstance(user)
+        UserFragment.getNewInstance(user)
     }
 
     fun Channels() = FragmentScreen {

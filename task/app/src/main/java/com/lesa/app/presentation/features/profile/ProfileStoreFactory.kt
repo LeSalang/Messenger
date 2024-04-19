@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.profile
+package com.lesa.app.presentation.features.profile
 
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.core.store.ElmStore
