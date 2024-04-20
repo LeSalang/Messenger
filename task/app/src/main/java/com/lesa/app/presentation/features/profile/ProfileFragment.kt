@@ -9,14 +9,14 @@ import com.lesa.app.App.Companion.INSTANCE
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentProfileBinding
 import com.lesa.app.presentation.elm.ElmBaseFragment
-import com.lesa.app.presentation.features.profile.ProfileEvent
+import com.lesa.app.presentation.features.profile.elm.ProfileEvent
 import com.lesa.app.presentation.utils.ScreenState
 import com.squareup.picasso.Picasso
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
-import com.lesa.app.presentation.features.profile.ProfileEffect as Effect
-import com.lesa.app.presentation.features.profile.ProfileEvent as Event
-import com.lesa.app.presentation.features.profile.ProfileState as State
+import com.lesa.app.presentation.features.profile.elm.ProfileEffect as Effect
+import com.lesa.app.presentation.features.profile.elm.ProfileEvent as Event
+import com.lesa.app.presentation.features.profile.elm.ProfileState as State
 
 class ProfileFragment : ElmBaseFragment<Effect, State, Event>(
     R.layout.fragment_profile

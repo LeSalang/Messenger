@@ -1,12 +1,12 @@
-package com.lesa.app.presentation.features.people
+package com.lesa.app.presentation.features.people.elm
 
-import com.lesa.app.presentation.features.people.PeopleEvent
+import com.lesa.app.presentation.features.people.elm.PeopleEvent
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
-import com.lesa.app.presentation.features.people.PeopleCommand as Command
-import com.lesa.app.presentation.features.people.PeopleEffect as Effect
-import com.lesa.app.presentation.features.people.PeopleEvent as Event
-import com.lesa.app.presentation.features.people.PeopleState as State
+import com.lesa.app.presentation.features.people.elm.PeopleCommand as Command
+import com.lesa.app.presentation.features.people.elm.PeopleEffect as Effect
+import com.lesa.app.presentation.features.people.elm.PeopleEvent as Event
+import com.lesa.app.presentation.features.people.elm.PeopleState as State
 
 class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Effect, Command> (
     Event.Ui::class,

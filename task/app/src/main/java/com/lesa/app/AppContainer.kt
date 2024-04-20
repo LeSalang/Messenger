@@ -10,10 +10,10 @@ import com.lesa.app.data.repositories.UserRepository
 import com.lesa.app.data.repositories.UserRepositoryImpl
 import com.lesa.app.domain.use_cases.people.LoadPeopleUseCase
 import com.lesa.app.domain.use_cases.profile.LoadProfileUseCase
-import com.lesa.app.presentation.features.people.PeopleActor
-import com.lesa.app.presentation.features.people.PeopleStoreFactory
-import com.lesa.app.presentation.features.profile.ProfileActor
-import com.lesa.app.presentation.features.profile.ProfileStoreFactory
+import com.lesa.app.presentation.features.people.elm.PeopleActor
+import com.lesa.app.presentation.features.people.elm.PeopleStoreFactory
+import com.lesa.app.presentation.features.profile.elm.ProfileActor
+import com.lesa.app.presentation.features.profile.elm.ProfileStoreFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

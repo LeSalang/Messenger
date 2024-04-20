@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.features.profile
+package com.lesa.app.presentation.features.profile.elm
 
 import com.lesa.app.presentation.features.profile.model.ProfileUi
 

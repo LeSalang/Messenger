@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.features.people
+package com.lesa.app.presentation.features.people.elm
 
 import com.lesa.app.domain.use_cases.people.LoadPeopleUseCase
 import com.lesa.app.presentation.features.people.model.UserMapper
@@ -16,12 +16,9 @@ class PeopleActor(
                     loadPeopleUseCase.invoke()
                 }.fold(
                     onSuccess = { userList ->
-                        emit(
-                            PeopleEvent.Internal.DataLoaded(
-                                userUiList = userList.map { user ->
-                                    UserMapper().map(user)
-                                }
-                            )
+                        emit(PeopleEvent.Internal.DataLoaded(userUiList = userList.map { user ->
+                            UserMapper().map(user)
+                        })
                         )
                     },
                     onFailure = {

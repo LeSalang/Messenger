@@ -11,15 +11,15 @@ import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentPeopleBinding
 import com.lesa.app.presentation.Screens
 import com.lesa.app.presentation.elm.ElmBaseFragment
-import com.lesa.app.presentation.features.people.PeopleEvent
-import com.lesa.app.presentation.features.people.PeopleState
+import com.lesa.app.presentation.features.people.elm.PeopleEvent
+import com.lesa.app.presentation.features.people.elm.PeopleState
 import com.lesa.app.presentation.features.people.model.UserUi
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
-import com.lesa.app.presentation.features.people.PeopleEffect as Effect
-import com.lesa.app.presentation.features.people.PeopleEvent as Event
-import com.lesa.app.presentation.features.people.PeopleState as State
+import com.lesa.app.presentation.features.people.elm.PeopleEffect as Effect
+import com.lesa.app.presentation.features.people.elm.PeopleEvent as Event
+import com.lesa.app.presentation.features.people.elm.PeopleState as State
 
 class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
     R.layout.fragment_people

@@ -1,11 +1,11 @@
-package com.lesa.app.presentation.features.profile
+package com.lesa.app.presentation.features.profile.elm
 
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
-import com.lesa.app.presentation.features.profile.ProfileCommand as Command
-import com.lesa.app.presentation.features.profile.ProfileEffect as Effect
-import com.lesa.app.presentation.features.profile.ProfileEvent as Event
-import com.lesa.app.presentation.features.profile.ProfileState as State
+import com.lesa.app.presentation.features.profile.elm.ProfileCommand as Command
+import com.lesa.app.presentation.features.profile.elm.ProfileEffect as Effect
+import com.lesa.app.presentation.features.profile.elm.ProfileEvent as Event
+import com.lesa.app.presentation.features.profile.elm.ProfileState as State
 
 class ProfileReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Effect, Command> (
     Event.Ui::class,
