@@ -1,10 +1,10 @@
-package com.lesa.app.presentation.people
+package com.lesa.app.presentation.features.people
 
 import com.lesa.app.composite_adapter.DelegateItem
-import com.lesa.app.domain.model.User
+import com.lesa.app.presentation.features.people.model.UserUi
 
 class UserDelegateItem(
-    val user: User,
+    val user: UserUi,
 ) : DelegateItem {
     override val id: Any
         get() = user.id

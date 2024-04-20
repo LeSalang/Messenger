@@ -7,9 +7,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App.Companion.INSTANCE
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentAnotherProfileBinding
-import com.lesa.app.domain.model.User
-import com.lesa.app.presentation.features.user.model.UserMapper
-import com.lesa.app.presentation.features.user.model.UserUi
+import com.lesa.app.presentation.features.people.model.UserUi
 import com.squareup.picasso.Picasso
 
 class UserFragment : Fragment(R.layout.fragment_another_profile) {
@@ -36,10 +34,10 @@ class UserFragment : Fragment(R.layout.fragment_another_profile) {
     companion object {
         private const val USER_KEY = "user_id_key"
 
-        fun getNewInstance(user: User): UserFragment {
+        fun getNewInstance(user: UserUi): UserFragment {
             return UserFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(USER_KEY, UserMapper().map(user))
+                    putParcelable(USER_KEY, user)
                 }
             }
         }

@@ -26,7 +26,7 @@ class ProfileFragment : ElmBaseFragment<Effect, State, Event>(
     override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
         elmRenderer = this
     ) {
-        INSTANCE.appContainer.storeFactory.create()
+        INSTANCE.appContainer.profileStoreFactory.create()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

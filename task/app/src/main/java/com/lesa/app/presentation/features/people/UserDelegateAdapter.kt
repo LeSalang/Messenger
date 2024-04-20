@@ -1,5 +1,6 @@
-package com.lesa.app.presentation.people
+package com.lesa.app.presentation.features.people
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
 import com.lesa.app.composite_adapter.DelegateAdapter
 import com.lesa.app.databinding.ItemPeopleBinding
-import com.lesa.app.domain.model.User
+import com.lesa.app.presentation.features.people.model.UserUi
 import com.squareup.picasso.Picasso
 
 class UserDelegateAdapter (
-    private val onClick: (Int) -> Unit
+    private val onClick: (UserUi) -> Unit
 ) : DelegateAdapter<UserDelegateItem, UserDelegateAdapter.ViewHolder>(UserDelegateItem::class.java) {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -23,18 +24,18 @@ class UserDelegateAdapter (
         holder.bind(item.user)
     }
 
-    class ViewHolder(view: View, val onClick: (Int) -> Unit) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, val onClick: (UserUi) -> Unit) : RecyclerView.ViewHolder(view) {
         private val binding = ItemPeopleBinding.bind(itemView)
 
-        fun bind(user: User) {
+        fun bind(user: UserUi) {
             Picasso.get().load(user.avatar).into(binding.peopleLogoImage)
             binding.peopleNameTextView.text = user.name
             binding.peopleEmailTextView.text = user.email
             itemView.setOnClickListener {
-                onClick(user.id)
+                onClick(user)
             }
-            /*binding.peopleNetStatusIndicator.imageTintList =
-                ColorStateList.valueOf(itemView.resources.getColor(user.presence.color))*/
+            binding.peopleNetStatusIndicator.imageTintList =
+                ColorStateList.valueOf(itemView.resources.getColor(user.presence.color))
         }
     }
 }

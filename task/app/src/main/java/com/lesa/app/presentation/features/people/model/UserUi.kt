@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.features.user.model
+package com.lesa.app.presentation.features.people.model
 
 import android.os.Parcelable
 import androidx.annotation.ColorRes
@@ -8,7 +8,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UserUi(
+    val id: Int,
     val name: String,
+    val email: String,
     val avatar: String?,
     val presence: Presence,
 ) : Parcelable {

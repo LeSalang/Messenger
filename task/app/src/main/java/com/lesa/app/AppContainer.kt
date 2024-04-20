@@ -8,7 +8,10 @@ import com.lesa.app.data.repositories.StreamsRepository
 import com.lesa.app.data.repositories.StreamsRepositoryImpl
 import com.lesa.app.data.repositories.UserRepository
 import com.lesa.app.data.repositories.UserRepositoryImpl
+import com.lesa.app.domain.use_cases.people.LoadPeopleUseCase
 import com.lesa.app.domain.use_cases.profile.LoadProfileUseCase
+import com.lesa.app.presentation.features.people.PeopleActor
+import com.lesa.app.presentation.features.people.PeopleStoreFactory
 import com.lesa.app.presentation.features.profile.ProfileActor
 import com.lesa.app.presentation.features.profile.ProfileStoreFactory
 import kotlinx.serialization.json.Json
@@ -19,7 +22,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 interface AppContainer {
-    val storeFactory: ProfileStoreFactory
+    val profileStoreFactory: ProfileStoreFactory
+    val peopleStoreFactory: PeopleStoreFactory
     val userRepository: UserRepository
     val streamsRepository: StreamsRepository
     val messagesRepository: MessagesRepository
@@ -68,7 +72,7 @@ class DefaultAppContainer() : AppContainer {
         MessagesRepositoryImpl(api = api)
     }
 
-    override val storeFactory by lazyNone {
+    override val profileStoreFactory by lazyNone {
         ProfileStoreFactory(profileActor)
     }
 
@@ -78,6 +82,18 @@ class DefaultAppContainer() : AppContainer {
 
     private val loadProfileUseCase by lazyNone {
         LoadProfileUseCase(userRepository)
+    }
+
+    override val peopleStoreFactory by lazyNone {
+        PeopleStoreFactory(peopleActor)
+    }
+
+    private val peopleActor by lazyNone {
+        PeopleActor(loadPeopleUseCase)
+    }
+
+    private val loadPeopleUseCase by lazyNone {
+        LoadPeopleUseCase(userRepository)
     }
 }
 

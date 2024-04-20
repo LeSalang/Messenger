@@ -1,11 +1,13 @@
-package com.lesa.app.presentation.features.user.model
+package com.lesa.app.presentation.features.people.model
 
 import com.lesa.app.domain.model.User
 
-class UserMapper() {
+class UserMapper {
     fun map(user: User) : UserUi {
         return UserUi(
+            id = user.id,
             name = user.name,
+            email = user.email,
             avatar = user.avatar,
             presence = user.presence.toUi()
         )

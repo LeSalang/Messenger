@@ -12,7 +12,7 @@ class ProfileReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
     Event.Internal::class
 ) {
     override fun Result.internal(event: Event.Internal): Any {
-        return when(event) {
+        return when (event) {
             is Event.Internal.DataLoaded -> state {
                 copy(
                     profileUi = ScreenState.Content(event.profileUi)
