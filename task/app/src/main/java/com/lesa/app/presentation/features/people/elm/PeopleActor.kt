@@ -16,9 +16,12 @@ class PeopleActor(
                     loadPeopleUseCase.invoke()
                 }.fold(
                     onSuccess = { userList ->
-                        emit(PeopleEvent.Internal.DataLoaded(userUiList = userList.map { user ->
-                            UserMapper().map(user)
-                        })
+                        emit(
+                            PeopleEvent.Internal.DataLoaded(
+                                userUiList = userList.map { user ->
+                                    UserMapper().map(user)
+                                }
+                            )
                         )
                     },
                     onFailure = {

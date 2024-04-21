@@ -1,10 +1,10 @@
 package com.lesa.app.presentation.channels
 
 import com.lesa.app.composite_adapter.DelegateItem
-import com.lesa.app.domain.model.Stream
+import com.lesa.app.presentation.features.streams.model.StreamUi
 
 class ChannelDelegateItem(
-    val stream: Stream,
+    val stream: StreamUi,
     val isExpanded: Boolean,
 ) : DelegateItem {
     override val id: Any

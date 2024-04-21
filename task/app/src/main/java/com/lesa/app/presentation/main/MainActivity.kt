@@ -4,16 +4,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import com.lesa.app.App
 import com.lesa.app.App.Companion.INSTANCE
 import com.lesa.app.R
-import com.lesa.app.presentation.Screens
 import com.lesa.app.databinding.ActivityMainBinding
+import com.lesa.app.presentation.Screens
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private var navigatorHolder: NavigatorHolder = App.INSTANCE.navigatorHolder
+    private var navigatorHolder: NavigatorHolder = INSTANCE.navigatorHolder
     private val navigator = AppNavigator(this, R.id.containerFragment)
     private val router = INSTANCE.router
 

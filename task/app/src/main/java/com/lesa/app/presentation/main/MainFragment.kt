@@ -7,8 +7,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.lesa.app.R
-import com.lesa.app.presentation.Screens
 import com.lesa.app.databinding.FragmentMainBinding
+import com.lesa.app.presentation.Screens
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding: FragmentMainBinding by viewBinding()
@@ -28,7 +28,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val bottomNavigationBar = binding.mainBottomNavigation
         bottomNavigationBar.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.channelsScreen -> router.newRootScreen(Screens.Channels())
+                R.id.channelsScreen -> router.newRootScreen(Screens.StreamsContainer())
                 R.id.peopleScreen -> router.newRootScreen(Screens.People())
                 R.id.profileScreen -> router.newRootScreen(Screens.Profile())
             }

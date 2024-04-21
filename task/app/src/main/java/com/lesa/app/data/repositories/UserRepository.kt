@@ -17,7 +17,7 @@ class UserRepositoryImpl(
     private val api: Api
 ) : UserRepository {
     override suspend fun getAllUsers(): List<User> {
-        val list =  coroutineScope {
+        val list = coroutineScope {
             val allPresence = async {
                 getAllPresence()
             }

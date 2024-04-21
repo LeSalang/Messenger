@@ -10,8 +10,7 @@ class PeopleStoreFactory(private val actor: PeopleActor) {
         return ElmStore(
             initialState = PeopleState(peopleUi = ScreenState.Loading),
             reducer = PeopleReducer(),
-            actor = actor,
-            startEvent = null, //TODO
+            actor = actor
         )
     }
 }
