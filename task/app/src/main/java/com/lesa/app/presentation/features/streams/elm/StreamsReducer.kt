@@ -2,6 +2,7 @@ package com.lesa.app.presentation.features.streams.elm
 
 import android.util.Log
 import com.lesa.app.presentation.features.streams.elm.StreamsEvent
+import com.lesa.app.presentation.features.streams.model.StreamsMapper
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
 import com.lesa.app.presentation.features.streams.elm.StreamsCommand as Command
@@ -17,8 +18,11 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
         Log.d("myLog", "result internal $event")
         return when (event) {
             is Event.Internal.DataLoaded -> state {
+                val streamList = event.streamList.map {
+                    StreamsMapper().map(it)
+                }
                 copy(
-                    streamUi = ScreenState.Content(event.streamUiList)
+                    streamUi = ScreenState.Content(streamList)
                 )
             }
             Event.Internal.Error -> state {
@@ -45,6 +49,12 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                     } else {
                         event.streamId
                     }
+                )
+            }
+            is StreamsEvent.Ui.Search -> commands {
+                +Command.Search(
+                    query = event.query,
+                    streamType = event.streamType
                 )
             }
         }

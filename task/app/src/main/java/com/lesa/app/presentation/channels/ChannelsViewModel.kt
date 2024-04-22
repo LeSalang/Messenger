@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.lesa.app.App
 import com.lesa.app.R
-import com.lesa.app.domain.model.Stream
 import com.lesa.app.data.repositories.StreamsRepository
+import com.lesa.app.domain.model.Stream
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -68,7 +68,7 @@ class ChannelsViewModel(
         )
     }
 
-    private fun searchChannels(query: String): List<Stream> { // TODO: move to repository
+    private fun searchChannels(query: String): List<Stream> {
         val refactoredQuery = query.trim(' ')
         val list = allStreams.filter { channel ->
             channel.topics.any { topic ->
@@ -160,4 +160,3 @@ inline fun <R> runCatchingNonCancellation(block: () -> R): Result<R> {
         Result.failure(e)
     }
 }
-

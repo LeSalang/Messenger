@@ -45,6 +45,15 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
         type = requireArguments().getParcelable(STREAM_TYPE_KEY) ?: StreamType.SUBSCRIBED
         store.accept(StreamsEvent.Ui.Init(type))
         setUpViews()
+
+        (parentFragment as? StreamsContainerFragment)?.setSearchListener { query ->
+            store.accept(
+                StreamsEvent.Ui.Search(
+                    query = query,
+                    streamType = type
+                )
+            )
+        }
     }
 
     override fun render(state: StreamsState) {
@@ -114,10 +123,6 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
         binding.error.refreshButton.setOnClickListener {
             store.accept(StreamsEvent.Ui.ReloadStreams(streamType = type))
         }
-    }
-
-    fun getAll() {
-        store.accept(Event.Ui.Init(type))
     }
 
     companion object {

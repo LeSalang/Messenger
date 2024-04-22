@@ -7,7 +7,6 @@ import android.view.View.VISIBLE
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.ViewPager2
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lesa.app.R
@@ -16,6 +15,7 @@ import com.lesa.app.presentation.channels.ChannelsViewModel
 import com.lesa.app.presentation.channels.ChannelsViewModelFactory
 import com.lesa.app.presentation.channels.PagerAdapter
 import com.lesa.app.presentation.features.streams.model.StreamType
+import com.lesa.app.presentation.utils.hideKeyboard
 
 class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
     private val binding: FragmentStreamsContainerBinding by viewBinding()
@@ -25,12 +25,6 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
         super.onViewCreated(view, savedInstanceState)
         setUpSearchView()
         setUpPager()
-
-        binding.searchEditText.addTextChangedListener {
-            it?.let {
-                viewModel.searchQuery.tryEmit(it.toString())
-            }
-        }
     }
 
     private fun setUpPager() {
@@ -48,14 +42,6 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
         TabLayoutMediator(tabLayout, fragmentViewPager) { tab, position ->
             tab.text = resources.getString(pages[position].title)
         }.attach()
-        binding.fragmentViewPager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-
-                }
-            }
-        )
     }
 
     private fun setUpSearchView() {
@@ -70,8 +56,17 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
                     searchTitle.visibility = VISIBLE
                     searchEditText.visibility = GONE
                     searchEditText.text.clear()
+                    searchEditText.hideKeyboard()
                 }
                 viewModel.isTitleSearch = !viewModel.isTitleSearch
+            }
+        }
+    }
+
+    fun setSearchListener(search: (String) -> Unit) {
+        binding.searchEditText.addTextChangedListener {
+            it?.let {
+                search(it.toString())
             }
         }
     }
