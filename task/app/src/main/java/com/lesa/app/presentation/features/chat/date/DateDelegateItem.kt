@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.chat.date
+package com.lesa.app.presentation.features.chat.date
 
 import com.lesa.app.compositeAdapter.DelegateItem
 import java.util.Date

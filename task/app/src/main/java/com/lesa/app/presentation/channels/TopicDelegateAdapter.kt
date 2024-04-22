@@ -35,10 +35,6 @@ class TopicDelegateAdapter (
             }
             val alfaColor = ColorUtils.setAlphaComponent(color, 80)
             binding.root.setBackgroundColor(alfaColor)
-            /*binding.topicMesCountTextView.text = String.format(
-                itemView.context.getString(R.string.channels_mes_count_pattern),
-                topic.count
-            )*/
             itemView.setOnClickListener {
                 onClick(topic)
             }

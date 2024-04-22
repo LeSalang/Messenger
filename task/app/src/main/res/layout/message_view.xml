@@ -58,7 +58,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <com.lesa.app.presentation.chat.message.emoji.EmojiFlexBox
+        <com.lesa.app.presentation.features.chat.message.emoji.EmojiFlexBox
             android:id="@+id/emojiFlexBox"
             android:layout_marginTop="@dimen/small_padding"
             android:layout_width="match_parent"

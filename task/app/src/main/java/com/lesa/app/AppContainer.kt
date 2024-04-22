@@ -8,9 +8,16 @@ import com.lesa.app.data.repositories.StreamsRepository
 import com.lesa.app.data.repositories.StreamsRepositoryImpl
 import com.lesa.app.data.repositories.UserRepository
 import com.lesa.app.data.repositories.UserRepositoryImpl
+import com.lesa.app.domain.use_cases.chat.AddReactionUseCase
+import com.lesa.app.domain.use_cases.chat.DeleteReactionUseCase
+import com.lesa.app.domain.use_cases.chat.LoadAllMessagesUseCase
+import com.lesa.app.domain.use_cases.chat.LoadSelectedMessageUseCase
+import com.lesa.app.domain.use_cases.chat.SendMessageUseCase
 import com.lesa.app.domain.use_cases.people.LoadPeopleUseCase
 import com.lesa.app.domain.use_cases.profile.LoadProfileUseCase
 import com.lesa.app.domain.use_cases.streams.LoadStreamsUseCase
+import com.lesa.app.presentation.features.chat.elm.ChatActor
+import com.lesa.app.presentation.features.chat.elm.ChatStoreFactory
 import com.lesa.app.presentation.features.people.elm.PeopleActor
 import com.lesa.app.presentation.features.people.elm.PeopleStoreFactory
 import com.lesa.app.presentation.features.profile.elm.ProfileActor
@@ -28,6 +35,7 @@ interface AppContainer {
     val profileStoreFactory: ProfileStoreFactory
     val peopleStoreFactory: PeopleStoreFactory
     val streamsStoreFactory: StreamsStoreFactory
+    val chatStoreFactory: ChatStoreFactory
     val userRepository: UserRepository
     val streamsRepository: StreamsRepository
     val messagesRepository: MessagesRepository
@@ -110,6 +118,40 @@ class DefaultAppContainer() : AppContainer {
 
     private val loadStreamsUseCase by lazyNone {
         LoadStreamsUseCase(streamsRepository)
+    }
+
+    override val chatStoreFactory by lazyNone {
+        ChatStoreFactory(chatActor)
+    }
+
+    private val chatActor by lazyNone {
+        ChatActor(
+            loadAllMessagesUseCase = loadAllMessagesUseCase,
+            sendMessageUseCase = sendMessageUseCase,
+            loadSelectedMessageUseCase = loadSelectedMessageUseCase,
+            addReactionUseCase = addReactionUseCase,
+            deleteReactionUseCase = deleteReactionUseCase
+        )
+    }
+
+    private val loadAllMessagesUseCase by lazyNone {
+        LoadAllMessagesUseCase(messagesRepository)
+    }
+
+    private val sendMessageUseCase by lazyNone {
+        SendMessageUseCase(messagesRepository)
+    }
+
+    private val loadSelectedMessageUseCase by lazyNone {
+        LoadSelectedMessageUseCase(messagesRepository)
+    }
+
+    private val addReactionUseCase by lazyNone {
+        AddReactionUseCase(messagesRepository)
+    }
+
+    private val deleteReactionUseCase by lazyNone {
+        DeleteReactionUseCase(messagesRepository)
     }
 }
 

@@ -1,4 +1,4 @@
-package com.lesa.app.domain.model
+package com.lesa.app.presentation.features.chat.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

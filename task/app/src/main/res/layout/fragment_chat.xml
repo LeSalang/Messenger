@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_18"
     android:fitsSystemWindows="true"
-    tools:context=".presentation.chat.ChatFragment">
+    tools:context=".presentation.features.chat.ChatFragment">
 
     <Toolbar
         android:id="@+id/toolBar"

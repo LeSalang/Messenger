@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.chat
+package com.lesa.app.presentation.features.chat
 
 import android.graphics.Color
 import android.graphics.Color.BLACK
@@ -7,81 +7,70 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.graphics.ColorUtils
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App
 import com.lesa.app.R
-import com.lesa.app.presentation.Screens
-import com.lesa.app.presentation.chat.date.DateDelegateAdapter
-import com.lesa.app.presentation.chat.emoji_picker.EmojiPickerBottomSheetFragment
-import com.lesa.app.presentation.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.ON_SELECT_EMOJI_REQUEST_KEY
-import com.lesa.app.presentation.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_EMOJI_KEY
-import com.lesa.app.presentation.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_MESSAGE_KEY
-import com.lesa.app.presentation.chat.message.MessageDelegateAdapter
-import com.lesa.app.presentation.chat.message.MessageView
 import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentChatBinding
-import com.lesa.app.domain.model.EmojiCNCS
-import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.Topic
-import kotlinx.coroutines.launch
+import com.lesa.app.presentation.Screens
+import com.lesa.app.presentation.elm.ElmBaseFragment
+import com.lesa.app.presentation.features.chat.date.DateDelegateAdapter
+import com.lesa.app.presentation.features.chat.elm.ChatEvent
+import com.lesa.app.presentation.features.chat.elm.ChatState
+import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment
+import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.ON_SELECT_EMOJI_REQUEST_KEY
+import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_EMOJI_KEY
+import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_MESSAGE_KEY
+import com.lesa.app.presentation.features.chat.message.MessageDelegateAdapter
+import com.lesa.app.presentation.features.chat.message.MessageView
+import com.lesa.app.presentation.features.chat.models.ChatMapper
+import com.lesa.app.presentation.features.chat.models.EmojiCNCS
+import com.lesa.app.presentation.features.chat.models.MessageUi
+import com.lesa.app.presentation.features.chat.models.TopicUi
+import com.lesa.app.presentation.utils.ScreenState
+import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
+import vivid.money.elmslie.core.store.Store
+import com.lesa.app.presentation.features.chat.elm.ChatEffect as Effect
+import com.lesa.app.presentation.features.chat.elm.ChatEvent as Event
+import com.lesa.app.presentation.features.chat.elm.ChatState as State
 
-class ChatFragment : Fragment(R.layout.fragment_chat) {
+class ChatFragment : ElmBaseFragment<Effect, State, Event>(
+    R.layout.fragment_chat
+) {
     private val binding: FragmentChatBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
+    private lateinit var topicUi: TopicUi
 
-    private val viewModel: ChatViewModel by viewModels() {
-        ChatViewModelFactory(
-            context = requireContext()
-        )
+    override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
+        elmRenderer = this
+    ) {
+        App.INSTANCE.appContainer.chatStoreFactory.create()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val topic : Topic = requireArguments().getParcelable(TOPIC_KEY)!!
+        topicUi = ChatMapper().topicToUiMap(topic)
+        store.accept(ChatEvent.Ui.Init(topicUi = topicUi))
         setUpViews()
-        val topic: Topic? = requireArguments().getParcelable(TOPIC_KEY)
-        viewModel.topic = topic
-        topic?.let { setUpTitle(it) }
-
-        lifecycleScope.launch {
-            viewModel.state.collect(::render)
-        }
-
-        childFragmentManager.setFragmentResultListener(
-            ON_SELECT_EMOJI_REQUEST_KEY, this
-        ) { requestKey, bundle ->
-            val emoji: EmojiCNCS? = bundle.getParcelable(SELECTED_EMOJI_KEY)
-            val messageId = bundle.getInt(SELECTED_MESSAGE_KEY)
-            if (emoji != null) {
-                onSelectEmoji(
-                    messageId = messageId, selectedEmojiCNCS = emoji
-                )
-            }
-        }
-        viewModel.loadMessages()
     }
 
-    private fun setUpViews() {
-        setUpRecycleView()
-        setUpActions()
-        setUpBackButton()
-        setupRefreshButton()
-    }
-
-    private fun render(state: ChatScreenState) {
-        when (state) {
-            is ChatScreenState.DataLoaded -> {
+    override fun render(state: ChatState) {
+        when (val dataToRender = state.chatUi) {
+            is ScreenState.Content -> {
                 binding.apply {
                     chatRecyclerView.visibility = View.VISIBLE
                     error.errorItem.visibility = View.GONE
                     shimmerLayout.visibility = View.GONE
+                    messageEditText.visibility = View.VISIBLE
+                    sendButton.visibility = View.VISIBLE
                 }
+                updateList(list = dataToRender.content)
             }
-            ChatScreenState.Error -> {
+            ScreenState.Error -> {
                 binding.apply {
                     chatRecyclerView.visibility = View.GONE
                     error.errorItem.visibility = View.VISIBLE
@@ -90,18 +79,28 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                     sendButton.visibility = View.GONE
                 }
             }
-            ChatScreenState.Loading -> {
+            ScreenState.Loading -> {
                 binding.apply {
                     chatRecyclerView.visibility = View.GONE
                     error.errorItem.visibility = View.GONE
                     shimmerLayout.visibility = View.VISIBLE
+                    messageEditText.visibility = View.VISIBLE
+                    sendButton.visibility = View.VISIBLE
                 }
             }
         }
-        updateList()
     }
 
-    private fun setUpTitle(topic: Topic) {
+    private fun setUpViews() {
+        setUpTitle(topicUi)
+        setUpBackButton()
+        setUpRecycleView()
+        setUpEmojiPicker()
+        setupRefreshButton()
+        setUpActions()
+    }
+
+    private fun setUpTitle(topic: TopicUi) {
         val color = ColorUtils.blendARGB(Color.parseColor(topic.color), BLACK, 0.6f)
         binding.toolBar.setBackgroundColor(color)
         activity?.window?.statusBarColor = color
@@ -115,7 +114,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private fun setUpBackButton() {
         binding.backButton.setOnClickListener {
             activity?.window?.statusBarColor = BLACK
-            App.INSTANCE.router.navigateTo(Screens.Main()) // TODO: 'exit()' doesn't work :c
+            App.INSTANCE.router.navigateTo(Screens.Main()) // TODO: 'exit()' doesn't work.
         }
     }
 
@@ -125,26 +124,16 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 MessageDelegateAdapter(
                     actions = MessageView.Actions(
                         onLongClick = { id ->
-                            showEmojiPicker(
-                                message = viewModel.state.value.messages.first {
-                                    it.id == id
-                                }
-                            )
+                            showEmojiPicker(id = id)
                         },
                         onEmojiClick = { id, emojiCode ->
                             onSelectEmoji(
-                                message = viewModel.state.value.messages.first {
-                                    it.id == id
-                                },
+                                messageId = id,
                                 emojiCode = emojiCode
                             )
                         },
                         onPlusButtonClick = { id ->
-                            showEmojiPicker(
-                                message = viewModel.state.value.messages.first {
-                                    it.id == id
-                                }
-                            )
+                            showEmojiPicker(id = id)
                         }
                     )
                 ),
@@ -152,6 +141,26 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             )
         )
         binding.chatRecyclerView.adapter = adapter
+    }
+
+    private fun setUpEmojiPicker() {
+        childFragmentManager.setFragmentResultListener(
+            ON_SELECT_EMOJI_REQUEST_KEY, this
+        ) { requestKey, bundle ->
+            val emoji: EmojiCNCS? = bundle.getParcelable(SELECTED_EMOJI_KEY)
+            val messageId = bundle.getInt(SELECTED_MESSAGE_KEY)
+            if (emoji != null) {
+                onSelectEmoji(
+                    messageId = messageId, selectedEmojiCNCS = emoji
+                )
+            }
+        }
+    }
+
+    private fun setupRefreshButton() {
+        binding.error.refreshButton.setOnClickListener {
+            store.accept(Event.Ui.Init(topicUi))
+        }
     }
 
     private fun setUpActions() {
@@ -175,8 +184,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         }
     }
 
-    private fun updateList() {
-        val delegateItems = makeDelegateItems(list = viewModel.state.value.messages)
+    private fun updateList(list: List<MessageUi>) {
+        val delegateItems = makeDelegateItems(list = list)
         adapter.submitList(delegateItems) {
             binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
         }
@@ -187,24 +196,26 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         if (messageText.isBlank()) {
             // TODO: show attachments picker
         } else {
-            viewModel.sendMessages(
-                content = messageText,
+            store.accept(
+                ChatEvent.Ui.SendMessage(
+                    content = messageText,
+                    topicUi = topicUi
+                )
             )
-            updateList()
             binding.messageEditText.text.clear()
         }
     }
 
     private fun makeDelegateItems(
-        list: List<Message>,
+        list: List<MessageUi>,
     ): MutableList<DelegateItem> {
         return ChatDelegateItemFactory().makeDelegateItems(
             list = list
         )
     }
 
-    private fun showEmojiPicker(message: Message) {
-        val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment.newInstance(message.id)
+    private fun showEmojiPicker(id: Int) {
+        val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment.newInstance(id)
         emojiPickerBottomSheetFragment.show(
             childFragmentManager, EmojiPickerBottomSheetFragment.TAG
         )
@@ -214,34 +225,23 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         messageId: Int,
         selectedEmojiCNCS: EmojiCNCS,
     ) {
-        val message: Message = viewModel
-            .state
-            .value
-            .messages
-            .firstOrNull {
-                it.id == messageId
-            } ?: return
         val emojiCode = selectedEmojiCNCS.code
         onSelectEmoji(
-            message = message,
+            messageId = messageId,
             emojiCode = emojiCode
         )
     }
 
     private fun onSelectEmoji(
-        message: Message,
+        messageId: Int,
         emojiCode: String,
     ) {
-        viewModel.onSelectEmoji(
-            message = message,
-            emojiCode = emojiCode
+        store.accept(
+            Event.Ui.SelectEmoji(
+                messageId = messageId,
+                emojiCode = emojiCode
+            )
         )
-    }
-
-    private fun setupRefreshButton() {
-        binding.error.refreshButton.setOnClickListener {
-            viewModel.loadMessages()
-        }
     }
 
     companion object {

@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.chat.emoji_picker
+package com.lesa.app.presentation.features.chat.emoji_picker
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,8 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.lesa.app.databinding.FragmentEmojiPickerBottomSheetBinding
-import com.lesa.app.domain.model.EmojiCNCS
-import com.lesa.app.domain.model.emojiSetCNCS
+import com.lesa.app.presentation.features.chat.models.EmojiCNCS
+import com.lesa.app.presentation.features.chat.models.emojiSetCNCS
 
 class EmojiPickerBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding: FragmentEmojiPickerBottomSheetBinding by viewBinding(createMethod = CreateMethod.INFLATE)

@@ -1,10 +1,10 @@
-package com.lesa.app.presentation.chat.emoji_picker
+package com.lesa.app.presentation.features.chat.emoji_picker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.databinding.ItemEmojiBinding
-import com.lesa.app.domain.model.EmojiCNCS
+import com.lesa.app.presentation.features.chat.models.EmojiCNCS
 
 class EmojiPickerAdapter(
     private val emojiList: List<EmojiCNCS>,

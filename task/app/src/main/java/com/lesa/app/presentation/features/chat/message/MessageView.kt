@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.chat.message
+package com.lesa.app.presentation.features.chat.message
 
 import android.content.Context
 import android.text.Html
@@ -12,8 +12,8 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import com.lesa.app.R
-import com.lesa.app.presentation.chat.message.emoji.EmojiFlexBox
-import com.lesa.app.presentation.chat.message.emoji.EmojiView
+import com.lesa.app.presentation.features.chat.message.emoji.EmojiFlexBox
+import com.lesa.app.presentation.features.chat.message.emoji.EmojiView
 import com.lesa.app.databinding.MessageViewBinding
 import com.squareup.picasso.Picasso
 

@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.chat.message.emoji
+package com.lesa.app.presentation.features.chat.message.emoji
 
 import android.content.Context
 import android.graphics.Canvas

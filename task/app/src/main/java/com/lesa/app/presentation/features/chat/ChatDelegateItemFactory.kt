@@ -1,16 +1,16 @@
-package com.lesa.app.presentation.chat
+package com.lesa.app.presentation.features.chat
 
-import com.lesa.app.presentation.chat.date.DateDelegateItem
-import com.lesa.app.presentation.chat.message.MessageDelegateItem
-import com.lesa.app.presentation.chat.message.MessageView
-import com.lesa.app.presentation.chat.message.emoji.EmojiView
 import com.lesa.app.composite_adapter.DelegateItem
-import com.lesa.app.domain.model.Message
+import com.lesa.app.presentation.features.chat.date.DateDelegateItem
+import com.lesa.app.presentation.features.chat.message.MessageDelegateItem
+import com.lesa.app.presentation.features.chat.message.MessageView
+import com.lesa.app.presentation.features.chat.message.emoji.EmojiView
+import com.lesa.app.presentation.features.chat.models.MessageUi
 import java.text.SimpleDateFormat
 
 class ChatDelegateItemFactory {
     fun makeDelegateItems(
-        list: List<Message>,
+        list: List<MessageUi>,
     ): MutableList<DelegateItem> {
         val formatter = SimpleDateFormat("yyyyMMdd")
         val messagesGroupedByDates = list.groupBy {

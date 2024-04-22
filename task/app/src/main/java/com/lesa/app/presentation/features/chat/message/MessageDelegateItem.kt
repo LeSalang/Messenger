@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.chat.message
+package com.lesa.app.presentation.features.chat.message
 
 import com.lesa.app.compositeAdapter.DelegateItem
 

@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.chat.date
+package com.lesa.app.presentation.features.chat.date
 
 import android.view.LayoutInflater
 import android.view.View
