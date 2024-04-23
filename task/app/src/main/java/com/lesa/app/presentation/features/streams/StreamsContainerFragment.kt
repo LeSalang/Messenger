@@ -12,6 +12,7 @@ import com.lesa.app.R
 import com.lesa.app.databinding.FragmentStreamsContainerBinding
 import com.lesa.app.presentation.channels.PagerAdapter
 import com.lesa.app.presentation.features.streams.model.StreamType
+import com.lesa.app.presentation.main.MainFragment
 import com.lesa.app.presentation.utils.hideKeyboard
 import com.lesa.app.presentation.utils.showKeyboard
 
@@ -57,6 +58,9 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
                     searchEditText.visibility = VISIBLE
                     searchEditText.showKeyboard()
                 }
+                val fragment = requireActivity().supportFragmentManager
+                    .findFragmentById(R.id.containerFragment) as? MainFragment
+                fragment?.showBottomBar(searchVisible)
                 searchVisible = searchVisible.not()
             }
         }

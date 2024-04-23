@@ -15,8 +15,10 @@ import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.people.elm.PeopleEvent
 import com.lesa.app.presentation.features.people.elm.PeopleState
 import com.lesa.app.presentation.features.people.model.UserUi
+import com.lesa.app.presentation.main.MainFragment
 import com.lesa.app.presentation.utils.ScreenState
 import com.lesa.app.presentation.utils.hideKeyboard
+import com.lesa.app.presentation.utils.showKeyboard
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
 import com.lesa.app.presentation.features.people.elm.PeopleEffect as Effect
@@ -72,6 +74,7 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
                 searchIcon.setImageResource(R.drawable.icon_close)
                 searchTitle.visibility = View.GONE
                 searchEditText.visibility = View.VISIBLE
+                searchEditText.showKeyboard()
             }
         } else {
             binding.apply {
@@ -82,6 +85,9 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
                 searchEditText.hideKeyboard()
             }
         }
+        val fragment = requireActivity().supportFragmentManager
+            .findFragmentById(R.id.containerFragment) as? MainFragment
+        fragment?.showBottomBar(!state.isSearching)
     }
 
     private fun setUpViews() {
