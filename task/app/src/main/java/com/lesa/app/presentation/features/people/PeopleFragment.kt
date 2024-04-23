@@ -2,6 +2,7 @@ package com.lesa.app.presentation.features.people
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.App.Companion.INSTANCE
 import com.lesa.app.R
@@ -15,6 +16,7 @@ import com.lesa.app.presentation.features.people.elm.PeopleEvent
 import com.lesa.app.presentation.features.people.elm.PeopleState
 import com.lesa.app.presentation.features.people.model.UserUi
 import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.hideKeyboard
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
 import com.lesa.app.presentation.features.people.elm.PeopleEffect as Effect
@@ -65,6 +67,51 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
                 }
             }
         }
+        if (state.isSearching) {
+            binding.apply {
+                searchIcon.setImageResource(R.drawable.icon_close)
+                searchTitle.visibility = View.GONE
+                searchEditText.visibility = View.VISIBLE
+            }
+        } else {
+            binding.apply {
+                searchIcon.setImageResource(R.drawable.icon_search)
+                searchTitle.visibility = View.VISIBLE
+                searchEditText.visibility = View.GONE
+                searchEditText.text.clear()
+                searchEditText.hideKeyboard()
+            }
+        }
+    }
+
+    private fun setUpViews() {
+        setUpRecyclerView()
+        setupRefreshButton()
+        setSearchListener()
+    }
+
+    private fun setUpRecyclerView() {
+        adapter = CompositeAdapter(
+            delegatesList(
+                UserDelegateAdapter(onClick = { openProfile(it) })
+            )
+        )
+        binding.peopleRecyclerView.adapter = adapter
+    }
+
+    private fun setupRefreshButton() {
+        binding.error.refreshButton.setOnClickListener {
+            store.accept(PeopleEvent.Ui.ReloadPeople)
+        }
+    }
+
+    private fun setSearchListener() {
+        binding.searchIcon.setOnClickListener {
+            store.accept(PeopleEvent.Ui.OnSearchClicked)
+        }
+        binding.searchEditText.addTextChangedListener {
+            store.accept(PeopleEvent.Ui.Search(it.toString()))
+        }
     }
 
     private fun updateList(list: List<UserUi>) {
@@ -83,27 +130,7 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
         }
     }
 
-    private fun setUpViews() {
-        setUpRecyclerView()
-        setupRefreshButton()
-    }
-
-    private fun setUpRecyclerView() {
-        adapter = CompositeAdapter(
-            delegatesList(
-                UserDelegateAdapter(onClick = { openProfile(it) })
-            )
-        )
-        binding.peopleRecyclerView.adapter = adapter
-    }
-
     private fun openProfile(user: UserUi) {
         INSTANCE.router.navigateTo(Screens.AnotherProfile(user = user))
-    }
-
-    private fun setupRefreshButton() {
-        binding.error.refreshButton.setOnClickListener {
-            store.accept(PeopleEvent.Ui.ReloadPeople)
-        }
     }
 }

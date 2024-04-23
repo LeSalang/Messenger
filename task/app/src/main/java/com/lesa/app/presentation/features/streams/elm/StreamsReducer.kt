@@ -18,11 +18,11 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
         Log.d("myLog", "result internal $event")
         return when (event) {
             is Event.Internal.DataLoaded -> state {
-                val streamList = event.streamList.map {
+                val streamUiList = event.streamList.map {
                     StreamsMapper().map(it)
                 }
                 copy(
-                    streamUi = ScreenState.Content(streamList)
+                    streamUi = ScreenState.Content(streamUiList)
                 )
             }
             Event.Internal.Error -> state {

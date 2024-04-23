@@ -8,10 +8,7 @@ sealed interface StreamsEvent {
         data class Init(val streamType: StreamType) : Ui
         data class ReloadStreams(val streamType: StreamType) : Ui
         data class ExpandStream(val streamId: Int?) : Ui
-        data class Search(
-            val query: String,
-            val streamType: StreamType
-        ) : Ui
+        data class Search(val query: String, val streamType: StreamType) : Ui
     }
 
     sealed interface Internal : StreamsEvent {

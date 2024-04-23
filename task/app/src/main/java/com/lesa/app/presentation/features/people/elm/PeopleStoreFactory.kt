@@ -8,7 +8,10 @@ class PeopleStoreFactory(private val actor: PeopleActor) {
 
     fun create() : Store<PeopleEvent, PeopleEffect, PeopleState> {
         return ElmStore(
-            initialState = PeopleState(peopleUi = ScreenState.Loading),
+            initialState = PeopleState(
+                peopleUi = ScreenState.Loading,
+                isSearching = false
+            ),
             reducer = PeopleReducer(),
             actor = actor
         )

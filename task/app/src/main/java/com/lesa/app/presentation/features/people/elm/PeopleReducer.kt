@@ -1,6 +1,7 @@
 package com.lesa.app.presentation.features.people.elm
 
 import com.lesa.app.presentation.features.people.elm.PeopleEvent
+import com.lesa.app.presentation.features.people.model.UserMapper
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
 import com.lesa.app.presentation.features.people.elm.PeopleCommand as Command
@@ -15,8 +16,11 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
     override fun Result.internal(event: PeopleEvent.Internal): Any {
         return when (event) {
             is PeopleEvent.Internal.DataLoaded -> state {
+                val userUiList = event.userList.map {
+                    UserMapper().map(it)
+                }
                 copy(
-                    peopleUi = ScreenState.Content(event.userUiList)
+                    peopleUi = ScreenState.Content(userUiList)
                 )
             }
             PeopleEvent.Internal.Error -> state {
@@ -34,6 +38,14 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
             }
             PeopleEvent.Ui.ReloadPeople -> commands {
                 +Command.LoadData
+            }
+            is PeopleEvent.Ui.Search -> commands {
+                +Command.Search(query = event.query)
+            }
+            PeopleEvent.Ui.OnSearchClicked -> state {
+                copy(
+                    isSearching = !isSearching
+                )
             }
         }
     }

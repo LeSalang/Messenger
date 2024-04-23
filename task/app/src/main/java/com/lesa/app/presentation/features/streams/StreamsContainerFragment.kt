@@ -6,20 +6,18 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentStreamsContainerBinding
-import com.lesa.app.presentation.channels.ChannelsViewModel
-import com.lesa.app.presentation.channels.ChannelsViewModelFactory
 import com.lesa.app.presentation.channels.PagerAdapter
 import com.lesa.app.presentation.features.streams.model.StreamType
 import com.lesa.app.presentation.utils.hideKeyboard
+import com.lesa.app.presentation.utils.showKeyboard
 
 class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
     private val binding: FragmentStreamsContainerBinding by viewBinding()
-    private val viewModel: ChannelsViewModel by viewModels { ChannelsViewModelFactory(requireContext()) }
+    private var searchVisible = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,18 +45,19 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
     private fun setUpSearchView() {
         binding.apply {
             searchIcon.setOnClickListener {
-                if (viewModel.isTitleSearch) {
-                    searchIcon.setImageResource(R.drawable.icon_close)
-                    searchTitle.visibility = GONE
-                    searchEditText.visibility = VISIBLE
-                } else {
+                if (searchVisible) {
                     searchIcon.setImageResource(R.drawable.icon_search)
                     searchTitle.visibility = VISIBLE
                     searchEditText.visibility = GONE
                     searchEditText.text.clear()
                     searchEditText.hideKeyboard()
+                } else {
+                    searchIcon.setImageResource(R.drawable.icon_close)
+                    searchTitle.visibility = GONE
+                    searchEditText.visibility = VISIBLE
+                    searchEditText.showKeyboard()
                 }
-                viewModel.isTitleSearch = !viewModel.isTitleSearch
+                searchVisible = searchVisible.not()
             }
         }
     }
