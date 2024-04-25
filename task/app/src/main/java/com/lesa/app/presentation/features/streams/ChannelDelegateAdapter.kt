@@ -33,9 +33,9 @@ class ChannelDelegateAdapter (
             itemView.setOnClickListener {
                 onClick(item.stream.id)
             }
-            val color = item.stream.color?.let {
-                Color.parseColor(it)
-            } ?: itemView.resources.getColor(R.color.gray_18)
+            val color = item.stream.color?.runCatching {
+                Color.parseColor(this)
+            }?.getOrNull() ?: itemView.resources.getColor(R.color.gray_18)
             val alfaColor = ColorUtils.setAlphaComponent(color, 100)
             binding.root.setBackgroundColor(alfaColor)
         }
