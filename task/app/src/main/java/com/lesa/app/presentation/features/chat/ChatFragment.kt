@@ -30,7 +30,6 @@ import com.lesa.app.presentation.features.chat.models.ChatMapper
 import com.lesa.app.presentation.features.chat.models.EmojiCNCS
 import com.lesa.app.presentation.features.chat.models.MessageUi
 import com.lesa.app.presentation.features.chat.models.TopicUi
-import com.lesa.app.presentation.navigation.Screens
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
@@ -124,7 +123,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     private fun setUpBackButton() {
         binding.backButton.setOnClickListener {
             activity?.window?.statusBarColor = BLACK
-            App.INSTANCE.router.navigateTo(Screens.Main()) // TODO: 'exit()' doesn't work.
+            App.INSTANCE.router.exit()
         }
     }
 
