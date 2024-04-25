@@ -10,7 +10,7 @@ import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentPeopleBinding
-import com.lesa.app.presentation.Screens
+import com.lesa.app.presentation.navigation.Screens
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.people.elm.PeopleEvent
 import com.lesa.app.presentation.features.people.elm.PeopleState

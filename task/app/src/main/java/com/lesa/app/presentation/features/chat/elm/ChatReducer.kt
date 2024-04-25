@@ -1,5 +1,7 @@
 package com.lesa.app.presentation.features.chat.elm
 
+import com.lesa.app.presentation.features.chat.elm.ChatEffect
+import com.lesa.app.presentation.features.chat.elm.ChatEvent
 import com.lesa.app.presentation.features.chat.models.ChatMapper
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
@@ -26,6 +28,9 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 copy(
                     chatUi = ScreenState.Error
                 )
+            }
+            ChatEvent.Internal.ErrorMessage -> effects {
+                +ChatEffect.EmojiError
             }
         }
     }

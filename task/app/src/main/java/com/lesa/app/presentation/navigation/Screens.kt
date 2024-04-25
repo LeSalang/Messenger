@@ -1,4 +1,4 @@
-package com.lesa.app.presentation
+package com.lesa.app.presentation.navigation
 
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.lesa.app.domain.model.Topic

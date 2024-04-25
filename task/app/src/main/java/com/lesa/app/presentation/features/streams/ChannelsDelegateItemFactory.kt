@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.channels
+package com.lesa.app.presentation.features.streams
 
 import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.presentation.features.streams.model.StreamUi

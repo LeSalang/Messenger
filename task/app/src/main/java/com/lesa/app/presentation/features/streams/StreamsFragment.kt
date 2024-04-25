@@ -11,15 +11,12 @@ import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentStreamsBinding
 import com.lesa.app.domain.model.Topic
-import com.lesa.app.presentation.Screens
-import com.lesa.app.presentation.channels.ChannelDelegateAdapter
-import com.lesa.app.presentation.channels.ChannelsDelegateItemFactory
-import com.lesa.app.presentation.channels.TopicDelegateAdapter
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.streams.elm.StreamsEvent
 import com.lesa.app.presentation.features.streams.elm.StreamsState
 import com.lesa.app.presentation.features.streams.model.StreamType
 import com.lesa.app.presentation.features.streams.model.StreamUi
+import com.lesa.app.presentation.navigation.Screens
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store

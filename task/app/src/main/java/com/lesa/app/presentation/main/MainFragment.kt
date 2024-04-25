@@ -9,7 +9,7 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentMainBinding
-import com.lesa.app.presentation.Screens
+import com.lesa.app.presentation.navigation.Screens
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding: FragmentMainBinding by viewBinding()

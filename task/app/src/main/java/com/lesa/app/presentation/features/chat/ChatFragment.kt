@@ -5,6 +5,7 @@ import android.graphics.Color.BLACK
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.graphics.ColorUtils
 import androidx.core.widget.doOnTextChanged
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -15,7 +16,6 @@ import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentChatBinding
 import com.lesa.app.domain.model.Topic
-import com.lesa.app.presentation.Screens
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.chat.date.DateDelegateAdapter
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
@@ -30,6 +30,7 @@ import com.lesa.app.presentation.features.chat.models.ChatMapper
 import com.lesa.app.presentation.features.chat.models.EmojiCNCS
 import com.lesa.app.presentation.features.chat.models.MessageUi
 import com.lesa.app.presentation.features.chat.models.TopicUi
+import com.lesa.app.presentation.navigation.Screens
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
@@ -87,6 +88,15 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     messageEditText.visibility = View.VISIBLE
                     sendButton.visibility = View.VISIBLE
                 }
+            }
+        }
+    }
+
+    override fun handleEffect(effect: Effect) {
+        when (effect) {
+            Effect.EmojiError -> {
+                val toast = Toast.makeText(context, getText(R.string.error_emoji), Toast.LENGTH_SHORT)
+                toast.show()
             }
         }
     }

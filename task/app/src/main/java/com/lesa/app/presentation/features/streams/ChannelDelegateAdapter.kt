@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.channels
+package com.lesa.app.presentation.features.streams
 
 import android.graphics.Color
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.channels
+package com.lesa.app.presentation.utils
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

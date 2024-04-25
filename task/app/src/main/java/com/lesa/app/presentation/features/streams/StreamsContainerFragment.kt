@@ -10,9 +10,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentStreamsContainerBinding
-import com.lesa.app.presentation.channels.PagerAdapter
 import com.lesa.app.presentation.features.streams.model.StreamType
 import com.lesa.app.presentation.main.MainFragment
+import com.lesa.app.presentation.utils.PagerAdapter
 import com.lesa.app.presentation.utils.hideKeyboard
 import com.lesa.app.presentation.utils.showKeyboard
 

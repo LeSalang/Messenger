@@ -9,7 +9,10 @@ import com.lesa.app.domain.use_cases.chat.SendMessageUseCase
 import com.lesa.app.presentation.features.chat.models.emojiSetCNCS
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import vivid.money.elmslie.core.store.Actor
+import java.util.concurrent.ConcurrentHashMap
 
 class ChatActor(
     private val loadAllMessagesUseCase: LoadAllMessagesUseCase, 
@@ -19,6 +22,7 @@ class ChatActor(
     private val deleteReactionUseCase: DeleteReactionUseCase
     ) : Actor<ChatCommand, ChatEvent>() {
     private var messageList = mutableListOf<Message>()
+    private val mutexMap = ConcurrentHashMap<String, Mutex>()
 
     override fun execute(command: ChatCommand): Flow<ChatEvent> {
         return when (command) {
@@ -63,51 +67,58 @@ class ChatActor(
                 )
             }
             is ChatCommand.SelectEmoji -> flow {
-                runCatching {
-                    val message = messageList.firstOrNull {
-                        it.id == command.messageId
-                    } ?: return@flow
-                    val emoji = message.reactions[command.emojiCode]
-                    if (emoji != null) {
-                        val emojiName = emoji.emojiName
-                        if (emoji.isOwn) {
-                            deleteReactionUseCase.invoke(
-                                messageId = message.id,
-                                emojiName = emojiName
-                            )
-                        } else {
-                            addReactionUseCase.invoke(
-                                messageId = message.id,
-                                emojiName = emojiName
-                            )
-                        }
-                    } else {
-                        val emojiName = emojiSetCNCS.firstOrNull {
-                            it.code == command.emojiCode
-                        }?.name ?: return@flow
-                        addReactionUseCase.invoke(
-                            messageId = message.id,
-                            emojiName = emojiName
+                mutexMap.getOrPut(command.messageId.toString(), ::Mutex).withLock {
+                    emit(
+                        selectEmoji(
+                            messageId = command.messageId,
+                            emojiCode = command.emojiCode
                         )
-                    }
-                    return@runCatching loadSelectedMessageUseCase.invoke(command.messageId)
-                }.fold(
-                    onSuccess = { message ->
-                        val index = messageList.indexOfFirst {
-                            it.id == message.id
-                        }
-                        messageList[index] = message
-                        emit(
-                            ChatEvent.Internal.AllMessagesLoaded(
-                                messageList = messageList
-                            )
-                        )
-                    },
-                    onFailure = {
-                        emit(ChatEvent.Internal.Error)
-                    }
+                    )
+                }
+            }.mapEvents(
+                eventMapper = {
+                    ChatEvent.Internal.AllMessagesLoaded(
+                        messageList = messageList
+                    )
+                },
+                errorMapper = {
+                    ChatEvent.Internal.ErrorMessage
+                }
+            )
+        }
+    }
+
+    private suspend fun selectEmoji(messageId: Int, emojiCode: String) {
+            val message = messageList.firstOrNull {
+                it.id == messageId
+            } ?: return
+            val emoji = message.reactions[emojiCode]
+            if (emoji != null) {
+                val emojiName = emoji.emojiName
+                if (emoji.isOwn) {
+                    deleteReactionUseCase.invoke(
+                        messageId = message.id,
+                        emojiName = emojiName
+                    )
+                } else {
+                    addReactionUseCase.invoke(
+                        messageId = message.id,
+                        emojiName = emojiName
+                    )
+                }
+            } else {
+                val emojiName = emojiSetCNCS.firstOrNull {
+                    it.code == emojiCode
+                }?.name ?: return
+                addReactionUseCase.invoke(
+                    messageId = message.id,
+                    emojiName = emojiName
                 )
             }
-        }
+            val updatedMessage = loadSelectedMessageUseCase.invoke(messageId)
+            val index = messageList.indexOfFirst {
+                it.id == updatedMessage.id
+            }
+            messageList[index] = updatedMessage
     }
 }

@@ -20,5 +20,6 @@ sealed interface ChatEvent {
     sealed interface Internal : ChatEvent {
         data class AllMessagesLoaded(val messageList: List<Message>) : Internal
         data object Error : Internal
+        data object ErrorMessage : Internal
     }
 }

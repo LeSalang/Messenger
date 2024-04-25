@@ -7,7 +7,7 @@ import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.lesa.app.App.Companion.INSTANCE
 import com.lesa.app.R
 import com.lesa.app.databinding.ActivityMainBinding
-import com.lesa.app.presentation.Screens
+import com.lesa.app.presentation.navigation.Screens
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
