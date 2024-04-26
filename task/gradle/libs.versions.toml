@@ -5,6 +5,7 @@ appcompat = "1.6.1"
 cicerone = "7.1"
 constraintlayout = "2.1.4"
 coreKtx = "1.13.0"
+dagger = "2.51.1"
 elmslie = "3.0.0-alpha10"
 facebook-shimmer = "0.5.0"
 flexbox = "3.0.0"
@@ -12,7 +13,7 @@ fragment = "1.6.2"
 kotlin = "1.9.0"
 kotlin-parselable = "1.8.10"
 kotlin-serialization = "1.9.22"
-kotlinx-coroutines-android = "1.6.4"
+kotlinx-coroutines-android = "1.7.1"
 material = "1.11.0"
 okhttp3 = "4.12.0"
 okhttp3-interceptor = "4.12.0"
@@ -28,6 +29,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 cicerone = { group = "com.github.terrakok", name = "cicerone", version.ref = "cicerone"}
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger"}
 elmslie-core = { group = "com.github.vivid-money.elmslie", name = "elmslie-core", version.ref = "elmslie"}
 elmslie-android = { group = "com.github.vivid-money.elmslie", name = "elmslie-android", version.ref = "elmslie"}
 facebook-shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "facebook-shimmer"}
@@ -45,7 +47,8 @@ serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization
 viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2"}
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlin-parselable" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization",  version.ref = "kotlin-serialization" }
