@@ -14,38 +14,31 @@ class PeopleActor @Inject constructor(
     override fun execute(command: PeopleCommand): Flow<PeopleEvent> {
         return when (command) {
             is PeopleCommand.LoadData -> flow {
-                runCatching {
-                    loadPeopleUseCase.invoke()
-                }.fold(
-                    onSuccess = { userList ->
-                        this@PeopleActor.userList = userList
-                        emit(
-                            PeopleEvent.Internal.DataLoaded(
-                                userList = this@PeopleActor.userList
-                            )
-                        )
-                    },
-                    onFailure = {
-                        emit(PeopleEvent.Internal.Error)
-                    }
-                )
-            }
+                emit(loadPeopleUseCase.invoke())
+            }.mapEvents(
+                eventMapper = { userList ->
+                    this@PeopleActor.userList = userList
+                    PeopleEvent.Internal.DataLoaded(
+                        userList = this@PeopleActor.userList
+                    )
+                },
+                errorMapper = {
+                    PeopleEvent.Internal.Error
+                }
+            )
+
             is PeopleCommand.Search -> flow {
-                runCatching {
-                    search(command.query)
-                }.fold(
-                    onSuccess = {
-                        emit(
-                            PeopleEvent.Internal.DataLoaded(
-                                userList = it
-                            )
-                        )
-                    },
-                    onFailure = {
-                        emit(PeopleEvent.Internal.Error)
-                    }
-                )
-            }
+                emit(search(command.query))
+            }.mapEvents(
+                eventMapper = {
+                    PeopleEvent.Internal.DataLoaded(
+                        userList = it
+                    )
+                },
+                errorMapper = {
+                    PeopleEvent.Internal.Error
+                }
+            )
         }
     }
 

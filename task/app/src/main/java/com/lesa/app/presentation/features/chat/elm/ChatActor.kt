@@ -28,45 +28,39 @@ class ChatActor @Inject constructor(
     override fun execute(command: ChatCommand): Flow<ChatEvent> {
         return when (command) {
             is ChatCommand.LoadAllMessages -> flow {
-                runCatching {
-                    val topic = command.topicUi
+                val topic = command.topicUi
+                emit(
                     loadAllMessagesUseCase.invoke(streamName = topic.streamName, topicName = topic.name)
-                }.fold(
-                    onSuccess = { list ->
-                        messageList = list.toMutableList()
-                        emit(
-                            ChatEvent.Internal.AllMessagesLoaded(
-                                messageList = messageList
-                            )
-                        )
-                    },
-                    onFailure = {
-                        emit(ChatEvent.Internal.Error)
-                    }
                 )
-            }
-            is ChatCommand.SendMessage -> flow {
-                runCatching { 
-                    val messageId = sendMessageUseCase.invoke(
-                        content = command.content,
-                        topicName = command.topicUi.name,
-                        streamId = command.topicUi.streamId
+            }.mapEvents(
+                eventMapper = {
+                    messageList = it.toMutableList()
+                    ChatEvent.Internal.AllMessagesLoaded(
+                        messageList = messageList
                     )
-                    loadSelectedMessageUseCase.invoke(messageId)
-                }.fold(
-                    onSuccess = { message ->
+                },
+                errorMapper = {
+                    ChatEvent.Internal.Error
+                }
+            )
+            is ChatCommand.SendMessage -> flow {
+                val messageId = sendMessageUseCase.invoke(
+                    content = command.content,
+                    topicName = command.topicUi.name,
+                    streamId = command.topicUi.streamId
+                )
+                emit(loadSelectedMessageUseCase.invoke(messageId))
+                }.mapEvents(
+                    eventMapper = { message ->
                         messageList.add(message)
-                        emit(
                             ChatEvent.Internal.AllMessagesLoaded(
                                 messageList = messageList
                             )
-                        )
                     },
-                    onFailure = {
-                        emit(ChatEvent.Internal.Error)
+                    errorMapper = {
+                       ChatEvent.Internal.Error
                     }
                 )
-            }
             is ChatCommand.SelectEmoji -> flow {
                 mutexMap.getOrPut(command.messageId.toString(), ::Mutex).withLock {
                     emit(

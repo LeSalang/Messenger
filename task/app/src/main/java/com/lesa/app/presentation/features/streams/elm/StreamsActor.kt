@@ -16,49 +16,44 @@ class StreamsActor @Inject constructor(
     override fun execute(command: StreamsCommand): Flow<StreamsEvent> {
         return when (command) {
             is StreamsCommand.LoadData ->  flow {
-                runCatching {
-                    loadStreamsUseCase.invoke()
-                }.fold(
-                    onSuccess = { streamList ->
-                        streams = streamList
-                        val filteredStreams = streams.filter {
-                            when (command.streamType) {
-                                StreamType.SUBSCRIBED -> {
-                                    it.isSubscribed
-                                }
-                                StreamType.ALL -> true
+                emit(loadStreamsUseCase.invoke())
+            }.mapEvents(
+                eventMapper = { streamList ->
+                    streams = streamList
+                    val filteredStreams = streams.filter {
+                        when (command.streamType) {
+                            StreamType.SUBSCRIBED -> {
+                                it.isSubscribed
                             }
+                            StreamType.ALL -> true
                         }
-                        emit(
-                            StreamsEvent.Internal.DataLoaded(
-                                streamList = filteredStreams
-                            )
-                        )
-                    },
-                    onFailure = {
-                        emit(StreamsEvent.Internal.Error)
                     }
-                )
-            }
+                    StreamsEvent.Internal.DataLoaded(
+                        streamList = filteredStreams
+                    )
+                },
+                errorMapper = {
+                    StreamsEvent.Internal.Error
+                }
+            )
+
             is StreamsCommand.Search -> flow {
-                runCatching {
+                emit(
                     filter(
                         streamList = search(command.query),
                         streamType = command.streamType
                     )
-                }.fold(
-                    onSuccess = {
-                        emit(
-                            StreamsEvent.Internal.DataLoaded(
-                                streamList = it
-                            )
-                        )
-                    },
-                    onFailure = {
-                        emit(StreamsEvent.Internal.Error)
-                    }
                 )
-            }
+            }.mapEvents(
+                eventMapper = {
+                    StreamsEvent.Internal.DataLoaded(
+                        streamList = it
+                    )
+                },
+                errorMapper = {
+                    StreamsEvent.Internal.Error
+                }
+            )
         }
     }
 

@@ -13,19 +13,17 @@ class ProfileActor @Inject constructor(
     override fun execute(command: ProfileCommand): Flow<ProfileEvent> {
         return when(command) {
             is ProfileCommand.LoadData -> flow {
-                runCatching {
-                    loadProfileUseCase.invoke()
-                }.fold(
-                    onSuccess = {
-                        val mapper = ProfileMapper()
-                        val profileUi = mapper.map(it)
-                        emit(ProfileEvent.Internal.DataLoaded(profileUi = profileUi))
-                    },
-                    onFailure = {
-                        emit(ProfileEvent.Internal.Error)
-                    }
-                )
-            }
+                emit(loadProfileUseCase.invoke())
+            }.mapEvents(
+                eventMapper = {
+                    val mapper = ProfileMapper()
+                    val profileUi = mapper.map(it)
+                    ProfileEvent.Internal.DataLoaded(profileUi = profileUi)
+                },
+                errorMapper = {
+                    ProfileEvent.Internal.Error
+                }
+            )
         }
     }
 }
