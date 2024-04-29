@@ -30,6 +30,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 cicerone = { group = "com.github.terrakok", name = "cicerone", version.ref = "cicerone"}
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger"}
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger"}
 elmslie-core = { group = "com.github.vivid-money.elmslie", name = "elmslie-core", version.ref = "elmslie"}
 elmslie-android = { group = "com.github.vivid-money.elmslie", name = "elmslie-android", version.ref = "elmslie"}
 facebook-shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "facebook-shimmer"}

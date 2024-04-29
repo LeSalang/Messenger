@@ -13,8 +13,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import vivid.money.elmslie.core.store.Actor
 import java.util.concurrent.ConcurrentHashMap
+import javax.inject.Inject
 
-class ChatActor(
+class ChatActor @Inject constructor(
     private val loadAllMessagesUseCase: LoadAllMessagesUseCase, 
     private val sendMessageUseCase: SendMessageUseCase,
     private val loadSelectedMessageUseCase: LoadSelectedMessageUseCase,

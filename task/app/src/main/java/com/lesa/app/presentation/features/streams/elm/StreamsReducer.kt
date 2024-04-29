@@ -15,7 +15,6 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
     Event.Internal::class
 ) {
     override fun Result.internal(event: Event.Internal): Any {
-        Log.d("myLog", "result internal $event")
         return when (event) {
             is Event.Internal.DataLoaded -> state {
                 val streamUiList = event.streamList.map {
@@ -34,7 +33,6 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
     }
 
     override fun Result.ui(event: Event.Ui): Any {
-        Log.d("myLog", "result ui $event")
         return when (event) {
             is Event.Ui.Init -> commands {
                 +Command.LoadData(streamType = event.streamType)

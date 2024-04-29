@@ -3,6 +3,7 @@ package com.lesa.app.data.repositories
 import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.models.toMessage
 import com.lesa.app.domain.model.Message
+import javax.inject.Inject
 
 interface MessagesRepository {
     suspend fun getAllMessagesInStream(
@@ -31,7 +32,7 @@ interface MessagesRepository {
     ) : Message
 }
 
-class MessagesRepositoryImpl(
+class MessagesRepositoryImpl @Inject constructor(
     private val api: Api
 ) : MessagesRepository {
 

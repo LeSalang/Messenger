@@ -5,20 +5,28 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.github.terrakok.cicerone.Cicerone
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import com.lesa.app.App
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentMainBinding
 import com.lesa.app.presentation.navigation.Screens
+import javax.inject.Inject
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding: FragmentMainBinding by viewBinding()
-    private val cicerone = Cicerone.create()
-    private val router = cicerone.router
-    private val navigatorHolder = cicerone.getNavigatorHolder()
     private lateinit var navigator: AppNavigator
 
+    @Inject
+    lateinit var navigatorHolder: NavigatorHolder
+
+    @Inject
+    lateinit var router: Router
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        App.INSTANCE.appComponent.inject(this)
+
         super.onViewCreated(view, savedInstanceState)
         navigator = AppNavigator(
             requireActivity(), R.id.mainFragmentContainer,

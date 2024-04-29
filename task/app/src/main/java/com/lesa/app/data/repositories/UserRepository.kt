@@ -7,13 +7,14 @@ import com.lesa.app.data.network.models.toUser
 import com.lesa.app.domain.model.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import javax.inject.Inject
 
 interface UserRepository {
     suspend fun getAllUsers() : List<User>
     suspend fun getOwnUser() : User
 }
 
-class UserRepositoryImpl(
+class UserRepositoryImpl @Inject constructor(
     private val api: Api
 ) : UserRepository {
     override suspend fun getAllUsers(): List<User> {

@@ -1,23 +1,32 @@
 package com.lesa.app
 
 import android.app.Application
-import com.github.terrakok.cicerone.Cicerone
-import com.lesa.app.data.network.Api
+import com.lesa.app.di.AppComponent
+import com.lesa.app.di.DaggerAppComponent
+import com.lesa.app.di.chat.ChatDepsStore
+import com.lesa.app.di.people.PeopleDepsStore
+import com.lesa.app.di.profile.ProfileDepsStore
+import com.lesa.app.di.streams.StreamsDepsStore
 
 internal class App : Application() {
-    private val cicerone = Cicerone.create()
-    val router
-        get() = cicerone.router
-    val navigatorHolder
-        get() = cicerone.getNavigatorHolder()
-
-    lateinit var api: Api
-    lateinit var appContainer: AppContainer
+    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
-        appContainer = DefaultAppContainer()
+        appComponent = buildComponent()
+        setUpModulesDeps(appComponent)
         INSTANCE = this
+    }
+
+    private fun buildComponent(): AppComponent {
+        return DaggerAppComponent.builder().application(this).build()
+    }
+
+    private fun setUpModulesDeps(appComponent: AppComponent) {
+        ChatDepsStore.deps = appComponent
+        PeopleDepsStore.deps = appComponent
+        ProfileDepsStore.deps = appComponent
+        StreamsDepsStore.deps = appComponent
     }
 
     companion object {

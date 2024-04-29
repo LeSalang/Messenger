@@ -1,26 +1,33 @@
 package com.lesa.app.presentation.features.people
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.lesa.app.App.Companion.INSTANCE
+import com.github.terrakok.cicerone.Router
 import com.lesa.app.R
 import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentPeopleBinding
-import com.lesa.app.presentation.navigation.Screens
+import com.lesa.app.di.people.PeopleComponent
+import com.lesa.app.di.people.PeopleComponentViewModel
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.people.elm.PeopleEvent
 import com.lesa.app.presentation.features.people.elm.PeopleState
+import com.lesa.app.presentation.features.people.elm.PeopleStoreFactory
 import com.lesa.app.presentation.features.people.model.UserUi
 import com.lesa.app.presentation.main.MainFragment
+import com.lesa.app.presentation.navigation.Screens
 import com.lesa.app.presentation.utils.ScreenState
 import com.lesa.app.presentation.utils.hideKeyboard
 import com.lesa.app.presentation.utils.showKeyboard
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
+import javax.inject.Inject
 import com.lesa.app.presentation.features.people.elm.PeopleEffect as Effect
 import com.lesa.app.presentation.features.people.elm.PeopleEvent as Event
 import com.lesa.app.presentation.features.people.elm.PeopleState as State
@@ -31,10 +38,24 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
     private val binding: FragmentPeopleBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
 
+    @Inject
+    lateinit var storeFactory: PeopleStoreFactory
+
+    @Inject
+    lateinit var router: Router
+
+    lateinit var peopleComponent: PeopleComponent
+
     override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
         elmRenderer = this
     ) {
-        INSTANCE.appContainer.peopleStoreFactory.create()
+        storeFactory.create()
+    }
+
+    override fun onAttach(context: Context) {
+        ViewModelProvider(this).get<PeopleComponentViewModel>()
+            .component.inject(this)
+        super.onAttach(context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -137,6 +158,6 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
     }
 
     private fun openProfile(user: UserUi) {
-        INSTANCE.router.navigateTo(Screens.AnotherProfile(user = user))
+        router.navigateTo(Screens.AnotherProfile(user = user))
     }
 }

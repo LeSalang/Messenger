@@ -5,8 +5,9 @@ import com.lesa.app.domain.use_cases.people.LoadPeopleUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import vivid.money.elmslie.core.store.Actor
+import javax.inject.Inject
 
-class PeopleActor(
+class PeopleActor @Inject constructor(
     private val loadPeopleUseCase: LoadPeopleUseCase
 ) : Actor<PeopleCommand, PeopleEvent>() {
     private var userList = listOf<User>()

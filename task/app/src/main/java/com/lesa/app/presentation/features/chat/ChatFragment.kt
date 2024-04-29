@@ -1,25 +1,33 @@
 package com.lesa.app.presentation.features.chat
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.graphics.ColorUtils
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.lesa.app.App
+import com.github.terrakok.cicerone.Router
 import com.lesa.app.R
 import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentChatBinding
+import com.lesa.app.di.chat.ChatComponentViewModel
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.chat.date.DateDelegateAdapter
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
 import com.lesa.app.presentation.features.chat.elm.ChatState
+import com.lesa.app.presentation.features.chat.elm.ChatStoreFactory
 import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment
 import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.ON_SELECT_EMOJI_REQUEST_KEY
 import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_EMOJI_KEY
@@ -30,9 +38,11 @@ import com.lesa.app.presentation.features.chat.models.ChatMapper
 import com.lesa.app.presentation.features.chat.models.EmojiCNCS
 import com.lesa.app.presentation.features.chat.models.MessageUi
 import com.lesa.app.presentation.features.chat.models.TopicUi
+import com.lesa.app.presentation.main.MainFragment
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
+import javax.inject.Inject
 import com.lesa.app.presentation.features.chat.elm.ChatEffect as Effect
 import com.lesa.app.presentation.features.chat.elm.ChatEvent as Event
 import com.lesa.app.presentation.features.chat.elm.ChatState as State
@@ -44,10 +54,29 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     private lateinit var adapter: CompositeAdapter
     private lateinit var topicUi: TopicUi
 
+    @Inject
+    lateinit var storeFactory: ChatStoreFactory
+
+    @Inject
+    lateinit var router: Router
+
     override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
         elmRenderer = this
     ) {
-        App.INSTANCE.appContainer.chatStoreFactory.create()
+        storeFactory.create()
+    }
+
+    override fun onAttach(context: Context) {
+        ViewModelProvider(this).get<ChatComponentViewModel>()
+            .component.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun onStart() {
+        val fragment = requireActivity().supportFragmentManager
+            .findFragmentById(R.id.containerFragment) as? MainFragment
+        fragment?.showBottomBar(false)
+        super.onStart()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,6 +85,13 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         topicUi = ChatMapper().topicToUiMap(topic)
         store.accept(ChatEvent.Ui.Init(topicUi = topicUi))
         setUpViews()
+    }
+
+    override fun onStop() {
+        val fragment = requireActivity().supportFragmentManager
+            .findFragmentById(R.id.containerFragment) as? MainFragment
+        fragment?.showBottomBar(true)
+        super.onStop()
     }
 
     override fun render(state: ChatState) {
@@ -120,10 +156,15 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         )
     }
 
+
     private fun setUpBackButton() {
         binding.backButton.setOnClickListener {
             activity?.window?.statusBarColor = BLACK
-            App.INSTANCE.router.exit()
+            router.exit()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            activity?.window?.statusBarColor = BLACK
+            router.exit()
         }
     }
 

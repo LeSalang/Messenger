@@ -6,12 +6,13 @@ import com.lesa.app.data.network.models.toTopic
 import com.lesa.app.domain.model.Stream
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import javax.inject.Inject
 
 interface StreamsRepository {
     suspend fun getAllStreams() : List<Stream>
 }
 
-class StreamsRepositoryImpl(
+class StreamsRepositoryImpl @Inject constructor(
     private val api: Api
 ) : StreamsRepository {
     override suspend fun getAllStreams(): List<Stream> {

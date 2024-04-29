@@ -6,8 +6,9 @@ import com.lesa.app.presentation.features.streams.model.StreamType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import vivid.money.elmslie.core.store.Actor
+import javax.inject.Inject
 
-class StreamsActor(
+class StreamsActor @Inject constructor(
     private val loadStreamsUseCase: LoadStreamsUseCase
 ) : Actor<StreamsCommand, StreamsEvent>() {
     private var streams = listOf<Stream>()

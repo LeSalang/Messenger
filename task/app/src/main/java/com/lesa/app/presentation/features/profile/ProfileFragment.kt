@@ -1,19 +1,25 @@
 package com.lesa.app.presentation.features.profile
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.lesa.app.App.Companion.INSTANCE
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentProfileBinding
+import com.lesa.app.di.profile.ProfileComponent
+import com.lesa.app.di.profile.ProfileComponentViewModel
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.profile.elm.ProfileEvent
+import com.lesa.app.presentation.features.profile.elm.ProfileStoreFactory
 import com.lesa.app.presentation.utils.ScreenState
 import com.squareup.picasso.Picasso
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
+import javax.inject.Inject
 import com.lesa.app.presentation.features.profile.elm.ProfileEffect as Effect
 import com.lesa.app.presentation.features.profile.elm.ProfileEvent as Event
 import com.lesa.app.presentation.features.profile.elm.ProfileState as State
@@ -23,10 +29,19 @@ class ProfileFragment : ElmBaseFragment<Effect, State, Event>(
 ) {
     private val binding: FragmentProfileBinding by viewBinding()
 
+    @Inject
+    lateinit var storeFactory: ProfileStoreFactory
+
     override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
         elmRenderer = this
     ) {
-        INSTANCE.appContainer.profileStoreFactory.create()
+        storeFactory.create()
+    }
+
+    override fun onAttach(context: Context) {
+        ViewModelProvider(this).get<ProfileComponentViewModel>()
+            .component.inject(this)
+        super.onAttach(context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

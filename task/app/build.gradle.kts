@@ -63,4 +63,6 @@ dependencies {
     implementation(libs.retrofit.converter)
     implementation(libs.serialization)
     implementation(libs.viewpager2)
+
+    kapt(libs.dagger.compiler)
 }
