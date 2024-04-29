@@ -8,8 +8,12 @@ sealed interface ChatCommand {
         val content: String,
         val topicUi: TopicUi
     ) : ChatCommand
-    data class SelectEmoji(
+    data class AddReaction(
         val messageId: Int,
-        val emojiCode: String
+        val emojiName: String
+    ) : ChatCommand
+    data class RemoveReaction(
+        val messageId: Int,
+        val emojiName: String
     ) : ChatCommand
 }

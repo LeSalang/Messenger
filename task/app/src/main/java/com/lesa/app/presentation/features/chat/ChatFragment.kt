@@ -4,9 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -95,7 +93,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     }
 
     override fun render(state: ChatState) {
-        when (val dataToRender = state.chatUi) {
+        when (val dataToRender = state.screenState) {
             is ScreenState.Content -> {
                 binding.apply {
                     chatRecyclerView.visibility = View.VISIBLE
@@ -155,7 +153,6 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
             topic.name
         )
     }
-
 
     private fun setUpBackButton() {
         binding.backButton.setOnClickListener {

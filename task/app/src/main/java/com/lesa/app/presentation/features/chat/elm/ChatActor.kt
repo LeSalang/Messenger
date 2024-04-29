@@ -6,7 +6,6 @@ import com.lesa.app.domain.use_cases.chat.DeleteReactionUseCase
 import com.lesa.app.domain.use_cases.chat.LoadAllMessagesUseCase
 import com.lesa.app.domain.use_cases.chat.LoadSelectedMessageUseCase
 import com.lesa.app.domain.use_cases.chat.SendMessageUseCase
-import com.lesa.app.presentation.features.chat.models.emojiSetCNCS
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
@@ -20,9 +19,8 @@ class ChatActor @Inject constructor(
     private val sendMessageUseCase: SendMessageUseCase,
     private val loadSelectedMessageUseCase: LoadSelectedMessageUseCase,
     private val addReactionUseCase: AddReactionUseCase,
-    private val deleteReactionUseCase: DeleteReactionUseCase
+    private val removeReactionUseCase: DeleteReactionUseCase
     ) : Actor<ChatCommand, ChatEvent>() {
-    private var messageList = mutableListOf<Message>()
     private val mutexMap = ConcurrentHashMap<String, Mutex>()
 
     override fun execute(command: ChatCommand): Flow<ChatEvent> {
@@ -34,15 +32,15 @@ class ChatActor @Inject constructor(
                 )
             }.mapEvents(
                 eventMapper = {
-                    messageList = it.toMutableList()
                     ChatEvent.Internal.AllMessagesLoaded(
-                        messageList = messageList
+                        messages = it
                     )
                 },
                 errorMapper = {
                     ChatEvent.Internal.Error
                 }
             )
+
             is ChatCommand.SendMessage -> flow {
                 val messageId = sendMessageUseCase.invoke(
                     content = command.content,
@@ -50,30 +48,40 @@ class ChatActor @Inject constructor(
                     streamId = command.topicUi.streamId
                 )
                 emit(loadSelectedMessageUseCase.invoke(messageId))
-                }.mapEvents(
-                    eventMapper = { message ->
-                        messageList.add(message)
-                            ChatEvent.Internal.AllMessagesLoaded(
-                                messageList = messageList
-                            )
-                    },
-                    errorMapper = {
-                       ChatEvent.Internal.Error
-                    }
-                )
-            is ChatCommand.SelectEmoji -> flow {
-                mutexMap.getOrPut(command.messageId.toString(), ::Mutex).withLock {
-                    emit(
-                        selectEmoji(
-                            messageId = command.messageId,
-                            emojiCode = command.emojiCode
-                        )
+            }.mapEvents(
+                eventMapper = { message ->
+                    ChatEvent.Internal.MessageSent(
+                        sentMessage = message
                     )
+                },
+                errorMapper = {
+                   ChatEvent.Internal.Error
+                }
+            )
+
+            is ChatCommand.AddReaction -> flow {
+                mutexMap.getOrPut(command.messageId.toString(), ::Mutex).withLock {
+                    emit(addReaction(command))
                 }
             }.mapEvents(
                 eventMapper = {
-                    ChatEvent.Internal.AllMessagesLoaded(
-                        messageList = messageList
+                    ChatEvent.Internal.MessageUpdated(
+                        updatedMessage = it
+                    )
+                },
+                errorMapper = {
+                    ChatEvent.Internal.ErrorMessage
+                }
+            )
+
+            is ChatCommand.RemoveReaction -> flow {
+                mutexMap.getOrPut(command.messageId.toString(), ::Mutex).withLock {
+                    emit(removeReaction(command))
+                }
+            }.mapEvents(
+                eventMapper = {
+                    ChatEvent.Internal.MessageUpdated(
+                        updatedMessage = it
                     )
                 },
                 errorMapper = {
@@ -83,37 +91,19 @@ class ChatActor @Inject constructor(
         }
     }
 
-    private suspend fun selectEmoji(messageId: Int, emojiCode: String) {
-            val message = messageList.firstOrNull {
-                it.id == messageId
-            } ?: return
-            val emoji = message.reactions[emojiCode]
-            if (emoji != null) {
-                val emojiName = emoji.emojiName
-                if (emoji.isOwn) {
-                    deleteReactionUseCase.invoke(
-                        messageId = message.id,
-                        emojiName = emojiName
-                    )
-                } else {
-                    addReactionUseCase.invoke(
-                        messageId = message.id,
-                        emojiName = emojiName
-                    )
-                }
-            } else {
-                val emojiName = emojiSetCNCS.firstOrNull {
-                    it.code == emojiCode
-                }?.name ?: return
-                addReactionUseCase.invoke(
-                    messageId = message.id,
-                    emojiName = emojiName
-                )
-            }
-            val updatedMessage = loadSelectedMessageUseCase.invoke(messageId)
-            val index = messageList.indexOfFirst {
-                it.id == updatedMessage.id
-            }
-            messageList[index] = updatedMessage
+    private suspend fun addReaction(command: ChatCommand.AddReaction): Message {
+        addReactionUseCase.invoke(
+            messageId = command.messageId,
+            emojiName = command.emojiName
+        )
+        return loadSelectedMessageUseCase.invoke(command.messageId)
+    }
+
+    private suspend fun removeReaction(command: ChatCommand.RemoveReaction): Message {
+        removeReactionUseCase.invoke(
+            messageId = command.messageId,
+            emojiName = command.emojiName
+        )
+        return loadSelectedMessageUseCase.invoke(command.messageId)
     }
 }

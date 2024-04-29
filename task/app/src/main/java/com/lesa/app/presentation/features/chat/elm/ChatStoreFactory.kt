@@ -9,9 +9,9 @@ class ChatStoreFactory @Inject constructor(private val actor: ChatActor) {
     fun create() : Store<ChatEvent, ChatEffect, ChatState> {
         return ElmStore(
             initialState = ChatState(
-                chatUi = ScreenState.Loading,
+                screenState = ScreenState.Loading,
                 topicUi = null,
-                messageId = null,
+                messages = listOf()
             ),
             reducer = ChatReducer(),
             actor = actor
