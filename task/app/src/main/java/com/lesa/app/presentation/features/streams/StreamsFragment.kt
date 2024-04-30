@@ -35,7 +35,6 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
 ) {
     private val binding: FragmentStreamsBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
-    private lateinit var type: StreamType
 
     @Inject
     lateinit var storeFactory: StreamsStoreFactory
@@ -46,7 +45,8 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
     override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
         elmRenderer = this
     ) {
-        storeFactory.create()
+        val type = requireArguments().getParcelable(STREAM_TYPE_KEY) ?: StreamType.SUBSCRIBED
+        storeFactory.create(type)
     }
 
     override fun onAttach(context: Context) {
@@ -57,22 +57,20 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        type = requireArguments().getParcelable(STREAM_TYPE_KEY) ?: StreamType.SUBSCRIBED
-        store.accept(StreamsEvent.Ui.Init(type))
+        store.accept(StreamsEvent.Ui.Init)
         setUpViews()
 
         (parentFragment as? StreamsContainerFragment)?.setSearchListener { query ->
             store.accept(
                 StreamsEvent.Ui.Search(
-                    query = query,
-                    streamType = type
+                    query = query
                 )
             )
         }
     }
 
     override fun render(state: StreamsState) {
-        when (val dataToRender = state.streamUi) {
+        when (val dataToRender = state.screenState) {
             is ScreenState.Content -> {
                 val list = dataToRender.content
                 val expandedStreamId = state.expandedChannelId
@@ -136,7 +134,7 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
 
     private fun setupRefreshButton() {
         binding.error.refreshButton.setOnClickListener {
-            store.accept(StreamsEvent.Ui.ReloadStreams(streamType = type))
+            store.accept(StreamsEvent.Ui.ReloadStreams)
         }
     }
 

@@ -1,7 +1,8 @@
 package com.lesa.app.presentation.features.streams.elm
 
-import android.util.Log
+import com.lesa.app.domain.model.Stream
 import com.lesa.app.presentation.features.streams.elm.StreamsEvent
+import com.lesa.app.presentation.features.streams.model.StreamType
 import com.lesa.app.presentation.features.streams.model.StreamsMapper
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
@@ -17,16 +18,21 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
     override fun Result.internal(event: Event.Internal): Any {
         return when (event) {
             is Event.Internal.DataLoaded -> state {
-                val streamUiList = event.streamList.map {
+                val filteredStreams = filter(
+                    streamType = state.streamType,
+                    streamList = event.streams
+                )
+                val streamUiList = filteredStreams.map {
                     StreamsMapper().map(it)
                 }
                 copy(
-                    streamUi = ScreenState.Content(streamUiList)
+                    screenState = ScreenState.Content(streamUiList),
+                    streams = event.streams
                 )
             }
             Event.Internal.Error -> state {
                 copy(
-                    streamUi = ScreenState.Error
+                    screenState = ScreenState.Error
                 )
             }
         }
@@ -35,10 +41,10 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
     override fun Result.ui(event: Event.Ui): Any {
         return when (event) {
             is Event.Ui.Init -> commands {
-                +Command.LoadData(streamType = event.streamType)
+                +Command.LoadData
             }
             is Event.Ui.ReloadStreams -> commands {
-                +Command.LoadData(streamType = event.streamType)
+                +Command.LoadData
             }
             is StreamsEvent.Ui.ExpandStream -> state {
                 copy(
@@ -49,12 +55,39 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                     }
                 )
             }
-            is StreamsEvent.Ui.Search -> commands {
-                +Command.Search(
-                    query = event.query,
-                    streamType = event.streamType
+            is StreamsEvent.Ui.Search -> state {
+                val filteredStreams = filter(
+                    streamType = state.streamType,
+                    streamList = state.streams
+                )
+                val resultList = search(streams = filteredStreams, query = event.query)
+                    .map { StreamsMapper().map(it) }
+                copy(
+                    screenState = ScreenState.Content(resultList)
                 )
             }
         }
+    }
+
+    private fun filter(streamList: List<Stream>, streamType: StreamType) : List<Stream> {
+        return streamList.filter {
+            when (streamType) {
+                StreamType.SUBSCRIBED -> {
+                    it.isSubscribed
+                }
+                StreamType.ALL -> true
+            }
+        }
+    }
+
+    private fun search(streams: List<Stream>, query: String): List<Stream> {
+        val refactoredQuery = query.trim(' ')
+        if (refactoredQuery.isEmpty()) return streams
+        val list = streams.filter { stream ->
+            stream.topics.any { topic ->
+                topic.name.contains(refactoredQuery, ignoreCase = true)
+            } || stream.name.contains(refactoredQuery, ignoreCase = true)
+        }
+        return list
     }
 }
