@@ -35,7 +35,6 @@ import com.lesa.app.presentation.features.chat.message.MessageView
 import com.lesa.app.presentation.features.chat.models.ChatMapper
 import com.lesa.app.presentation.features.chat.models.EmojiCNCS
 import com.lesa.app.presentation.features.chat.models.MessageUi
-import com.lesa.app.presentation.features.chat.models.TopicUi
 import com.lesa.app.presentation.main.MainFragment
 import com.lesa.app.presentation.utils.ScreenState
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
@@ -50,7 +49,6 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 ) {
     private val binding: FragmentChatBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
-    private lateinit var topicUi: TopicUi
 
     @Inject
     lateinit var storeFactory: ChatStoreFactory
@@ -61,7 +59,9 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
         elmRenderer = this
     ) {
-        storeFactory.create()
+        val topic : Topic = requireArguments().getParcelable(TOPIC_KEY)!! // TODO
+        val topicUi = ChatMapper().topicToUiMap(topic)
+        storeFactory.create(topicUi)
     }
 
     override fun onAttach(context: Context) {
@@ -79,9 +79,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val topic : Topic = requireArguments().getParcelable(TOPIC_KEY)!!
-        topicUi = ChatMapper().topicToUiMap(topic)
-        store.accept(ChatEvent.Ui.Init(topicUi = topicUi))
+        store.accept(ChatEvent.Ui.Init)
         setUpViews()
     }
 
@@ -135,7 +133,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     }
 
     private fun setUpViews() {
-        setUpTitle(topicUi)
+        setUpTitle()
         setUpBackButton()
         setUpRecycleView()
         setUpEmojiPicker()
@@ -143,7 +141,8 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         setUpActions()
     }
 
-    private fun setUpTitle(topic: TopicUi) {
+    private fun setUpTitle() {
+        val topic = store.states.value.topicUi
         val color = ColorUtils.blendARGB(Color.parseColor(topic.color), BLACK, 0.6f)
         binding.toolBar.setBackgroundColor(color)
         activity?.window?.statusBarColor = color
@@ -206,7 +205,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
     private fun setupRefreshButton() {
         binding.error.refreshButton.setOnClickListener {
-            store.accept(Event.Ui.Init(topicUi))
+            store.accept(Event.Ui.Init)
         }
     }
 
@@ -245,8 +244,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         } else {
             store.accept(
                 ChatEvent.Ui.SendMessage(
-                    content = messageText,
-                    topicUi = topicUi
+                    content = messageText
                 )
             )
             binding.messageEditText.text.clear()

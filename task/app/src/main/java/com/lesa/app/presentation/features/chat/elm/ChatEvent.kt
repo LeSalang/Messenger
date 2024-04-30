@@ -1,15 +1,13 @@
 package com.lesa.app.presentation.features.chat.elm
 
 import com.lesa.app.domain.model.Message
-import com.lesa.app.presentation.features.chat.models.TopicUi
 
 sealed interface ChatEvent {
     sealed interface Ui : ChatEvent {
-        data class Init(val topicUi: TopicUi) : Ui
+        data object Init : Ui
         data object ReloadChat : Ui
         data class SendMessage(
-            val content: String,
-            val topicUi: TopicUi
+            val content: String
         ) : Ui
         data class SelectEmoji(
             val messageId: Int,

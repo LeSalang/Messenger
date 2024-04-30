@@ -70,16 +70,16 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
     override fun Result.ui(event: Event.Ui): Any {
         return when (event) {
             is Event.Ui.Init -> commands {
-                val topic = event.topicUi
+                val topic = state.topicUi
                 +Command.LoadAllMessages(topicUi = topic)
             }
 
             is Event.Ui.SendMessage -> commands {
-                +Command.SendMessage(content = event.content, topicUi = event.topicUi)
+                +Command.SendMessage(content = event.content, topicUi = state.topicUi)
             }
 
             Event.Ui.ReloadChat -> commands {
-                +Command.LoadAllMessages(topicUi = state.topicUi!!) //TODO
+                +Command.LoadAllMessages(topicUi = state.topicUi)
             }
 
             is Event.Ui.SelectEmoji -> commands {

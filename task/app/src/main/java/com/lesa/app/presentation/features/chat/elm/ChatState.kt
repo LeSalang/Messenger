@@ -8,5 +8,5 @@ import com.lesa.app.presentation.utils.ScreenState
 data class ChatState(
     val screenState: ScreenState<List<MessageUi>>,
     val messages: List<Message>,
-    val topicUi: TopicUi?
+    val topicUi: TopicUi
 )
