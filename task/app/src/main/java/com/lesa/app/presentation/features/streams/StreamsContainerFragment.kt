@@ -6,22 +6,27 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentStreamsContainerBinding
 import com.lesa.app.presentation.features.streams.model.StreamType
-import com.lesa.app.presentation.main.MainFragment
+import com.lesa.app.presentation.utils.BottomBarViewModel
 import com.lesa.app.presentation.utils.PagerAdapter
 import com.lesa.app.presentation.utils.hideKeyboard
 import com.lesa.app.presentation.utils.showKeyboard
+import kotlinx.coroutines.launch
 
 class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
     private val binding: FragmentStreamsContainerBinding by viewBinding()
     private var searchVisible = false
+    private lateinit var bottomBarViewModel: BottomBarViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
         setUpSearchView()
         setUpPager()
     }
@@ -58,9 +63,9 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
                     searchEditText.visibility = VISIBLE
                     searchEditText.showKeyboard()
                 }
-                val fragment = requireActivity().supportFragmentManager
-                    .findFragmentById(R.id.containerFragment) as? MainFragment
-                fragment?.showBottomBar(searchVisible)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    bottomBarViewModel.isBottomBarShown.emit(searchVisible)
+                }
                 searchVisible = searchVisible.not()
             }
         }

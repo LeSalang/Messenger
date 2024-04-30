@@ -12,6 +12,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.Router
 import com.lesa.app.R
@@ -23,6 +24,7 @@ import com.lesa.app.di.chat.ChatComponentViewModel
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.chat.date.DateDelegateAdapter
+import com.lesa.app.presentation.features.chat.elm.ChatEffect
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
 import com.lesa.app.presentation.features.chat.elm.ChatState
 import com.lesa.app.presentation.features.chat.elm.ChatStoreFactory
@@ -32,11 +34,11 @@ import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomShe
 import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_MESSAGE_KEY
 import com.lesa.app.presentation.features.chat.message.MessageDelegateAdapter
 import com.lesa.app.presentation.features.chat.message.MessageView
-import com.lesa.app.presentation.features.chat.models.ChatMapper
 import com.lesa.app.presentation.features.chat.models.EmojiCNCS
 import com.lesa.app.presentation.features.chat.models.MessageUi
-import com.lesa.app.presentation.main.MainFragment
-import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.BottomBarViewModel
+import com.lesa.app.presentation.utils.LceState
+import kotlinx.coroutines.launch
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
 import javax.inject.Inject
@@ -49,6 +51,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 ) {
     private val binding: FragmentChatBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
+    private lateinit var bottomBarViewModel: BottomBarViewModel
 
     @Inject
     lateinit var storeFactory: ChatStoreFactory
@@ -60,8 +63,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         elmRenderer = this
     ) {
         val topic : Topic = requireArguments().getParcelable(TOPIC_KEY)!! // TODO
-        val topicUi = ChatMapper().topicToUiMap(topic)
-        storeFactory.create(topicUi)
+        storeFactory.create(topic)
     }
 
     override fun onAttach(context: Context) {
@@ -70,29 +72,30 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         super.onAttach(context)
     }
 
-    override fun onStart() {
-        val fragment = requireActivity().supportFragmentManager
-            .findFragmentById(R.id.containerFragment) as? MainFragment
-        fragment?.showBottomBar(false)
-        super.onStart()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
         super.onViewCreated(view, savedInstanceState)
         store.accept(ChatEvent.Ui.Init)
         setUpViews()
     }
 
+    override fun onStart() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            bottomBarViewModel.isBottomBarShown.emit(false)
+        }
+        super.onStart()
+    }
+
     override fun onStop() {
-        val fragment = requireActivity().supportFragmentManager
-            .findFragmentById(R.id.containerFragment) as? MainFragment
-        fragment?.showBottomBar(true)
+        viewLifecycleOwner.lifecycleScope.launch {
+            bottomBarViewModel.isBottomBarShown.emit(true)
+        }
         super.onStop()
     }
 
     override fun render(state: ChatState) {
-        when (val dataToRender = state.screenState) {
-            is ScreenState.Content -> {
+        when (val dataToRender = state.lceState) {
+            is LceState.Content -> {
                 binding.apply {
                     chatRecyclerView.visibility = View.VISIBLE
                     error.errorItem.visibility = View.GONE
@@ -102,7 +105,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 }
                 updateList(list = dataToRender.content)
             }
-            ScreenState.Error -> {
+            LceState.Error -> {
                 binding.apply {
                     chatRecyclerView.visibility = View.GONE
                     error.errorItem.visibility = View.VISIBLE
@@ -111,7 +114,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     sendButton.visibility = View.GONE
                 }
             }
-            ScreenState.Loading -> {
+            LceState.Loading -> {
                 binding.apply {
                     chatRecyclerView.visibility = View.GONE
                     error.errorItem.visibility = View.GONE
@@ -141,6 +144,19 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 val toast = Toast.makeText(context, getText(R.string.error_emoji), Toast.LENGTH_SHORT)
                 toast.show()
             }
+
+            Effect.ShowAttachmentsPicker -> {
+                // TODO: show attachments picker
+            }
+
+            Effect.ClearMessageInput -> {
+                binding.messageEditText.text.clear()
+            }
+
+            is ChatEffect.UpdateActionButton -> {
+                binding.sendButton.setImageResource(effect.icon)
+                binding.sendButton.setBackgroundResource(effect.background)
+            }
         }
     }
 
@@ -154,7 +170,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     }
 
     private fun setUpTitle() {
-        val topic = store.states.value.topicUi
+        val topic = store.states.value.topic
         val color = ColorUtils.blendARGB(Color.parseColor(topic.color), BLACK, 0.6f)
         binding.toolBar.setBackgroundColor(color)
         activity?.window?.statusBarColor = color
@@ -221,22 +237,17 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
     private fun setUpActions() {
         binding.messageEditText.doOnTextChanged { _, _, _, _ ->
-            if (binding.messageEditText.text.toString().isBlank()) {
-                binding.sendButton.setImageResource(R.drawable.circle_button_add_message_icon)
-                binding.sendButton.setBackgroundResource(R.drawable.circle_button_add_file_bg)
-            } else {
-                binding.sendButton.setImageResource(R.drawable.circle_button_add_file_icon)
-                binding.sendButton.setBackgroundResource(R.drawable.circle_button_add_message_bg)
-            }
+            val text = binding.messageEditText.text.toString()
+            store.accept(Event.Ui.MessageTextChanged(text))
         }
         binding.messageEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                addMessage()
+                onActionButtonClicked()
             }
             return@setOnEditorActionListener true
         }
         binding.sendButton.setOnClickListener {
-            addMessage()
+            onActionButtonClicked()
         }
     }
 
@@ -247,18 +258,11 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         }
     }
 
-    private fun addMessage() {
+    private fun onActionButtonClicked() {
         val messageText = binding.messageEditText.text.toString()
-        if (messageText.isBlank()) {
-            // TODO: show attachments picker
-        } else {
-            store.accept(
-                ChatEvent.Ui.SendMessage(
-                    content = messageText
-                )
-            )
-            binding.messageEditText.text.clear()
-        }
+        store.accept(
+            ChatEvent.Ui.ActionButtonClicked(content = messageText)
+        )
     }
 
     private fun makeDelegateItems(

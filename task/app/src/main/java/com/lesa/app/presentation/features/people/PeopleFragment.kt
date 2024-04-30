@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.Router
 import com.lesa.app.R
@@ -16,15 +17,17 @@ import com.lesa.app.databinding.FragmentPeopleBinding
 import com.lesa.app.di.people.PeopleComponent
 import com.lesa.app.di.people.PeopleComponentViewModel
 import com.lesa.app.presentation.elm.ElmBaseFragment
+import com.lesa.app.presentation.features.people.elm.PeopleEffect
 import com.lesa.app.presentation.features.people.elm.PeopleEvent
 import com.lesa.app.presentation.features.people.elm.PeopleState
 import com.lesa.app.presentation.features.people.elm.PeopleStoreFactory
 import com.lesa.app.presentation.features.people.model.UserUi
-import com.lesa.app.presentation.main.MainFragment
 import com.lesa.app.presentation.navigation.Screens
-import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.BottomBarViewModel
+import com.lesa.app.presentation.utils.LceState
 import com.lesa.app.presentation.utils.hideKeyboard
 import com.lesa.app.presentation.utils.showKeyboard
+import kotlinx.coroutines.launch
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
 import javax.inject.Inject
@@ -37,6 +40,7 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
 ) {
     private val binding: FragmentPeopleBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
+    private lateinit var bottomBarViewModel: BottomBarViewModel
 
     @Inject
     lateinit var storeFactory: PeopleStoreFactory
@@ -59,14 +63,15 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
         super.onViewCreated(view, savedInstanceState)
         store.accept(PeopleEvent.Ui.Init)
         setUpViews()
     }
 
     override fun render(state: PeopleState) {
-        when (val dataToRender = state.screenState) {
-            is ScreenState.Content -> {
+        when (val dataToRender = state.lceState) {
+            is LceState.Content -> {
                 val content = dataToRender.content
                 binding.apply {
                     peopleRecyclerView.visibility = View.VISIBLE
@@ -75,14 +80,14 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
                 }
                 updateList(list = content)
             }
-            ScreenState.Error -> {
+            LceState.Error -> {
                 binding.apply {
                     peopleRecyclerView.visibility = View.GONE
                     error.errorItem.visibility = View.VISIBLE
                     shimmerLayout.visibility = View.GONE
                 }
             }
-            ScreenState.Loading -> {
+            LceState.Loading -> {
                 binding.apply {
                     peopleRecyclerView.visibility = View.GONE
                     error.errorItem.visibility = View.GONE
@@ -106,9 +111,17 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
                 searchEditText.hideKeyboard()
             }
         }
-        val fragment = requireActivity().supportFragmentManager
-            .findFragmentById(R.id.containerFragment) as? MainFragment
-        fragment?.showBottomBar(!state.isSearching)
+        viewLifecycleOwner.lifecycleScope.launch {
+            bottomBarViewModel.isBottomBarShown.emit(!state.isSearching)
+        }
+    }
+
+    override fun handleEffect(effect: PeopleEffect) {
+        when (effect) {
+            is PeopleEffect.OpenProfile -> {
+                router.navigateTo(Screens.AnotherProfile(user = effect.user))
+            }
+        }
     }
 
     private fun setUpViews() {
@@ -120,7 +133,9 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
     private fun setUpRecyclerView() {
         adapter = CompositeAdapter(
             delegatesList(
-                UserDelegateAdapter(onClick = { openProfile(it) })
+                UserDelegateAdapter(onClick = {
+                    store.accept(Event.Ui.OpenProfile(user = it))
+                })
             )
         )
         binding.peopleRecyclerView.adapter = adapter
@@ -155,9 +170,5 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
         return list.map {
             UserDelegateItem(it)
         }
-    }
-
-    private fun openProfile(user: UserUi) {
-        router.navigateTo(Screens.AnotherProfile(user = user))
     }
 }

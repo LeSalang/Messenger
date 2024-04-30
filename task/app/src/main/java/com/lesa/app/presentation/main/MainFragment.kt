@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
@@ -12,11 +14,15 @@ import com.lesa.app.App
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentMainBinding
 import com.lesa.app.presentation.navigation.Screens
+import com.lesa.app.presentation.utils.BottomBarViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding: FragmentMainBinding by viewBinding()
     private lateinit var navigator: AppNavigator
+
+    private lateinit var bottomBarViewModel: BottomBarViewModel
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -26,12 +32,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         App.INSTANCE.appComponent.inject(this)
+        bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
 
         super.onViewCreated(view, savedInstanceState)
         navigator = AppNavigator(
             requireActivity(), R.id.mainFragmentContainer,
             childFragmentManager
         )
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            bottomBarViewModel.isBottomBarShown.collect {
+                showBottomBar(it)
+            }
+        }
 
         val bottomNavigationBar = binding.mainBottomNavigation
         bottomNavigationBar.setOnItemSelectedListener { menuItem ->
@@ -54,7 +67,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onPause()
     }
 
-    fun showBottomBar(isVisible: Boolean) {
+    private fun showBottomBar(isVisible: Boolean) {
         binding.mainBottomNavigation.isVisible = isVisible
     }
 }

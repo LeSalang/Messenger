@@ -16,13 +16,14 @@ import com.lesa.app.databinding.FragmentStreamsBinding
 import com.lesa.app.di.streams.StreamsComponentViewModel
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.elm.ElmBaseFragment
+import com.lesa.app.presentation.features.streams.elm.StreamsEffect
 import com.lesa.app.presentation.features.streams.elm.StreamsEvent
 import com.lesa.app.presentation.features.streams.elm.StreamsState
 import com.lesa.app.presentation.features.streams.elm.StreamsStoreFactory
 import com.lesa.app.presentation.features.streams.model.StreamType
 import com.lesa.app.presentation.features.streams.model.StreamUi
 import com.lesa.app.presentation.navigation.Screens
-import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.LceState
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
 import javax.inject.Inject
@@ -70,8 +71,8 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
     }
 
     override fun render(state: StreamsState) {
-        when (val dataToRender = state.screenState) {
-            is ScreenState.Content -> {
+        when (val dataToRender = state.lceState) {
+            is LceState.Content -> {
                 val list = dataToRender.content
                 val expandedStreamId = state.expandedChannelId
                 binding.apply {
@@ -81,19 +82,27 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
                 }
                 updateList(streams = list, expandedStreamId = expandedStreamId)
             }
-            ScreenState.Error -> {
+            LceState.Error -> {
                 binding.apply {
                     channelsRecycleView.visibility = GONE
                     error.errorItem.visibility = VISIBLE
                     shimmerLayout.visibility = GONE
                 }
             }
-            ScreenState.Loading -> {
+            LceState.Loading -> {
                 binding.apply {
                     channelsRecycleView.visibility = GONE
                     error.errorItem.visibility = GONE
                     shimmerLayout.visibility = VISIBLE
                 }
+            }
+        }
+    }
+
+    override fun handleEffect(effect: StreamsEffect) {
+        when (effect) {
+            is StreamsEffect.OpenChat -> {
+                router.navigateTo(Screens.Chat(topic = effect.topic))
             }
         }
     }
@@ -122,7 +131,7 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
     }
 
     private fun openChat(topic: Topic) {
-        router.navigateTo(Screens.Chat(topic = topic))
+        store.accept(Event.Ui.TopicClicked(topic = topic))
     }
 
     private fun updateList(streams: List<StreamUi>, expandedStreamId: Int?) {

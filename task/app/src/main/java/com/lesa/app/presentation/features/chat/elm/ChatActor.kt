@@ -26,7 +26,7 @@ class ChatActor @Inject constructor(
     override fun execute(command: ChatCommand): Flow<ChatEvent> {
         return when (command) {
             is ChatCommand.LoadAllMessages -> flow {
-                val topic = command.topicUi
+                val topic = command.topic
                 emit(
                     loadAllMessagesUseCase.invoke(streamName = topic.streamName, topicName = topic.name)
                 )
@@ -44,8 +44,8 @@ class ChatActor @Inject constructor(
             is ChatCommand.SendMessage -> flow {
                 val messageId = sendMessageUseCase.invoke(
                     content = command.content,
-                    topicName = command.topicUi.name,
-                    streamId = command.topicUi.streamId
+                    topicName = command.topic.name,
+                    streamId = command.topic.streamId
                 )
                 emit(loadSelectedMessageUseCase.invoke(messageId))
             }.mapEvents(

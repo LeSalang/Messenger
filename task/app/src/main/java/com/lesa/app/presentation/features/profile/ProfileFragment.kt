@@ -10,12 +10,11 @@ import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.lesa.app.R
 import com.lesa.app.databinding.FragmentProfileBinding
-import com.lesa.app.di.profile.ProfileComponent
 import com.lesa.app.di.profile.ProfileComponentViewModel
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.profile.elm.ProfileEvent
 import com.lesa.app.presentation.features.profile.elm.ProfileStoreFactory
-import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.LceState
 import com.squareup.picasso.Picasso
 import vivid.money.elmslie.android.renderer.elmStoreWithRenderer
 import vivid.money.elmslie.core.store.Store
@@ -52,7 +51,7 @@ class ProfileFragment : ElmBaseFragment<Effect, State, Event>(
 
     override fun render(state: State) {
         when (val dataToRender = state.profileUi) {
-            is ScreenState.Content -> {
+            is LceState.Content -> {
                 val content = dataToRender.content
                 binding.user.apply {
                     userNameTextView.text = content.name
@@ -64,12 +63,12 @@ class ProfileFragment : ElmBaseFragment<Effect, State, Event>(
                 binding.error.errorItem.visibility = GONE
                 binding.shimmer.visibility = GONE
             }
-            is ScreenState.Error -> {
+            is LceState.Error -> {
                 binding.user.itemProfile.visibility = GONE
                 binding.error.errorItem.visibility = VISIBLE
                 binding.shimmer.visibility = GONE
             }
-            ScreenState.Loading -> {
+            LceState.Loading -> {
                 binding.user.itemProfile.visibility = GONE
                 binding.error.errorItem.visibility = GONE
                 binding.shimmer.visibility = VISIBLE

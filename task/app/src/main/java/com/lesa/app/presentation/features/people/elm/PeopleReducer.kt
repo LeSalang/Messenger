@@ -3,7 +3,7 @@ package com.lesa.app.presentation.features.people.elm
 import com.lesa.app.domain.model.User
 import com.lesa.app.presentation.features.people.elm.PeopleEvent
 import com.lesa.app.presentation.features.people.model.UserMapper
-import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.LceState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
 import com.lesa.app.presentation.features.people.elm.PeopleCommand as Command
 import com.lesa.app.presentation.features.people.elm.PeopleEffect as Effect
@@ -21,13 +21,13 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
                     UserMapper().map(it)
                 }
                 copy(
-                    screenState = ScreenState.Content(userUiList),
+                    lceState = LceState.Content(userUiList),
                     users = event.users
                 )
             }
             PeopleEvent.Internal.Error -> state {
                 copy(
-                    screenState = ScreenState.Error
+                    lceState = LceState.Error
                 )
             }
         }
@@ -38,20 +38,27 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
             PeopleEvent.Ui.Init -> commands {
                 +Command.LoadUsers
             }
+
             PeopleEvent.Ui.ReloadPeople -> commands {
                 +Command.LoadUsers
             }
+
             is PeopleEvent.Ui.Search -> state {
                 val resultList = search(users = state.users, query = event.query)
                     .map { UserMapper().map(it) }
                 copy(
-                    screenState = ScreenState.Content(resultList)
+                    lceState = LceState.Content(resultList)
                 )
             }
+
             PeopleEvent.Ui.OnSearchClicked -> state {
                 copy(
                     isSearching = !isSearching
                 )
+            }
+
+            is PeopleEvent.Ui.OpenProfile -> effects {
+                +Effect.OpenProfile(user = event.user)
             }
         }
     }

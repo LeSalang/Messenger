@@ -8,7 +8,7 @@ sealed interface ChatEvent {
             val messageId: Int,
             val emojiCode: String
         ) : Ui
-        data class SendMessage(
+        data class ActionButtonClicked(
             val content: String
         ) : Ui
         data class ShowEmojiPicker(
@@ -17,6 +17,9 @@ sealed interface ChatEvent {
         data object Back : Ui
         data object Init : Ui
         data object ReloadChat : Ui
+        data class MessageTextChanged(
+            val text: String
+        ) : Ui
     }
 
     sealed interface Internal : ChatEvent {

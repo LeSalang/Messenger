@@ -4,7 +4,7 @@ import com.lesa.app.domain.model.Stream
 import com.lesa.app.presentation.features.streams.elm.StreamsEvent
 import com.lesa.app.presentation.features.streams.model.StreamType
 import com.lesa.app.presentation.features.streams.model.StreamsMapper
-import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.LceState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
 import com.lesa.app.presentation.features.streams.elm.StreamsCommand as Command
 import com.lesa.app.presentation.features.streams.elm.StreamsEffect as Effect
@@ -26,13 +26,13 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                     StreamsMapper().map(it)
                 }
                 copy(
-                    screenState = ScreenState.Content(streamUiList),
+                    lceState = LceState.Content(streamUiList),
                     streams = event.streams
                 )
             }
             Event.Internal.Error -> state {
                 copy(
-                    screenState = ScreenState.Error
+                    lceState = LceState.Error
                 )
             }
         }
@@ -63,8 +63,12 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                 val resultList = search(streams = filteredStreams, query = event.query)
                     .map { StreamsMapper().map(it) }
                 copy(
-                    screenState = ScreenState.Content(resultList)
+                    lceState = LceState.Content(resultList)
                 )
+            }
+
+            is StreamsEvent.Ui.TopicClicked -> effects {
+                +Effect.OpenChat(topic = event.topic)
             }
         }
     }

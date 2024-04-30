@@ -1,12 +1,13 @@
 package com.lesa.app.presentation.features.chat.elm
 
+import com.lesa.app.R
 import com.lesa.app.domain.model.Message
 import com.lesa.app.presentation.features.chat.elm.ChatCommand
 import com.lesa.app.presentation.features.chat.elm.ChatEffect
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
 import com.lesa.app.presentation.features.chat.models.ChatMapper
 import com.lesa.app.presentation.features.chat.models.emojiSetCNCS
-import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.LceState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
 import com.lesa.app.presentation.features.chat.elm.ChatCommand as Command
 import com.lesa.app.presentation.features.chat.elm.ChatEffect as Effect
@@ -24,14 +25,14 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     ChatMapper().map(it)
                 }
                 copy(
-                    screenState = ScreenState.Content(messageUiList),
+                    lceState = LceState.Content(messageUiList),
                     messages = event.messages
                 )
             }
 
             Event.Internal.Error -> state {
                 copy(
-                    screenState = ScreenState.Error
+                    lceState = LceState.Error
                 )
             }
 
@@ -45,7 +46,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     ChatMapper().map(it)
                 }
                 copy(
-                    screenState = ScreenState.Content(messageUiList),
+                    lceState = LceState.Content(messageUiList),
                     messages = messages
                 )
             }
@@ -60,7 +61,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     ChatMapper().map(it)
                 }
                 copy(
-                    screenState = ScreenState.Content(messageUiList),
+                    lceState = LceState.Content(messageUiList),
                     messages = messageList
                 )
             }
@@ -70,8 +71,8 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
     override fun Result.ui(event: Event.Ui): Any {
         return when (event) {
             is Event.Ui.Init -> commands {
-                val topic = state.topicUi
-                +Command.LoadAllMessages(topicUi = topic)
+                val topic = state.topic
+                +Command.LoadAllMessages(topic = topic)
             }
 
             is Event.Ui.SelectEmoji -> commands {
@@ -84,19 +85,44 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             }
 
             is Event.Ui.ShowEmojiPicker -> effects {
-                +ChatEffect.ShowEmojiPicker(emojiId = event.emojiId)
+                +Effect.ShowEmojiPicker(emojiId = event.emojiId)
             }
 
-            is Event.Ui.SendMessage -> commands {
-                +Command.SendMessage(content = event.content, topicUi = state.topicUi)
+            is Event.Ui.ActionButtonClicked -> {
+                if (event.content.isBlank()) {
+                    effects {
+                        +Effect.ShowAttachmentsPicker
+                    }
+                } else {
+                    commands {
+                        +Command.SendMessage(content = event.content, topic = state.topic)
+                    }
+                    effects {
+                        +Effect.ClearMessageInput
+                    }
+                }
             }
 
             Event.Ui.Back -> effects {
-                +ChatEffect.Back
+                +Effect.Back
             }
 
             Event.Ui.ReloadChat -> commands {
-                +Command.LoadAllMessages(topicUi = state.topicUi)
+                +Command.LoadAllMessages(topic = state.topic)
+            }
+
+            is ChatEvent.Ui.MessageTextChanged -> effects {
+                if (event.text.isBlank()) {
+                    +Effect.UpdateActionButton(
+                        icon = R.drawable.circle_button_add_message_icon,
+                        background = R.drawable.circle_button_add_file_bg
+                    )
+                } else {
+                    +Effect.UpdateActionButton(
+                        icon = R.drawable.circle_button_add_file_icon,
+                        background = R.drawable.circle_button_add_message_bg
+                    )
+                }
             }
         }
     }

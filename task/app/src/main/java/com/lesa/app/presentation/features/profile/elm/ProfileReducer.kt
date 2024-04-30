@@ -1,6 +1,6 @@
 package com.lesa.app.presentation.features.profile.elm
 
-import com.lesa.app.presentation.utils.ScreenState
+import com.lesa.app.presentation.utils.LceState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
 import com.lesa.app.presentation.features.profile.elm.ProfileCommand as Command
 import com.lesa.app.presentation.features.profile.elm.ProfileEffect as Effect
@@ -15,12 +15,12 @@ class ProfileReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
         return when (event) {
             is Event.Internal.DataLoaded -> state {
                 copy(
-                    profileUi = ScreenState.Content(event.profileUi)
+                    profileUi = LceState.Content(event.profileUi)
                 )
             }
             is Event.Internal.Error -> state {
                 copy(
-                    profileUi = ScreenState.Error
+                    profileUi = LceState.Error
                 )
             }
         }
