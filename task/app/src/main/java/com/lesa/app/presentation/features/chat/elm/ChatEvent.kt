@@ -13,6 +13,9 @@ sealed interface ChatEvent {
             val messageId: Int,
             val emojiCode: String
         ) : Ui
+        data class ShowEmojiPicker(
+            val emojiId: Int
+        ) : Ui
     }
 
     sealed interface Internal : ChatEvent {

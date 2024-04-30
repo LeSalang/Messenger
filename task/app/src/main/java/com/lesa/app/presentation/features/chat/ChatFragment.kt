@@ -23,6 +23,7 @@ import com.lesa.app.di.chat.ChatComponentViewModel
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.chat.date.DateDelegateAdapter
+import com.lesa.app.presentation.features.chat.elm.ChatEffect
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
 import com.lesa.app.presentation.features.chat.elm.ChatState
 import com.lesa.app.presentation.features.chat.elm.ChatStoreFactory
@@ -129,6 +130,12 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 val toast = Toast.makeText(context, getText(R.string.error_emoji), Toast.LENGTH_SHORT)
                 toast.show()
             }
+            is ChatEffect.ShowEmojiPicker -> {
+                val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment.newInstance(effect.emojiId)
+                emojiPickerBottomSheetFragment.show(
+                    childFragmentManager, EmojiPickerBottomSheetFragment.TAG
+                )
+            }
         }
     }
 
@@ -170,7 +177,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 MessageDelegateAdapter(
                     actions = MessageView.Actions(
                         onLongClick = { id ->
-                            showEmojiPicker(id = id)
+                            store.accept(Event.Ui.ShowEmojiPicker(emojiId = id))
                         },
                         onEmojiClick = { id, emojiCode ->
                             onSelectEmoji(
@@ -179,7 +186,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                             )
                         },
                         onPlusButtonClick = { id ->
-                            showEmojiPicker(id = id)
+                            store.accept(Event.Ui.ShowEmojiPicker(emojiId = id))
                         }
                     )
                 ),
@@ -256,13 +263,6 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     ): MutableList<DelegateItem> {
         return ChatDelegateItemFactory().makeDelegateItems(
             list = list
-        )
-    }
-
-    private fun showEmojiPicker(id: Int) {
-        val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment.newInstance(id)
-        emojiPickerBottomSheetFragment.show(
-            childFragmentManager, EmojiPickerBottomSheetFragment.TAG
         )
     }
 

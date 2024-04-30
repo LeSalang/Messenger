@@ -90,6 +90,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 )
                 if (command != null) +command
             }
+
+            is ChatEvent.Ui.ShowEmojiPicker -> effects {
+                +ChatEffect.ShowEmojiPicker(emojiId = event.emojiId)
+            }
         }
     }
 
