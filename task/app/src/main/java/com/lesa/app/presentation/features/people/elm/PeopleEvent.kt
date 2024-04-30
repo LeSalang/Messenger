@@ -11,7 +11,7 @@ sealed interface PeopleEvent {
     }
 
     sealed interface Internal : PeopleEvent {
-        data class DataLoaded(val userList: List<User>) : Internal
+        data class DataLoaded(val users: List<User>) : Internal
         data object Error : Internal
     }
 }

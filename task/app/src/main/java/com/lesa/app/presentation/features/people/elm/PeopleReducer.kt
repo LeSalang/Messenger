@@ -1,5 +1,6 @@
 package com.lesa.app.presentation.features.people.elm
 
+import com.lesa.app.domain.model.User
 import com.lesa.app.presentation.features.people.elm.PeopleEvent
 import com.lesa.app.presentation.features.people.model.UserMapper
 import com.lesa.app.presentation.utils.ScreenState
@@ -16,16 +17,17 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
     override fun Result.internal(event: PeopleEvent.Internal): Any {
         return when (event) {
             is PeopleEvent.Internal.DataLoaded -> state {
-                val userUiList = event.userList.map {
+                val userUiList = event.users.map {
                     UserMapper().map(it)
                 }
                 copy(
-                    peopleUi = ScreenState.Content(userUiList)
+                    screenState = ScreenState.Content(userUiList),
+                    users = event.users
                 )
             }
             PeopleEvent.Internal.Error -> state {
                 copy(
-                    peopleUi = ScreenState.Error
+                    screenState = ScreenState.Error
                 )
             }
         }
@@ -34,13 +36,17 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
     override fun Result.ui(event: PeopleEvent.Ui): Any {
         return when (event) {
             PeopleEvent.Ui.Init -> commands {
-                +Command.LoadData
+                +Command.LoadUsers
             }
             PeopleEvent.Ui.ReloadPeople -> commands {
-                +Command.LoadData
+                +Command.LoadUsers
             }
-            is PeopleEvent.Ui.Search -> commands {
-                +Command.Search(query = event.query)
+            is PeopleEvent.Ui.Search -> state {
+                val resultList = search(users = state.users, query = event.query)
+                    .map { UserMapper().map(it) }
+                copy(
+                    screenState = ScreenState.Content(resultList)
+                )
             }
             PeopleEvent.Ui.OnSearchClicked -> state {
                 copy(
@@ -48,5 +54,18 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
                 )
             }
         }
+    }
+
+    private fun search(
+        users: List<User>,
+        query: String
+    ): List<User> {
+        val refactoredQuery = query.trim(' ')
+        if (refactoredQuery.isEmpty()) return users
+        val list = users.filter { user ->
+            user.name.contains(refactoredQuery, ignoreCase = true)
+                || user.name.contains(refactoredQuery, ignoreCase = true)
+        }
+        return list
     }
 }

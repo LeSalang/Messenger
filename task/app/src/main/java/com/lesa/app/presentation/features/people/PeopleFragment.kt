@@ -65,7 +65,7 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
     }
 
     override fun render(state: PeopleState) {
-        when (val dataToRender = state.peopleUi) {
+        when (val dataToRender = state.screenState) {
             is ScreenState.Content -> {
                 val content = dataToRender.content
                 binding.apply {
