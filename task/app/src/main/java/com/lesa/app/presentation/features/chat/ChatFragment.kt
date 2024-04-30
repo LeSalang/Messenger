@@ -23,7 +23,6 @@ import com.lesa.app.di.chat.ChatComponentViewModel
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.chat.date.DateDelegateAdapter
-import com.lesa.app.presentation.features.chat.elm.ChatEffect
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
 import com.lesa.app.presentation.features.chat.elm.ChatState
 import com.lesa.app.presentation.features.chat.elm.ChatStoreFactory
@@ -126,15 +125,21 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
     override fun handleEffect(effect: Effect) {
         when (effect) {
-            Effect.EmojiError -> {
-                val toast = Toast.makeText(context, getText(R.string.error_emoji), Toast.LENGTH_SHORT)
-                toast.show()
-            }
-            is ChatEffect.ShowEmojiPicker -> {
+            is Effect.ShowEmojiPicker -> {
                 val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment.newInstance(effect.emojiId)
                 emojiPickerBottomSheetFragment.show(
                     childFragmentManager, EmojiPickerBottomSheetFragment.TAG
                 )
+            }
+
+            Effect.Back -> {
+                activity?.window?.statusBarColor = BLACK
+                router.exit()
+            }
+
+            Effect.EmojiError -> {
+                val toast = Toast.makeText(context, getText(R.string.error_emoji), Toast.LENGTH_SHORT)
+                toast.show()
             }
         }
     }
@@ -162,12 +167,10 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
     private fun setUpBackButton() {
         binding.backButton.setOnClickListener {
-            activity?.window?.statusBarColor = BLACK
-            router.exit()
+            store.accept(Event.Ui.Back)
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            activity?.window?.statusBarColor = BLACK
-            router.exit()
+            store.accept(Event.Ui.Back)
         }
     }
 

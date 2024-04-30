@@ -74,14 +74,6 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 +Command.LoadAllMessages(topicUi = topic)
             }
 
-            is Event.Ui.SendMessage -> commands {
-                +Command.SendMessage(content = event.content, topicUi = state.topicUi)
-            }
-
-            Event.Ui.ReloadChat -> commands {
-                +Command.LoadAllMessages(topicUi = state.topicUi)
-            }
-
             is Event.Ui.SelectEmoji -> commands {
                 val command = selectEmoji(
                     messageList = state.messages,
@@ -91,8 +83,20 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 if (command != null) +command
             }
 
-            is ChatEvent.Ui.ShowEmojiPicker -> effects {
+            is Event.Ui.ShowEmojiPicker -> effects {
                 +ChatEffect.ShowEmojiPicker(emojiId = event.emojiId)
+            }
+
+            is Event.Ui.SendMessage -> commands {
+                +Command.SendMessage(content = event.content, topicUi = state.topicUi)
+            }
+
+            Event.Ui.Back -> effects {
+                +ChatEffect.Back
+            }
+
+            Event.Ui.ReloadChat -> commands {
+                +Command.LoadAllMessages(topicUi = state.topicUi)
             }
         }
     }

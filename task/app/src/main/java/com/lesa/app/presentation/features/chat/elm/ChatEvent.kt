@@ -4,18 +4,19 @@ import com.lesa.app.domain.model.Message
 
 sealed interface ChatEvent {
     sealed interface Ui : ChatEvent {
-        data object Init : Ui
-        data object ReloadChat : Ui
-        data class SendMessage(
-            val content: String
-        ) : Ui
         data class SelectEmoji(
             val messageId: Int,
             val emojiCode: String
         ) : Ui
+        data class SendMessage(
+            val content: String
+        ) : Ui
         data class ShowEmojiPicker(
             val emojiId: Int
         ) : Ui
+        data object Back : Ui
+        data object Init : Ui
+        data object ReloadChat : Ui
     }
 
     sealed interface Internal : ChatEvent {
