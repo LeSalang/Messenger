@@ -34,8 +34,13 @@ class UserDelegateAdapter (
             itemView.setOnClickListener {
                 onClick(user)
             }
-            binding.peopleNetStatusIndicator.imageTintList =
-                ColorStateList.valueOf(itemView.resources.getColor(user.presence.color))
+            if (user.presence.color != null) {
+                binding.peopleNetStatusIndicator.visibility = View.VISIBLE
+                binding.peopleNetStatusIndicator.imageTintList =
+                    ColorStateList.valueOf(itemView.resources.getColor(user.presence.color))
+            } else {
+                binding.peopleNetStatusIndicator.visibility = View.GONE
+            }
         }
     }
 }

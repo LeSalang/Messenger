@@ -13,11 +13,12 @@ class UserMapper {
         )
     }
 
-    private fun User.Presence.toUi() : UserUi.Presence {
-        return when (this) {
-            User.Presence.ACTIVE -> UserUi.Presence.ACTIVE
-            User.Presence.IDLE -> UserUi.Presence.IDLE
-            User.Presence.OFFLINE -> UserUi.Presence.OFFLINE
+    private fun User.Presence?.toUi() : UserUi.Presence {
+        if (this == null) return UserUi.Presence.OFFLINE
+        return when (this.status) {
+            User.Presence.Status.ACTIVE -> UserUi.Presence.ACTIVE
+            User.Presence.Status.IDLE -> UserUi.Presence.IDLE
+            User.Presence.Status.OFFLINE -> UserUi.Presence.OFFLINE
         }
     }
 }

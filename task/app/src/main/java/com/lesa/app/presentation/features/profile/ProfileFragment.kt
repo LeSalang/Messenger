@@ -55,8 +55,8 @@ class ProfileFragment : ElmBaseFragment<Effect, State, Event>(
                 val content = dataToRender.content
                 binding.user.apply {
                     userNameTextView.text = content.name
-                    userNetStatusTextView.text = resources.getString(content.presence.text)
-                    userNetStatusTextView.setTextColor(resources.getColor(content.presence.color))
+                    userNetStatusTextView.text = resources.getString(R.string.status_active)
+                    userNetStatusTextView.setTextColor(resources.getColor(R.color.green))
                     Picasso.get().load(content.avatar).into(userLogoImage)
                 }
                 binding.user.itemProfile.visibility = VISIBLE
@@ -73,6 +73,8 @@ class ProfileFragment : ElmBaseFragment<Effect, State, Event>(
                 binding.error.errorItem.visibility = GONE
                 binding.shimmer.visibility = VISIBLE
             }
+
+            LceState.Idle -> TODO()
         }
     }
 

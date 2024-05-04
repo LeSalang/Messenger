@@ -4,10 +4,10 @@ import com.lesa.app.data.repositories.UserRepository
 import com.lesa.app.domain.model.User
 import javax.inject.Inject
 
-class LoadPeopleUseCase @Inject constructor(
+class LoadCachedPeopleUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     suspend fun invoke() : List<User> {
-        return userRepository.getUpdatedUsers()
+        return userRepository.getCachedUsers()
     }
 }

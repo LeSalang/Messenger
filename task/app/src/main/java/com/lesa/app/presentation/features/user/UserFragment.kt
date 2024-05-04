@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -67,7 +68,12 @@ class UserFragment : Fragment(R.layout.fragment_another_profile) {
         binding.user.apply{
             userNameTextView.text = user.name
             userNetStatusTextView.text = resources.getString(user.presence.text)
-            userNetStatusTextView.setTextColor(resources.getColor(user.presence.color))
+            if (user.presence.color != null) {
+                userNetStatusTextView.isVisible = true
+                userNetStatusTextView.setTextColor(resources.getColor(user.presence.color))
+            } else {
+                userNetStatusTextView.isVisible = false
+            }
             Picasso.get().load(user.avatar).into(userLogoImage)
         }
     }

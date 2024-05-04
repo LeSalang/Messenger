@@ -123,6 +123,8 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     sendButton.visibility = View.VISIBLE
                 }
             }
+
+            LceState.Idle -> TODO()
         }
     }
 

@@ -7,7 +7,7 @@ import com.lesa.app.data.network.models.AllSubscribedStreamsApiDto
 import com.lesa.app.data.network.models.AllTopicsInStreamApiDto
 import com.lesa.app.data.network.models.AllUsersApiDto
 import com.lesa.app.data.network.models.MessageResponseApiDto
-import com.lesa.app.data.network.models.PresenceApiDto
+import com.lesa.app.data.network.models.PresenceResponseApiDto
 import com.lesa.app.data.network.models.ResponseApiDto
 import com.lesa.app.data.network.models.UserApiDto
 import retrofit2.http.DELETE
@@ -24,7 +24,7 @@ interface Api {
     suspend fun getOwnUser() : UserApiDto
 
     @GET("users/{$USER_ID}/presence")
-    suspend fun getUserPresence(@Path(USER_ID) userId: Int): PresenceApiDto
+    suspend fun getUserPresence(@Path(USER_ID) userId: Int): PresenceResponseApiDto
 
     @GET("realm/presence")
     suspend fun getAllUsersPresence(): AllPresenceApiDto

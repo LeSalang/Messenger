@@ -94,6 +94,7 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
                     shimmerLayout.visibility = View.VISIBLE
                 }
             }
+            LceState.Idle -> {}
         }
         if (state.isSearching) {
             binding.apply {
@@ -161,7 +162,9 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
             makeDelegateItems(
                 list = list
             )
-        )
+        ) {
+            binding.peopleRecyclerView.layoutManager?.scrollToPosition(0)
+        }
     }
 
     private fun makeDelegateItems(

@@ -8,16 +8,7 @@ class ProfileMapper() {
             id = user.id,
             name = user.name,
             email = user.email,
-            avatar = user.avatar,
-            presence = user.presence.toUi()
+            avatar = user.avatar
         )
-    }
-
-    private fun User.Presence.toUi() : ProfileUi.Presence {
-        return when (this) {
-            User.Presence.ACTIVE -> ProfileUi.Presence.ACTIVE
-            User.Presence.IDLE -> ProfileUi.Presence.IDLE
-            User.Presence.OFFLINE -> ProfileUi.Presence.OFFLINE
-        }
     }
 }

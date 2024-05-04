@@ -96,6 +96,8 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
                     shimmerLayout.visibility = VISIBLE
                 }
             }
+
+            LceState.Idle -> TODO()
         }
     }
 

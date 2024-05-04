@@ -10,7 +10,7 @@ class PeopleStoreFactory @Inject constructor(private val actor: PeopleActor) {
     fun create() : Store<PeopleEvent, PeopleEffect, PeopleState> {
         return ElmStore(
             initialState = PeopleState(
-                lceState = LceState.Loading,
+                lceState = LceState.Idle,
                 isSearching = false,
                 users = listOf()
             ),

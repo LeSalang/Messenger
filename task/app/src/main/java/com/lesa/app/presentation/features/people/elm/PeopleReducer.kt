@@ -17,7 +17,9 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
     override fun Result.internal(event: PeopleEvent.Internal): Any {
         return when (event) {
             is PeopleEvent.Internal.DataLoaded -> state {
-                val userUiList = event.users.map {
+                val userUiList = event.users.sortedByDescending {
+                    it.presence
+                }.map {
                     UserMapper().map(it)
                 }
                 copy(
@@ -25,10 +27,49 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
                     users = event.users
                 )
             }
+
+            is PeopleEvent.Internal.CachedDataLoaded -> {
+                state {
+                    val userUiList = event.users.sortedByDescending {
+                        it.presence
+                    }.map {
+                        UserMapper().map(it)
+                    }
+                    if (userUiList.isEmpty()) {
+                        copy(
+                            lceState = LceState.Loading
+                        )
+                    } else {
+                        copy(
+                            lceState = LceState.Content(userUiList), users = event.users
+                        )
+                    }
+                }
+                commands {
+                    +Command.LoadUsers
+                }
+            }
+
             PeopleEvent.Internal.Error -> state {
-                copy(
-                    lceState = LceState.Error
-                )
+                if (users.isEmpty()) {
+                    copy(
+                        lceState = LceState.Error
+                    )
+                } else {
+                    return@state this
+                }
+            }
+
+            PeopleEvent.Internal.ErrorCached -> {
+                state {
+                    copy(
+                        lceState = LceState.Loading
+                    )
+                }
+                commands {
+                    +Command.LoadUsers
+                }
+
             }
         }
     }
@@ -36,7 +77,7 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
     override fun Result.ui(event: PeopleEvent.Ui): Any {
         return when (event) {
             PeopleEvent.Ui.Init -> commands {
-                +Command.LoadUsers
+                +Command.LoadCachedUsers
             }
 
             PeopleEvent.Ui.ReloadPeople -> commands {

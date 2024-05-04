@@ -7,9 +7,7 @@ import javax.inject.Scope
 
 @PeopleScope
 @Component(
-    modules = [
-        PeopleBindModule::class
-    ],
+    modules = [PeopleBindModule::class],
     dependencies = [PeopleDeps::class]
 )
 interface PeopleComponent {

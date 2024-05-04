@@ -1,24 +1,25 @@
 [versions]
 activity = "1.9.0"
-agp = "8.3.2"
+agp = "8.4.0"
 appcompat = "1.6.1"
 cicerone = "7.1"
 constraintlayout = "2.1.4"
-coreKtx = "1.13.0"
+coreKtx = "1.13.1"
 dagger = "2.51.1"
 elmslie = "3.0.0-alpha10"
 facebook-shimmer = "0.5.0"
 flexbox = "3.0.0"
-fragment = "1.6.2"
+fragment = "1.7.0"
 kotlin = "1.9.0"
 kotlin-parselable = "1.8.10"
 kotlin-serialization = "1.9.22"
 kotlinx-coroutines-android = "1.7.1"
-material = "1.11.0"
+material = "1.12.0"
 okhttp3 = "4.12.0"
 okhttp3-interceptor = "4.12.0"
 picasso = "2.8"
 retrofit = "2.11.0"
+room = "2.6.1"
 serialization = "1.6.3"
 viewbindingpropertydelegate = "1.5.9"
 viewpager2 = "1.0.0"
@@ -44,6 +45,8 @@ okhttp3-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercep
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso"}
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
+room = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
 serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2"}
 

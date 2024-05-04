@@ -61,8 +61,10 @@ dependencies {
     implementation(libs.picasso)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter)
+    implementation(libs.room)
     implementation(libs.serialization)
     implementation(libs.viewpager2)
 
     kapt(libs.dagger.compiler)
+    kapt(libs.room.compiler)
 }

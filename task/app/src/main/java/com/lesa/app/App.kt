@@ -19,7 +19,7 @@ internal class App : Application() {
     }
 
     private fun buildComponent(): AppComponent {
-        return DaggerAppComponent.builder().application(this).build()
+        return DaggerAppComponent.builder().context(this).build()
     }
 
     private fun setUpModulesDeps(appComponent: AppComponent) {

@@ -18,7 +18,7 @@ data class UserUi(
     @Parcelize
     enum class Presence(
         @StringRes val text: Int,
-        @ColorRes val color: Int,
+        @ColorRes val color: Int?,
     ) : Parcelable {
         ACTIVE(
             R.string.status_active, R.color.green

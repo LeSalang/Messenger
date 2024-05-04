@@ -1,7 +1,8 @@
 package com.lesa.app.di
 
-import android.app.Application
+import android.content.Context
 import com.github.terrakok.cicerone.Router
+import com.lesa.app.data.local.dao.UserDao
 import com.lesa.app.data.network.Api
 import com.lesa.app.di.chat.ChatDeps
 import com.lesa.app.di.people.PeopleDeps
@@ -17,6 +18,7 @@ import javax.inject.Scope
 @Component(
     modules = [
         NetworkModule::class,
+        DatabaseModule::class,
         NavigationModule::class
     ]
 )
@@ -26,13 +28,14 @@ interface AppComponent : PeopleDeps, ProfileDeps, StreamsDeps, ChatDeps {
     interface Builder {
 
         @BindsInstance
-        fun application(application: Application): Builder
+        fun context(context: Context): Builder
 
         fun build(): AppComponent
     }
     
     override val api: Api
     override val router: Router
+    override val userDao: UserDao
 
     fun inject(activity: MainActivity)
     fun inject(fragment: MainFragment)
