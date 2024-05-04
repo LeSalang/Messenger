@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter)
     implementation(libs.room)
+    implementation(libs.room.ktx)
     implementation(libs.serialization)
     implementation(libs.viewpager2)
 

@@ -38,7 +38,7 @@ class UserRepositoryImpl @Inject constructor(
                 )
             }
         }
-        insertUsers(list)
+        updateCachedUsers(list)
         val sortedList = list.sortedBy {
             it.name
         }
@@ -68,11 +68,11 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    private fun insertUsers(users: List<User>) {
+    private suspend fun updateCachedUsers(users: List<User>) {
         val list = users.map {
             it.toUserEntity()
         }
-        dao.insertAllUsers(list)
+        dao.updateUsers(list)
     }
 
     private suspend fun getAllPresence() : AllPresenceApiDto {
