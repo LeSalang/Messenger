@@ -22,18 +22,57 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                     streamType = state.streamType,
                     streamList = event.streams
                 )
-                val streamUiList = filteredStreams.map {
-                    StreamsMapper().map(it)
-                }
+                val streamUiList = filteredStreams
+                    .sortedBy { it.name.uppercase() }
+                    .map { StreamsMapper().map(it) }
                 copy(
                     lceState = LceState.Content(streamUiList),
                     streams = event.streams
                 )
             }
             Event.Internal.Error -> state {
-                copy(
-                    lceState = LceState.Error
-                )
+                if (streams.isEmpty()) {
+                    copy(
+                        lceState = LceState.Error
+                    )
+                } else {
+                    return@state this
+                }
+            }
+
+            is StreamsEvent.Internal.CachedDataLoaded -> {
+                state {
+                    val filteredStreams = filter(
+                        streamType = state.streamType,
+                        streamList = event.streams
+                    )
+                    val streams = filteredStreams
+                        .sortedBy { it.name.uppercase() }
+                        .map { StreamsMapper().map(it) }
+                    if (streams.isEmpty()) {
+                        copy(
+                            lceState = LceState.Loading
+                        )
+                    } else {
+                        copy(
+                            lceState = LceState.Content(streams),
+                            streams = event.streams
+                        )
+                    }
+                }
+                commands {
+                    +Command.LoadStreams
+                }
+            }
+            StreamsEvent.Internal.ErrorCached -> {
+                state {
+                    copy(
+                        lceState = LceState.Loading
+                    )
+                }
+                commands {
+                    +Command.LoadStreams
+                }
             }
         }
     }
@@ -41,10 +80,10 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
     override fun Result.ui(event: Event.Ui): Any {
         return when (event) {
             is Event.Ui.Init -> commands {
-                +Command.LoadData
+                +Command.LoadCachedStreams
             }
             is Event.Ui.ReloadStreams -> commands {
-                +Command.LoadData
+                +Command.LoadStreams
             }
             is StreamsEvent.Ui.ExpandStream -> state {
                 copy(

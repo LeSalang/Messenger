@@ -39,10 +39,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
         updateCachedUsers(list)
-        val sortedList = list.sortedBy {
-            it.name
-        }
-        return sortedList
+        return list
     }
 
     override suspend fun getCachedUsers(): List<User> {
@@ -52,10 +49,7 @@ class UserRepositoryImpl @Inject constructor(
                 it.toUser()
             }
         }
-        val sortedList = list.sortedBy {
-            it.name
-        }
-        return sortedList
+        return list
     }
 
     override suspend fun getOwnUser(): User {

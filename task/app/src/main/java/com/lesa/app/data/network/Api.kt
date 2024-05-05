@@ -74,7 +74,6 @@ interface Api {
     )
 
     companion object {
-        const val RESULT_SUCCESS = "success"
         private const val STREAM_ID = "stream_id"
         private const val MESSAGE_ID = "message_id"
         private const val USER_ID = "user_id"

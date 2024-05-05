@@ -1,5 +1,8 @@
 package com.lesa.app.data.repositories
 
+import com.lesa.app.data.local.dao.StreamDao
+import com.lesa.app.data.local.entities.toStream
+import com.lesa.app.data.local.entities.toStreamEntity
 import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.models.toStream
 import com.lesa.app.data.network.models.toTopic
@@ -10,10 +13,12 @@ import javax.inject.Inject
 
 interface StreamsRepository {
     suspend fun getAllStreams() : List<Stream>
+    suspend fun getCachedStreams() : List<Stream>
 }
 
 class StreamsRepositoryImpl @Inject constructor(
-    private val api: Api
+    private val api: Api,
+    private val dao: StreamDao
 ) : StreamsRepository {
     override suspend fun getAllStreams(): List<Stream> {
         val subscribedStreams = api.getAllSubscribedStreams().streams.associateBy {
@@ -40,6 +45,24 @@ class StreamsRepositoryImpl @Inject constructor(
                 )
             }
         }
+        updateCachedStreams(allStreams)
         return allStreams
+    }
+
+    override suspend fun getCachedStreams(): List<Stream> {
+        val list = coroutineScope {
+            val allStreams = dao.getAll()
+            return@coroutineScope allStreams.map {
+                it.toStream()
+            }
+        }
+        return list
+    }
+
+    private suspend fun updateCachedStreams(streams: List<Stream>) {
+        val list = streams.map {
+            it.toStreamEntity()
+        }
+        dao.updateStreams(list)
     }
 }

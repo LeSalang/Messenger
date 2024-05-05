@@ -15,5 +15,7 @@ sealed interface StreamsEvent {
     sealed interface Internal : StreamsEvent {
         data class DataLoaded(val streams: List<Stream>) : Internal
         data object Error : Internal
+        data class CachedDataLoaded(val streams: List<Stream>) : Internal
+        data object ErrorCached : Internal
     }
 }
