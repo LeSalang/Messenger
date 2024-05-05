@@ -46,7 +46,7 @@ fun MessageApiDto.toMessage(ownId: Int) : Message {
         senderName = senderFullName,
         reactions = reactions
             .groupingBy { it.emojiCode }
-            .aggregate { emojiCode, emoji: Emoji?, apiDto, first ->
+            .aggregate { emojiCode, emoji: Emoji?, apiDto, _ ->
                 return@aggregate Emoji(
                     emojiCode = emojiCode,
                     emojiName = apiDto.emojiName,

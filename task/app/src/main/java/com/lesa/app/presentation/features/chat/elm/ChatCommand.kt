@@ -4,6 +4,7 @@ import com.lesa.app.domain.model.Topic
 
 sealed interface ChatCommand {
     data class LoadAllMessages(val topic: Topic) : ChatCommand
+    data class LoadAllCachedMessages(val topic: Topic) : ChatCommand
     data class SendMessage(
         val content: String,
         val topic: Topic

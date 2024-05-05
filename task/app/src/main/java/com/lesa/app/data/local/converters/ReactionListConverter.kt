@@ -1,19 +1,20 @@
 package com.lesa.app.data.local.converters
 
 import androidx.room.TypeConverter
+import com.lesa.app.data.local.entities.ReactionEntity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class ListStringConverter {
+class ReactionListConverter {
     @TypeConverter
-    fun fromStringList(value: List<String>): String {
+    fun fromReactionList(value: List<ReactionEntity>): String {
         return Json.encodeToString(value)
     }
 
     @TypeConverter
-    fun toStringList(value: String): List<String> {
+    fun toReactionList(value: String): List<ReactionEntity> {
         return try {
-            Json.decodeFromString<List<String>>(value)
+            Json.decodeFromString<List<ReactionEntity>>(value)
         } catch (e: Exception) {
             listOf()
         }

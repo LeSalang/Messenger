@@ -2,12 +2,14 @@ package com.lesa.app.di.chat
 
 import androidx.lifecycle.ViewModel
 import com.github.terrakok.cicerone.Router
+import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.network.Api
 import kotlin.properties.Delegates.notNull
 
 interface ChatDeps {
     val api: Api
     val router: Router
+    val messageDao: MessageDao
 }
 
 interface ChatDepsProvider {

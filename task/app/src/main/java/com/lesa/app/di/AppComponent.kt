@@ -2,8 +2,9 @@ package com.lesa.app.di
 
 import android.content.Context
 import com.github.terrakok.cicerone.Router
-import com.lesa.app.data.local.dao.UserDao
+import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.local.dao.StreamDao
+import com.lesa.app.data.local.dao.UserDao
 import com.lesa.app.data.network.Api
 import com.lesa.app.di.chat.ChatDeps
 import com.lesa.app.di.people.PeopleDeps
@@ -38,6 +39,7 @@ interface AppComponent : PeopleDeps, ProfileDeps, StreamsDeps, ChatDeps {
     override val router: Router
     override val userDao: UserDao
     override val streamDao: StreamDao
+    override val messageDao: MessageDao
 
     fun inject(activity: MainActivity)
     fun inject(fragment: MainFragment)

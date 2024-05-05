@@ -3,6 +3,7 @@ package com.lesa.app.presentation.features.chat.elm
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.use_cases.chat.AddReactionUseCase
 import com.lesa.app.domain.use_cases.chat.DeleteReactionUseCase
+import com.lesa.app.domain.use_cases.chat.LoadAllCachedMessagesUseCase
 import com.lesa.app.domain.use_cases.chat.LoadAllMessagesUseCase
 import com.lesa.app.domain.use_cases.chat.LoadSelectedMessageUseCase
 import com.lesa.app.domain.use_cases.chat.SendMessageUseCase
@@ -15,7 +16,8 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 class ChatActor @Inject constructor(
-    private val loadAllMessagesUseCase: LoadAllMessagesUseCase, 
+    private val loadAllMessagesUseCase: LoadAllMessagesUseCase,
+    private val loadAllCachedMessagesUseCase: LoadAllCachedMessagesUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
     private val loadSelectedMessageUseCase: LoadSelectedMessageUseCase,
     private val addReactionUseCase: AddReactionUseCase,
@@ -28,7 +30,10 @@ class ChatActor @Inject constructor(
             is ChatCommand.LoadAllMessages -> flow {
                 val topic = command.topic
                 emit(
-                    loadAllMessagesUseCase.invoke(streamName = topic.streamName, topicName = topic.name)
+                    loadAllMessagesUseCase.invoke(
+                        streamName = topic.streamName,
+                        topicName = topic.name
+                    )
                 )
             }.mapEvents(
                 eventMapper = {
@@ -38,6 +43,20 @@ class ChatActor @Inject constructor(
                 },
                 errorMapper = {
                     ChatEvent.Internal.Error
+                }
+            )
+
+            is ChatCommand.LoadAllCachedMessages -> flow {
+                val topicName = command.topic.name
+                emit(loadAllCachedMessagesUseCase.invoke(topicName))
+            }.mapEvents(
+                eventMapper = {
+                    ChatEvent.Internal.AllCachedMessagesLoaded(
+                        messages = it
+                    )
+                },
+                errorMapper = {
+                    ChatEvent.Internal.ErrorCached
                 }
             )
 
@@ -55,7 +74,7 @@ class ChatActor @Inject constructor(
                     )
                 },
                 errorMapper = {
-                   ChatEvent.Internal.Error
+                   ChatEvent.Internal.ErrorMessage
                 }
             )
 
@@ -70,7 +89,7 @@ class ChatActor @Inject constructor(
                     )
                 },
                 errorMapper = {
-                    ChatEvent.Internal.ErrorMessage
+                    ChatEvent.Internal.ErrorEmoji
                 }
             )
 
@@ -85,7 +104,7 @@ class ChatActor @Inject constructor(
                     )
                 },
                 errorMapper = {
-                    ChatEvent.Internal.ErrorMessage
+                    ChatEvent.Internal.ErrorEmoji
                 }
             )
         }

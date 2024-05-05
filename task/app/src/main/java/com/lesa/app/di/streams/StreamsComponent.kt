@@ -18,7 +18,6 @@ interface StreamsComponent {
     @Component.Builder
     interface Builder {
         fun deps(deps: StreamsDeps): Builder
-
         fun build(): StreamsComponent
     }
 }

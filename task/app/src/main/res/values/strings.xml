@@ -33,6 +33,7 @@
 
     <string name="error">ERROR!\nCheck your internet connection</string>
     <string name="error_emoji">ERROR! Can\'t update emoji</string>
+    <string name="error_message">ERROR! Can\'t update message</string>
     <string name="loading">Loading…</string>
     <string name="refresh">Refresh</string>
 

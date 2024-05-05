@@ -4,10 +4,10 @@ import com.lesa.app.data.repositories.MessagesRepository
 import com.lesa.app.domain.model.Message
 import javax.inject.Inject
 
-class LoadAllMessagesUseCase @Inject constructor(
+class LoadAllCachedMessagesUseCase @Inject constructor(
     private val repository: MessagesRepository
 ) {
-    suspend fun invoke(streamName: String, topicName: String): List<Message> {
-        return repository.getAllMessagesInTopic(streamName = streamName, topicName = topicName)
+    suspend fun invoke(topicName: String) : List<Message> {
+        return repository.getAllCachedMessagesInTopic(topicName)
     }
 }

@@ -147,6 +147,11 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 toast.show()
             }
 
+            Effect.MessageError -> {
+                val toast = Toast.makeText(context, getText(R.string.error_message), Toast.LENGTH_SHORT)
+                toast.show()
+            }
+
             Effect.ShowAttachmentsPicker -> {
                 // TODO: show attachments picker
             }

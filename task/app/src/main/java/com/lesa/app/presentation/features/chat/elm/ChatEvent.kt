@@ -24,9 +24,12 @@ sealed interface ChatEvent {
 
     sealed interface Internal : ChatEvent {
         data class AllMessagesLoaded(val messages: List<Message>) : Internal
+        data class AllCachedMessagesLoaded(val messages: List<Message>) : Internal
         data class MessageSent(val sentMessage: Message) : Internal
         data class MessageUpdated(val updatedMessage: Message) : Internal
         data object Error : Internal
+        data object ErrorCached : Internal
+        data object ErrorEmoji : Internal
         data object ErrorMessage : Internal
     }
 }

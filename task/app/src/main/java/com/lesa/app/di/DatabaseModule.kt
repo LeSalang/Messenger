@@ -2,6 +2,7 @@ package com.lesa.app.di
 
 import android.content.Context
 import androidx.room.Room
+import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.local.dao.StreamDao
 import com.lesa.app.data.local.dao.UserDao
 import com.lesa.app.data.local.databases.Database
@@ -28,6 +29,11 @@ class DatabaseModule {
     @Provides
     fun provideStreamDao(database: Database): StreamDao {
         return database.streamDao()
+    }
+
+    @Provides
+    fun provideMessageDao(database: Database): MessageDao {
+        return database.messageDao()
     }
 
     companion object {

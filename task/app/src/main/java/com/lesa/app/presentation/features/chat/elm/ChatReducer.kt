@@ -30,14 +30,54 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 )
             }
 
+            is Event.Internal.AllCachedMessagesLoaded -> {
+                state {
+                    val messageUiList = event.messages.map {
+                        ChatMapper().map(it)
+                    }
+                    if (event.messages.isEmpty()) {
+                        copy(
+                            lceState = LceState.Loading
+                        )
+                    } else {
+                        copy(
+                            lceState = LceState.Content(messageUiList),
+                            messages = event.messages
+                        )
+                    }
+                }
+                commands {
+                    +Command.LoadAllMessages(topic = state.topic)
+                }
+            }
+
             Event.Internal.Error -> state {
-                copy(
-                    lceState = LceState.Error
-                )
+                if (messages.isEmpty()) {
+                    copy(
+                        lceState = LceState.Error
+                    )
+                } else {
+                    return@state this
+                }
+            }
+
+            Event.Internal.ErrorCached -> {
+                state {
+                    copy(
+                        lceState = LceState.Loading
+                    )
+                }
+                commands {
+                    +Command.LoadAllMessages(topic = state.topic)
+                }
+            }
+
+            ChatEvent.Internal.ErrorEmoji -> effects {
+                +ChatEffect.EmojiError
             }
 
             ChatEvent.Internal.ErrorMessage -> effects {
-                +ChatEffect.EmojiError
+                +ChatEffect.MessageError
             }
 
             is ChatEvent.Internal.MessageSent -> state {
@@ -72,7 +112,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
         return when (event) {
             is Event.Ui.Init -> commands {
                 val topic = state.topic
-                +Command.LoadAllMessages(topic = topic)
+                +Command.LoadAllCachedMessages(topic = topic)
             }
 
             is Event.Ui.SelectEmoji -> commands {
