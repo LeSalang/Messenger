@@ -4,6 +4,7 @@ import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.local.entities.toMessage
 import com.lesa.app.data.local.entities.toMessageEntity
 import com.lesa.app.data.network.Api
+import com.lesa.app.data.network.models.MessageFilter.Companion.createNarrow
 import com.lesa.app.data.network.models.toMessage
 import com.lesa.app.domain.model.Message
 import kotlinx.coroutines.coroutineScope
@@ -50,12 +51,12 @@ class MessagesRepositoryImpl @Inject constructor(
         topicName: String
     ): List<Message> {
         val id = api.getOwnUser().id // TODO: request once after login
+        val narrow = createNarrow(streamName, topicName)
         val list = api.getAllMessagesInStream(
-                narrow = "[{\"operator\": \"stream\", \"operand\": \"$streamName\"}]"
-            ).messages.map {
+                narrow = narrow
+            ).messages
+            .map {
                 it.toMessage(id)
-            }.filter {
-                it.topic == topicName
             }
         updateCachedUsers(list)
         return list
