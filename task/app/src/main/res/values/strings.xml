@@ -32,6 +32,7 @@
     <string name="status_cached">Cached</string>
 
     <string name="error">ERROR!\nCheck your internet connection</string>
+    <string name="no_internet_connection">No internet connection!</string>
     <string name="error_emoji">ERROR! Can\'t update emoji</string>
     <string name="error_message">ERROR! Can\'t update message</string>
     <string name="loading">Loading…</string>
