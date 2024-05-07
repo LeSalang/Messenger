@@ -13,6 +13,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.Router
 import com.lesa.app.R
@@ -220,6 +222,17 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
             )
         )
         binding.chatRecyclerView.adapter = adapter
+
+        binding.chatRecyclerView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = binding.chatRecyclerView.layoutManager as LinearLayoutManager
+                    val position = layoutManager.findFirstVisibleItemPosition()
+                    if (position < LOAD_TRIGGER_MESSAGE_COUNT && dy < 0) store.accept(Event.Ui.FetchMoreMessages)
+                }
+            }
+        )
     }
 
     private fun setUpEmojiPicker() {
@@ -261,7 +274,8 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     private fun updateList(list: List<MessageUi>) {
         val delegateItems = makeDelegateItems(list = list)
         adapter.submitList(delegateItems) {
-            binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
+            // TODO: scroll to bottom only when first load and send messages
+            // binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
         }
     }
 
@@ -312,5 +326,6 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 }
             }
         }
+        private const val LOAD_TRIGGER_MESSAGE_COUNT = 5
     }
 }

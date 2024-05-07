@@ -1,10 +1,11 @@
 package com.lesa.app.presentation.features.chat.elm
 
 import com.lesa.app.domain.model.Message
+import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.domain.use_cases.chat.AddReactionUseCase
 import com.lesa.app.domain.use_cases.chat.DeleteReactionUseCase
 import com.lesa.app.domain.use_cases.chat.LoadAllCachedMessagesUseCase
-import com.lesa.app.domain.use_cases.chat.LoadAllMessagesUseCase
+import com.lesa.app.domain.use_cases.chat.LoadMessagesInTopicUseCase
 import com.lesa.app.domain.use_cases.chat.LoadSelectedMessageUseCase
 import com.lesa.app.domain.use_cases.chat.SendMessageUseCase
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 class ChatActor @Inject constructor(
-    private val loadAllMessagesUseCase: LoadAllMessagesUseCase,
+    private val loadMessagesInTopicUseCase: LoadMessagesInTopicUseCase,
     private val loadAllCachedMessagesUseCase: LoadAllCachedMessagesUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
     private val loadSelectedMessageUseCase: LoadSelectedMessageUseCase,
@@ -30,9 +31,10 @@ class ChatActor @Inject constructor(
             is ChatCommand.LoadAllMessages -> flow {
                 val topic = command.topic
                 emit(
-                    loadAllMessagesUseCase.invoke(
+                    loadMessagesInTopicUseCase.invoke(
                         streamName = topic.streamName,
-                        topicName = topic.name
+                        topicName = topic.name,
+                        anchor = MessageAnchor.Newest
                     )
                 )
             }.mapEvents(
@@ -105,6 +107,26 @@ class ChatActor @Inject constructor(
                 },
                 errorMapper = {
                     ChatEvent.Internal.ErrorEmoji
+                }
+            )
+
+            is ChatCommand.FetchMoreMessages -> flow {
+                val topic = command.topic
+                emit(
+                    loadMessagesInTopicUseCase.invoke(
+                        streamName = topic.streamName,
+                        topicName = topic.name,
+                        anchor = command.anchor
+                    )
+                )
+            }.mapEvents(
+                eventMapper = {
+                    ChatEvent.Internal.OldMessagesLoaded(
+                        messages = it
+                    )
+                },
+                errorMapper = {
+                    ChatEvent.Internal.Error
                 }
             )
         }

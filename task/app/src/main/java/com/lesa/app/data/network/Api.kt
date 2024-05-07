@@ -42,9 +42,10 @@ interface Api {
 
     @GET("messages")
     suspend fun getAllMessagesInStream(
-        @Query("num_before") numBefore: Int = 1000,
-        @Query("num_after") numAfter: Int = 1000,
-        @Query("anchor") anchor: String = "first_unread",
+        @Query("num_before") numBefore: Int = 20,
+        @Query("num_after") numAfter: Int = 0,
+        @Query("include_anchor") includeAnchor: Boolean = false,
+        @Query("anchor") anchor: String,
         @Query("narrow") narrow: String
     ) : AllMessagesApiDto
 
@@ -77,6 +78,7 @@ interface Api {
         private const val STREAM_ID = "stream_id"
         private const val MESSAGE_ID = "message_id"
         private const val USER_ID = "user_id"
+        const val NEWEST_MESSAGE_ANCHOR = "newest"
     }
 }
 

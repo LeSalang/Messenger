@@ -2,6 +2,7 @@ package com.lesa.app.presentation.features.chat.elm
 
 import com.lesa.app.R
 import com.lesa.app.domain.model.Message
+import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.presentation.features.chat.elm.ChatCommand
 import com.lesa.app.presentation.features.chat.elm.ChatEffect
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
@@ -54,7 +55,8 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             Event.Internal.Error -> state {
                 if (messages.isEmpty()) {
                     copy(
-                        lceState = LceState.Error
+                        lceState = LceState.Error,
+                        isPrefetching = false
                     )
                 } else {
                     return@state this
@@ -103,6 +105,18 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 copy(
                     lceState = LceState.Content(messageUiList),
                     messages = messageList
+                )
+            }
+
+            is ChatEvent.Internal.OldMessagesLoaded -> state {
+                val messages = event.messages + state.messages
+                val messageUiList = messages.map {
+                    ChatMapper().map(it)
+                }
+                copy(
+                    lceState = LceState.Content(messageUiList),
+                    messages = messages,
+                    isPrefetching = false
                 )
             }
         }
@@ -164,6 +178,25 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     )
                 }
             }
+
+            ChatEvent.Ui.FetchMoreMessages ->
+                if (!state.isPrefetching){
+                    state {
+                        copy(
+                            isPrefetching = true
+                        )
+                    }
+                    commands {
+                        val oldestMessageId = state.messages.firstOrNull()?.id
+                        if (oldestMessageId != null) {
+                            val anchor = MessageAnchor.Message(id = oldestMessageId)
+                            +Command.FetchMoreMessages(topic = state.topic, anchor = anchor)
+                        }
+                    }
+                } else {
+                    Unit
+                }
+            }
         }
     }
 
@@ -197,4 +230,3 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             )
         }
     }
-}

@@ -12,7 +12,8 @@ class ChatStoreFactory @Inject constructor(private val actor: ChatActor) {
             initialState = ChatState(
                 lceState = LceState.Loading,
                 topic = topic,
-                messages = listOf()
+                messages = listOf(),
+                isPrefetching = false
             ),
             reducer = ChatReducer(),
             actor = actor

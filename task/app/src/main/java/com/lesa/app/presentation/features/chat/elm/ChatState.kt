@@ -8,5 +8,6 @@ import com.lesa.app.presentation.utils.LceState
 data class ChatState(
     val lceState: LceState<List<MessageUi>>,
     val messages: List<Message>,
-    val topic: Topic
+    val topic: Topic,
+    val isPrefetching: Boolean
 )

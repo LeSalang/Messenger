@@ -4,16 +4,19 @@ import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.local.entities.toMessage
 import com.lesa.app.data.local.entities.toMessageEntity
 import com.lesa.app.data.network.Api
+import com.lesa.app.data.network.Api.Companion.NEWEST_MESSAGE_ANCHOR
 import com.lesa.app.data.network.models.MessageFilter.Companion.createNarrow
 import com.lesa.app.data.network.models.toMessage
 import com.lesa.app.domain.model.Message
+import com.lesa.app.domain.model.MessageAnchor
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 interface MessagesRepository {
-    suspend fun getAllMessagesInTopic(
+    suspend fun getMessagesInTopic(
         streamName: String,
-        topicName: String
+        topicName: String,
+        messageAnchor: MessageAnchor
     ) : List<Message>
 
     suspend fun getAllCachedMessagesInTopic(
@@ -46,19 +49,24 @@ class MessagesRepositoryImpl @Inject constructor(
     private val dao: MessageDao
 ) : MessagesRepository {
 
-    override suspend fun getAllMessagesInTopic(
+    override suspend fun getMessagesInTopic(
         streamName: String,
-        topicName: String
+        topicName: String,
+        messageAnchor: MessageAnchor
     ): List<Message> {
         val id = api.getOwnUser().id // TODO: request once after login
         val narrow = createNarrow(streamName, topicName)
+        val anchor = when (messageAnchor) {
+            is MessageAnchor.Message -> messageAnchor.id.toString()
+            MessageAnchor.Newest -> NEWEST_MESSAGE_ANCHOR
+        }
         val list = api.getAllMessagesInStream(
-                narrow = narrow
-            ).messages
-            .map {
-                it.toMessage(id)
-            }
-        updateCachedUsers(list)
+            narrow = narrow,
+            anchor = anchor
+        )
+        .messages
+        .map { it.toMessage(id) }
+        updateCachedMessages(list, topicName)
         return list
     }
 
@@ -105,10 +113,17 @@ class MessagesRepositoryImpl @Inject constructor(
         )
     }
 
-    private suspend fun updateCachedUsers(messages: List<Message>) {
-        val list = messages.map {
-            it.toMessageEntity()
+    private suspend fun updateCachedMessages(
+        messages: List<Message>,
+        topicName: String
+    ) {
+        val newList = messages.map { it.toMessageEntity() }
+        val oldList = dao.getAll()
+        var finalList = (newList + oldList).sortedBy { it.id }
+        if (finalList.size > 50) {
+            finalList = finalList.drop(finalList.size - 50)
+            dao.deleteAllInTopic(topicName)
         }
-        dao.updateMessages(list)
+        dao.updateMessages(finalList)
     }
 }

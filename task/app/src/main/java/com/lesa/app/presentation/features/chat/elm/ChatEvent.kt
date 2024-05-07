@@ -20,10 +20,12 @@ sealed interface ChatEvent {
         data class MessageTextChanged(
             val text: String
         ) : Ui
+        data object FetchMoreMessages : Ui
     }
 
     sealed interface Internal : ChatEvent {
         data class AllMessagesLoaded(val messages: List<Message>) : Internal
+        data class OldMessagesLoaded(val messages: List<Message>) : Internal
         data class AllCachedMessagesLoaded(val messages: List<Message>) : Internal
         data class MessageSent(val sentMessage: Message) : Internal
         data class MessageUpdated(val updatedMessage: Message) : Internal
