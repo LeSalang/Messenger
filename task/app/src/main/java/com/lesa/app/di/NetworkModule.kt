@@ -1,7 +1,10 @@
 package com.lesa.app.di
 
+import android.content.Context
 import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.interceptors.AuthHeaderInterceptor
+import com.squareup.picasso.OkHttp3Downloader
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.json.Json
@@ -14,18 +17,18 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 @Module
 class NetworkModule {
 
+    private val authClient = OkHttpClient
+        .Builder()
+        .addInterceptor(AuthHeaderInterceptor())
+        .addInterceptor(
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        )
+        .build()
+
     @Provides
     fun provideApi() : Api {
-        val authClient = OkHttpClient
-            .Builder()
-            .addInterceptor(AuthHeaderInterceptor())
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            )
-            .build()
-
         val jsonSerializer = Json {
             ignoreUnknownKeys = true
         }
@@ -43,7 +46,14 @@ class NetworkModule {
         return retrofit.create(Api::class.java)
     }
 
+    @Provides
+    fun providePicasso(context: Context) : Picasso {
+        return Picasso.Builder(context)
+            .downloader(OkHttp3Downloader(authClient))
+            .build()
+    }
+
     companion object {
-        private const val BASE_URL = "https://tinkoff-android-spring-2024.zulipchat.com/api/v1/"
+        const val BASE_URL = "https://tinkoff-android-spring-2024.zulipchat.com/api/v1/"
     }
 }

@@ -10,6 +10,7 @@ import com.lesa.app.di.chat.ChatDeps
 import com.lesa.app.di.people.PeopleDeps
 import com.lesa.app.di.profile.ProfileDeps
 import com.lesa.app.di.streams.StreamsDeps
+import com.lesa.app.presentation.features.chat.message.MessageView
 import com.lesa.app.presentation.main.MainActivity
 import com.lesa.app.presentation.main.MainFragment
 import dagger.BindsInstance
@@ -43,6 +44,7 @@ interface AppComponent : PeopleDeps, ProfileDeps, StreamsDeps, ChatDeps {
 
     fun inject(activity: MainActivity)
     fun inject(fragment: MainFragment)
+    fun inject(messageView: MessageView)
 }
 
 @Scope

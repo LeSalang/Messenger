@@ -11,11 +11,14 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import com.lesa.app.App
 import com.lesa.app.R
+import com.lesa.app.databinding.MessageViewBinding
+import com.lesa.app.di.NetworkModule.Companion.BASE_URL
 import com.lesa.app.presentation.features.chat.message.emoji.EmojiFlexBox
 import com.lesa.app.presentation.features.chat.message.emoji.EmojiView
-import com.lesa.app.databinding.MessageViewBinding
 import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
 class MessageView @JvmOverloads constructor(
     context: Context,
@@ -25,6 +28,9 @@ class MessageView @JvmOverloads constructor(
     attachToRoot: Boolean = true,
 ) : ViewGroup(context, attributeSet, defStyleAttr, defStyleRes) {
     private var binding: MessageViewBinding
+
+    @Inject
+    lateinit var picasso: Picasso
 
     private var model: Model? = null
 
@@ -50,6 +56,7 @@ class MessageView @JvmOverloads constructor(
         get() = binding.messageTextCardView
 
     init {
+        App.INSTANCE.appComponent.inject(this)
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.message_view, this, attachToRoot)
         binding = MessageViewBinding.bind(this)
@@ -96,6 +103,11 @@ class MessageView @JvmOverloads constructor(
         model: Model,
         actions: Actions
     ) {
+        val imageGetter = TextViewImageGetter(
+            textView = messageTextView,
+            baseUrl = BASE_URL,
+            picasso = picasso
+        )
         if (this.model?.avatar != model.avatar) {
             Picasso.get().load(model.avatar).into(logoImageView)
         }
@@ -103,7 +115,12 @@ class MessageView @JvmOverloads constructor(
             nameTextView.text = model.userName
         }
         if (this.model?.text != model.text) {
-            messageTextView.text = Html.fromHtml(model.text, Html.FROM_HTML_MODE_LEGACY).trimEnd()
+            messageTextView.text = Html.fromHtml(
+                model.text,
+                Html.FROM_HTML_MODE_LEGACY,
+                imageGetter,
+                null
+            ).trimEnd()
         }
         if (this.model?.emojiList != model.emojiList) {
             emojiFlexBox.emojiList = model.emojiList
