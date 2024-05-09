@@ -1,5 +1,7 @@
 package com.lesa.app.presentation.features.chat.elm
 
+import android.content.ContentResolver
+import android.net.Uri
 import com.lesa.app.domain.model.Message
 
 sealed interface ChatEvent {
@@ -21,6 +23,10 @@ sealed interface ChatEvent {
             val text: String
         ) : Ui
         data object FetchMoreMessages : Ui
+        data class UploadFile(
+            val uri: Uri,
+            val contentResolver: ContentResolver
+        ) : Ui
     }
 
     sealed interface Internal : ChatEvent {
@@ -33,5 +39,6 @@ sealed interface ChatEvent {
         data object ErrorCached : Internal
         data object ErrorEmoji : Internal
         data object ErrorMessage : Internal
+        data class FileUploaded(val uri: String) : Internal
     }
 }

@@ -8,6 +8,7 @@ import com.lesa.app.domain.use_cases.chat.LoadAllCachedMessagesUseCase
 import com.lesa.app.domain.use_cases.chat.LoadMessagesInTopicUseCase
 import com.lesa.app.domain.use_cases.chat.LoadSelectedMessageUseCase
 import com.lesa.app.domain.use_cases.chat.SendMessageUseCase
+import com.lesa.app.domain.use_cases.chat.UploadFileUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
@@ -22,7 +23,8 @@ class ChatActor @Inject constructor(
     private val sendMessageUseCase: SendMessageUseCase,
     private val loadSelectedMessageUseCase: LoadSelectedMessageUseCase,
     private val addReactionUseCase: AddReactionUseCase,
-    private val removeReactionUseCase: DeleteReactionUseCase
+    private val removeReactionUseCase: DeleteReactionUseCase,
+    private val uploadFileUseCase: UploadFileUseCase
     ) : Actor<ChatCommand, ChatEvent>() {
     private val mutexMap = ConcurrentHashMap<String, Mutex>()
 
@@ -123,6 +125,26 @@ class ChatActor @Inject constructor(
                 eventMapper = {
                     ChatEvent.Internal.OldMessagesLoaded(
                         messages = it
+                    )
+                },
+                errorMapper = {
+                    ChatEvent.Internal.Error
+                }
+            )
+
+            is ChatCommand.UploadFile -> flow {
+                val uri = command.uri
+                val contentResolver = command.contentResolver
+                emit(
+                    uploadFileUseCase.invoke(
+                        uri = uri,
+                        contentResolver = contentResolver
+                    )
+                )
+            }.mapEvents(
+                eventMapper = {
+                    ChatEvent.Internal.FileUploaded(
+                        uri = it
                     )
                 },
                 errorMapper = {

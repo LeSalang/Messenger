@@ -119,6 +119,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     isPrefetching = false
                 )
             }
+
+            is ChatEvent.Internal.FileUploaded -> commands {
+                val content = "[](${event.uri})"
+                +Command.SendMessage(topic = state.topic, content = content)
+            }
         }
     }
 
@@ -196,7 +201,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 } else {
                     Unit
                 }
+
+            is ChatEvent.Ui.UploadFile -> commands {
+                +Command.UploadFile(uri = event.uri, contentResolver = event.contentResolver)
             }
+        }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.lesa.app.data.repositories
 
+import android.content.ContentResolver
+import android.net.Uri
 import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.local.entities.toMessage
 import com.lesa.app.data.local.entities.toMessageEntity
@@ -9,7 +11,10 @@ import com.lesa.app.data.network.models.MessageFilter.Companion.createNarrow
 import com.lesa.app.data.network.models.toMessage
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
+import com.lesa.app.presentation.utils.InputStreamRequestBody
 import kotlinx.coroutines.coroutineScope
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 interface MessagesRepository {
@@ -42,6 +47,11 @@ interface MessagesRepository {
     suspend fun getMessage(
         messageId: Int
     ) : Message
+
+    suspend fun uploadFile(
+        uri: Uri,
+        contentResolver: ContentResolver
+    ) : String
 }
 
 class MessagesRepositoryImpl @Inject constructor(
@@ -85,6 +95,20 @@ class MessagesRepositoryImpl @Inject constructor(
     override suspend fun getMessage(messageId: Int) : Message {
         val id = api.getOwnUser().id // TODO: request once after login
         return api.getMessage(messageId = messageId).message.toMessage(id)
+    }
+
+    override suspend fun uploadFile(uri: Uri, contentResolver: ContentResolver) : String {
+        val requestBody = InputStreamRequestBody(
+            contentType = "image/*".toMediaType(),
+            contentResolver = contentResolver,
+            uri = uri
+        )
+        val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart(
+            name = "name",
+            filename = "filename.jpg",
+            body = requestBody
+        ).build()
+        return api.uploadFile(file = multipartBody).uri
     }
 
     override suspend fun sendMessage(

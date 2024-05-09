@@ -8,8 +8,11 @@ import com.lesa.app.data.network.models.AllTopicsInStreamApiDto
 import com.lesa.app.data.network.models.AllUsersApiDto
 import com.lesa.app.data.network.models.MessageResponseApiDto
 import com.lesa.app.data.network.models.PresenceResponseApiDto
-import com.lesa.app.data.network.models.ResponseApiDto
+import com.lesa.app.data.network.models.SendMessageResponseApiDto
+import com.lesa.app.data.network.models.UriResponseApiDto
 import com.lesa.app.data.network.models.UserApiDto
+import okhttp3.MultipartBody
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -55,7 +58,7 @@ interface Api {
         @Query("to") streamId: Int,
         @Query("topic") topicName: String,
         @Query("content") content: String,
-    ) : ResponseApiDto
+    ) : SendMessageResponseApiDto
 
     @GET("messages/{$MESSAGE_ID}")
     suspend fun getMessage(
@@ -74,10 +77,16 @@ interface Api {
         @Query("emoji_name") emojiName: String
     )
 
+    @POST(USER_UPLOADS)
+    suspend fun uploadFile(
+        @Body file: MultipartBody
+    ) : UriResponseApiDto
+
     companion object {
         private const val STREAM_ID = "stream_id"
         private const val MESSAGE_ID = "message_id"
         private const val USER_ID = "user_id"
+        private const val USER_UPLOADS = "user_uploads"
         const val NEWEST_MESSAGE_ANCHOR = "newest"
     }
 }
