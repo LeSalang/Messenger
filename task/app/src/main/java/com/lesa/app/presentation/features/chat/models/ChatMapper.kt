@@ -4,7 +4,7 @@ import com.lesa.app.domain.model.Emoji
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.Topic
 
-class ChatMapper {
+object ChatMapper {
     fun map(message: Message) : MessageUi {
         return MessageUi(
             id = message.id,

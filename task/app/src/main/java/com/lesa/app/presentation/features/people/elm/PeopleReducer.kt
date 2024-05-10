@@ -20,7 +20,7 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
                 val userUiList = event.users.sortedByDescending {
                     it.presence
                 }.map {
-                    UserMapper().map(it)
+                    UserMapper.map(it)
                 }
                 copy(
                     lceState = LceState.Content(userUiList),
@@ -33,7 +33,7 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
                     val userUiList = event.users.sortedByDescending {
                         it.presence
                     }.map {
-                        UserMapper().map(it)
+                        UserMapper.map(it)
                     }
                     if (userUiList.isEmpty()) {
                         copy(
@@ -86,7 +86,7 @@ class PeopleReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, E
 
             is PeopleEvent.Ui.Search -> state {
                 val resultList = search(users = state.users, query = event.query)
-                    .map { UserMapper().map(it) }
+                    .map { UserMapper.map(it) }
                 copy(
                     lceState = LceState.Content(resultList)
                 )

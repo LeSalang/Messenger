@@ -16,8 +16,7 @@ class ProfileActor @Inject constructor(
                 emit(loadProfileUseCase.invoke())
             }.mapEvents(
                 eventMapper = {
-                    val mapper = ProfileMapper()
-                    val profileUi = mapper.map(it)
+                    val profileUi = ProfileMapper.map(it)
                     ProfileEvent.Internal.DataLoaded(profileUi = profileUi)
                 },
                 errorMapper = {

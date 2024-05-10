@@ -2,7 +2,7 @@ package com.lesa.app.presentation.features.people.model
 
 import com.lesa.app.domain.model.User
 
-class UserMapper {
+object UserMapper {
     fun map(user: User) : UserUi {
         return UserUi(
             id = user.id,
