@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.NavigatorHolder
@@ -22,7 +22,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding: FragmentMainBinding by viewBinding()
     private lateinit var navigator: AppNavigator
 
-    private lateinit var bottomBarViewModel: BottomBarViewModel
+    private val bottomBarViewModel by activityViewModels<BottomBarViewModel>()
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -32,7 +32,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         App.INSTANCE.appComponent.inject(this)
-        bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
+        //bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
 
         super.onViewCreated(view, savedInstanceState)
         navigator = AppNavigator(

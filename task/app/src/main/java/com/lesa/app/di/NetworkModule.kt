@@ -46,6 +46,7 @@ class NetworkModule {
         return retrofit.create(Api::class.java)
     }
 
+    @AppScope
     @Provides
     fun providePicasso(context: Context) : Picasso {
         return Picasso.Builder(context)

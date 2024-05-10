@@ -37,7 +37,7 @@ class TextViewImage(
     override fun onBitmapLoaded(unprocessedBitmap: Bitmap, from: Picasso.LoadedFrom) {
         val scaleToFullWidth = unprocessedBitmap.width >= textView.width / 5
 
-        val bitmap = if (scaleToFullWidth) {
+        val bitmap = if (scaleToFullWidth && textView.width > 0) {
             val scaleFactor = textView.width.toFloat() / unprocessedBitmap.width.toFloat()
             Bitmap.createScaledBitmap(
                 unprocessedBitmap,

@@ -12,6 +12,7 @@ import dagger.Provides
 @Module
 class DatabaseModule {
 
+    @AppScope
     @Provides
     fun provideDatabase(context: Context): Database {
         return Room.databaseBuilder(
