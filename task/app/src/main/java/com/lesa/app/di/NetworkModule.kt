@@ -17,18 +17,22 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 @Module
 class NetworkModule {
 
-    private val authClient = OkHttpClient
-        .Builder()
-        .addInterceptor(AuthHeaderInterceptor())
-        .addInterceptor(
-            HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }
-        )
-        .build()
+    @AppScope
+    @Provides
+    fun provideAuthClient() : OkHttpClient {
+        return OkHttpClient
+            .Builder()
+            .addInterceptor(AuthHeaderInterceptor())
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
+            .build()
+    }
 
     @Provides
-    fun provideApi() : Api {
+    fun provideApi(authClient: OkHttpClient) : Api {
         val jsonSerializer = Json {
             ignoreUnknownKeys = true
         }
@@ -48,7 +52,7 @@ class NetworkModule {
 
     @AppScope
     @Provides
-    fun providePicasso(context: Context) : Picasso {
+    fun providePicasso(context: Context, authClient: OkHttpClient) : Picasso {
         return Picasso.Builder(context)
             .downloader(OkHttp3Downloader(authClient))
             .build()
