@@ -39,33 +39,63 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    testOptions {
+        unitTests.all { it.useJUnitPlatform() }
+        animationsDisabled = true
+    }
 }
 
 dependencies {
+    // Android
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.cicerone)
-    implementation(libs.dagger)
-    implementation(libs.elmslie.android)
-    implementation(libs.elmslie.core)
-    implementation(libs.facebook.shimmer)
     implementation(libs.fragment)
     implementation(libs.google.android.flexbox)
-    implementation(libs.kirich1409.viewbindingpropertydelegate)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.material)
+    implementation(libs.viewpager2)
+    implementation(libs.serialization)
+
+    // Cicerone
+    implementation(libs.cicerone)
+
+    // Dagger
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+
+    // ELM
+    implementation(libs.elmslie.android)
+    implementation(libs.elmslie.core)
+
+    // Shimmer
+    implementation(libs.facebook.shimmer)
+
+    // ViewBindingPropertyDelegate
+    implementation(libs.kirich1409.viewbindingpropertydelegate)
+
+    // Retrofit
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.interceptor)
     implementation(libs.picasso)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter)
+
+    // Room
     implementation(libs.room)
     implementation(libs.room.ktx)
-    implementation(libs.serialization)
-    implementation(libs.viewpager2)
-
-    kapt(libs.dagger.compiler)
     kapt(libs.room.compiler)
+
+    // JUnit
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+
+    // Kotest
+    testImplementation(libs.kotest.junit)
+    testImplementation(libs.kotest.assertions)
+    testImplementation(libs.kotest.property)
+
+    // MockK
+    testImplementation(libs.mockk)
 }
