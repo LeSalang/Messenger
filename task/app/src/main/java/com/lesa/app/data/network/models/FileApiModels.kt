@@ -4,11 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SendMessageResponseApiDto(
-    @SerialName("id") val id: Int
-)
-
-@Serializable
-data class UriResponseApiDto(
+data class UploadFileResponseApiDto(
     @SerialName("uri") val uri: String
 )

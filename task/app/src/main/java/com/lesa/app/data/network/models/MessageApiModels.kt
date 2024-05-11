@@ -19,6 +19,11 @@ data class MessageResponseApiDto(
 )
 
 @Serializable
+data class SendMessageResponseApiDto(
+    @SerialName("id") val id: Int
+)
+
+@Serializable
 data class MessageApiDto(
     @SerialName("avatar_url")
     val avatar: String?,

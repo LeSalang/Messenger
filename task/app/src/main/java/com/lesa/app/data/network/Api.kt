@@ -9,7 +9,7 @@ import com.lesa.app.data.network.models.AllUsersApiDto
 import com.lesa.app.data.network.models.MessageResponseApiDto
 import com.lesa.app.data.network.models.PresenceResponseApiDto
 import com.lesa.app.data.network.models.SendMessageResponseApiDto
-import com.lesa.app.data.network.models.UriResponseApiDto
+import com.lesa.app.data.network.models.UploadFileResponseApiDto
 import com.lesa.app.data.network.models.UserApiDto
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -80,7 +80,7 @@ interface Api {
     @POST(USER_UPLOADS)
     suspend fun uploadFile(
         @Body file: MultipartBody
-    ) : UriResponseApiDto
+    ) : UploadFileResponseApiDto
 
     companion object {
         private const val STREAM_ID = "stream_id"
