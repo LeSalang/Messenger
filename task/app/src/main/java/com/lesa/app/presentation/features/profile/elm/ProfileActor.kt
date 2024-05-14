@@ -1,7 +1,6 @@
 package com.lesa.app.presentation.features.profile.elm
 
 import com.lesa.app.domain.use_cases.profile.LoadProfileUseCase
-import com.lesa.app.presentation.features.profile.model.ProfileMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import vivid.money.elmslie.core.store.Actor
@@ -16,8 +15,7 @@ class ProfileActor @Inject constructor(
                 emit(loadProfileUseCase.invoke())
             }.mapEvents(
                 eventMapper = {
-                    val profileUi = ProfileMapper.map(it)
-                    ProfileEvent.Internal.DataLoaded(profileUi = profileUi)
+                    ProfileEvent.Internal.DataLoaded(profile = it)
                 },
                 errorMapper = {
                     ProfileEvent.Internal.Error

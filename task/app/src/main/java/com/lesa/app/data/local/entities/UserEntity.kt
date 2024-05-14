@@ -28,14 +28,3 @@ fun UserEntity.toUser() : User {
         )
     )
 }
-
-fun User.toUserEntity() : UserEntity {
-    return UserEntity(
-        id = id,
-        name = name,
-        email = email,
-        avatar = avatar,
-        lastActivity = presence.timestamp?.time,
-        status = presence.status.ordinal
-    )
-}

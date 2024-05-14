@@ -16,7 +16,7 @@
         />
 
     <TextView
-        android:id="@+id/userNameTextView"
+        android:id="@+id/errorMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/medium_padding"

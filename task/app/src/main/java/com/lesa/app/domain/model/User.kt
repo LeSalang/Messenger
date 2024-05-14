@@ -1,5 +1,6 @@
 package com.lesa.app.domain.model
 
+import com.lesa.app.data.local.entities.UserEntity
 import java.util.Date
 
 data class User(
@@ -27,4 +28,15 @@ data class User(
             return this.status.order.compareTo(other.status.order)
         }
     }
+}
+
+fun User.toUserEntity() : UserEntity {
+    return UserEntity(
+        id = id,
+        name = name,
+        email = email,
+        avatar = avatar,
+        lastActivity = presence.timestamp?.time,
+        status = presence.status.ordinal
+    )
 }

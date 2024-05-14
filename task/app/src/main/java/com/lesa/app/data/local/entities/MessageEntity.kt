@@ -21,7 +21,7 @@ data class MessageEntity(
 fun MessageEntity.toMessage(): Message {
     return Message(
         id = id,
-        avatar = senderAvatar,
+        senderAvatar = senderAvatar,
         content = content,
         senderName = senderName,
         reactions = reactions.associate {
@@ -30,19 +30,6 @@ fun MessageEntity.toMessage(): Message {
         ,
         date = Date(timestamp * 1000),
         topic = topic,
-        isOwn = isOwn
-    )
-}
-
-fun Message.toMessageEntity(): MessageEntity {
-    return MessageEntity(
-        id = id,
-        content = content,
-        senderName = senderName,
-        senderAvatar = avatar,
-        timestamp = date.time / 1000,
-        topic = topic,
-        reactions = reactions.map { it.value.toReactionEntity() },
         isOwn = isOwn
     )
 }

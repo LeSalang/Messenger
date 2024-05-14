@@ -1,6 +1,6 @@
 package com.lesa.app.presentation.features.profile.elm
 
-import com.lesa.app.presentation.features.profile.model.ProfileUi
+import com.lesa.app.domain.model.User
 
 sealed interface ProfileEvent {
     sealed interface Ui : ProfileEvent {
@@ -9,7 +9,7 @@ sealed interface ProfileEvent {
     }
 
     sealed interface Internal : ProfileEvent {
-        data class DataLoaded(val profileUi: ProfileUi) : Internal
+        data class DataLoaded(val profile: User) : Internal
         data object Error : Internal
     }
 }

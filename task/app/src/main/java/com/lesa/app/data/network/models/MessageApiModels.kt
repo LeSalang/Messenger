@@ -46,7 +46,7 @@ data class MessageApiDto(
 fun MessageApiDto.toMessage(ownId: Int) : Message {
     return Message(
         id = id,
-        avatar = avatar,
+        senderAvatar = avatar,
         content = content,
         senderName = senderFullName,
         reactions = reactions

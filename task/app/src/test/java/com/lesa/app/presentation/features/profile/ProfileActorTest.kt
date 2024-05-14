@@ -36,7 +36,6 @@ class ProfileActorTest : BehaviorSpec({
             }
 
             And("loading is failed") {
-                val user = UserFactory.create()
                 coEvery {
                     loadProfileUseCase.invoke()
                 } throws Exception()

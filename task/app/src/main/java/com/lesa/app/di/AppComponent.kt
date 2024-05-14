@@ -33,6 +33,9 @@ interface AppComponent : PeopleDeps, ProfileDeps, StreamsDeps, ChatDeps {
         @BindsInstance
         fun context(context: Context): Builder
 
+        @BindsInstance
+        fun baseUrl(baseUrl: String): Builder
+
         fun build(): AppComponent
     }
     

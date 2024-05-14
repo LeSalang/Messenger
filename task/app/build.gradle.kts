@@ -17,7 +17,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.lesa.app.TestRunner"
     }
 
     buildTypes {
@@ -30,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         viewBinding = true
@@ -51,7 +52,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.fragment)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.fragment.test)
     implementation(libs.google.android.flexbox)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.material)
@@ -63,6 +65,8 @@ dependencies {
 
     // Dagger
     implementation(libs.dagger)
+    implementation(libs.play.services.base)
+    implementation(libs.androidx.runner)
     kapt(libs.dagger.compiler)
 
     // ELM
@@ -96,6 +100,22 @@ dependencies {
     testImplementation(libs.kotest.assertions)
     testImplementation(libs.kotest.property)
 
+    // Hamcrest Matchers
+    androidTestImplementation(libs.hamcrest)
+
     // MockK
     testImplementation(libs.mockk)
+
+    // Kaspresso
+    androidTestImplementation(libs.kaspresso)
+
+    // Espresso Intents
+    androidTestImplementation(libs.androidx.espresso.intents)
+
+    // Wiremock
+    debugImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.httpclient.android)
+    androidTestImplementation(libs.wiremock) {
+        exclude(group = "org.apache.httpcomponents", module = "httpclient")
+    }
 }

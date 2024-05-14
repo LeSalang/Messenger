@@ -1,5 +1,6 @@
 package com.lesa.app.presentation.features.profile.elm
 
+import com.lesa.app.presentation.features.profile.model.ProfileMapper
 import com.lesa.app.presentation.utils.LceState
 import vivid.money.elmslie.core.store.dsl.ScreenDslReducer
 import com.lesa.app.presentation.features.profile.elm.ProfileCommand as Command
@@ -15,7 +16,7 @@ class ProfileReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
         return when (event) {
             is Event.Internal.DataLoaded -> state {
                 copy(
-                    profileUi = LceState.Content(event.profileUi)
+                    profileUi = LceState.Content(ProfileMapper.map(event.profile))
                 )
             }
             is Event.Internal.Error -> state {

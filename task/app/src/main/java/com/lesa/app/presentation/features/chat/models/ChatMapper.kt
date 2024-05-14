@@ -8,7 +8,7 @@ object ChatMapper {
     fun map(message: Message) : MessageUi {
         return MessageUi(
             id = message.id,
-            avatar = message.avatar,
+            avatar = message.senderAvatar,
             content = message.content,
             senderName = message.senderName,
             reactions = reactionMapToUi(message.reactions),

@@ -4,13 +4,13 @@ import android.content.ContentResolver
 import android.net.Uri
 import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.local.entities.toMessage
-import com.lesa.app.data.local.entities.toMessageEntity
 import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.Api.Companion.NEWEST_MESSAGE_ANCHOR
 import com.lesa.app.data.network.models.MessageFilter.Companion.createNarrow
 import com.lesa.app.data.network.models.toMessage
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
+import com.lesa.app.domain.model.toMessageEntity
 import com.lesa.app.presentation.utils.InputStreamRequestBody
 import kotlinx.coroutines.coroutineScope
 import okhttp3.MediaType.Companion.toMediaType
@@ -144,10 +144,14 @@ class MessagesRepositoryImpl @Inject constructor(
         val newList = messages.map { it.toMessageEntity() }
         val oldList = dao.getAll()
         var finalList = (newList + oldList).sortedBy { it.id }
-        if (finalList.size > 50) {
-            finalList = finalList.drop(finalList.size - 50)
+        if (finalList.size > CACHE_SIZE) {
+            finalList = finalList.drop(finalList.size - CACHE_SIZE)
             dao.deleteAllInTopic(topicName)
         }
         dao.updateMessages(finalList)
+    }
+
+    companion object {
+        private const val CACHE_SIZE = 50
     }
 }

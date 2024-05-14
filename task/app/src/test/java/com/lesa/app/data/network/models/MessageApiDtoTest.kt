@@ -30,7 +30,7 @@ class MessageApiDtoTest : BehaviorSpec({
             Then("should be equal") {
                 val expected = Message(
                     id = 1,
-                    avatar = "https://null",
+                    senderAvatar = "https://null",
                     content = "content",
                     senderName = "John",
                     reactions = mapOf(

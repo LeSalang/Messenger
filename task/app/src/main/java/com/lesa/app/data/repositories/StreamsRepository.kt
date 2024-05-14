@@ -2,11 +2,11 @@ package com.lesa.app.data.repositories
 
 import com.lesa.app.data.local.dao.StreamDao
 import com.lesa.app.data.local.entities.toStream
-import com.lesa.app.data.local.entities.toStreamEntity
 import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.models.toStream
 import com.lesa.app.data.network.models.toTopic
 import com.lesa.app.domain.model.Stream
+import com.lesa.app.domain.model.toStreamEntity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject

@@ -16,7 +16,7 @@ data class StreamEntity(
     @ColumnInfo("topics") val topics: List<String>
 )
 
-fun StreamEntity.toStream() : Stream {
+fun StreamEntity.toStream(): Stream {
     return Stream(
         id = id,
         name = name,
@@ -29,18 +29,6 @@ fun StreamEntity.toStream() : Stream {
                 streamName = name,
                 streamId = id
             )
-        }
-    )
-}
-
-fun Stream.toStreamEntity() : StreamEntity {
-    return StreamEntity(
-        id = id,
-        name = name,
-        color = color,
-        isSubscribed = isSubscribed,
-        topics = topics.map { topic ->
-            topic.name
         }
     )
 }

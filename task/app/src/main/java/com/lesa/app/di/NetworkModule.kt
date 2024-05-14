@@ -32,13 +32,13 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideApi(authClient: OkHttpClient) : Api {
+    fun provideApi(authClient: OkHttpClient, baseUrl: String) : Api {
         val jsonSerializer = Json {
             ignoreUnknownKeys = true
         }
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(
                 jsonSerializer.asConverterFactory(
                     "application/json; charset=UTF8".toMediaType()
