@@ -84,8 +84,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 val contentResolver = requireContext().contentResolver
                 store.accept(Event.Ui.UploadFile(
                     name = "name",
-                    uri = uri,
-                    contentResolver = contentResolver
+                    uri = uri
                 ))
             }
         }

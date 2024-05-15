@@ -1,6 +1,5 @@
 package com.lesa.app.presentation.features.chat.elm
 
-import android.content.ContentResolver
 import android.net.Uri
 import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.domain.model.Topic
@@ -27,6 +26,5 @@ sealed interface ChatCommand {
     data class UploadFile(
         val name: String,
         val uri: Uri,
-        val contentResolver: ContentResolver
     ) : ChatCommand
 }

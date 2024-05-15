@@ -1,6 +1,5 @@
 package com.lesa.app.data.repositories
 
-import android.content.ContentResolver
 import android.net.Uri
 import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.local.entities.toMessage
@@ -9,11 +8,9 @@ import com.lesa.app.data.network.Api
 import com.lesa.app.data.network.Api.Companion.NEWEST_MESSAGE_ANCHOR
 import com.lesa.app.data.network.models.MessageFilter.Companion.createNarrow
 import com.lesa.app.data.network.models.toMessage
+import com.lesa.app.data.utils.FileRequestBodyFactory
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
-import com.lesa.app.presentation.utils.InputStreamRequestBody
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import javax.inject.Inject
 
 interface MessagesRepository {
@@ -49,14 +46,14 @@ interface MessagesRepository {
 
     suspend fun uploadFile(
         name: String,
-        uri: Uri,
-        contentResolver: ContentResolver
+        uri: Uri
     ) : String
 }
 
 class MessagesRepositoryImpl @Inject constructor(
     private val api: Api,
-    private val dao: MessageDao
+    private val dao: MessageDao,
+    private val fileRequestBodyFactory: FileRequestBodyFactory
 ) : MessagesRepository {
 
     override suspend fun getMessagesInTopic(
@@ -94,21 +91,8 @@ class MessagesRepositoryImpl @Inject constructor(
         return api.getMessage(messageId = messageId).message.toMessage(id)
     }
 
-    override suspend fun uploadFile(name: String, uri: Uri, contentResolver: ContentResolver) : String {
-        val mediaType = contentResolver
-            .getType(uri)
-            ?.toMediaTypeOrNull()
-            ?: throw IllegalArgumentException("unsupported media type")
-        val requestBody = InputStreamRequestBody(
-            contentType = mediaType,
-            contentResolver = contentResolver,
-            uri = uri
-        )
-        val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart(
-            name = name,
-            filename = name + "." + mediaType.subtype,
-            body = requestBody
-        ).build()
+    override suspend fun uploadFile(name: String, uri: Uri) : String {
+        val multipartBody = fileRequestBodyFactory.createRequestBody(uri = uri, name = name)
         return api.uploadFile(file = multipartBody).uri
     }
 

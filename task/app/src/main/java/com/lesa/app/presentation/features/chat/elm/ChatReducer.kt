@@ -205,13 +205,12 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             is ChatEvent.Ui.UploadFile -> commands {
                 +Command.UploadFile(
                     name = event.name,
-                    uri = event.uri,
-                    contentResolver = event.contentResolver
+                    uri = event.uri
                 )
             }
         }
-        }
     }
+}
 
     private fun selectEmoji(
         messageList: List<Message>,

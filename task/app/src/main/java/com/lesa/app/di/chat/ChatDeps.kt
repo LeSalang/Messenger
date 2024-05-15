@@ -1,5 +1,6 @@
 package com.lesa.app.di.chat
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.github.terrakok.cicerone.Router
 import com.lesa.app.data.local.dao.MessageDao
@@ -10,6 +11,7 @@ interface ChatDeps {
     val api: Api
     val router: Router
     val messageDao: MessageDao
+    val context: Context
 }
 
 interface ChatDepsProvider {
