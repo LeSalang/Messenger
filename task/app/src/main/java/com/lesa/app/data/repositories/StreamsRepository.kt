@@ -50,13 +50,10 @@ class StreamsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCachedStreams(): List<Stream> {
-        val list = coroutineScope {
             val allStreams = dao.getAll()
-            return@coroutineScope allStreams.map {
+            return allStreams.map {
                 it.toStream()
             }
-        }
-        return list
     }
 
     private suspend fun updateCachedStreams(streams: List<Stream>) {
