@@ -135,8 +135,10 @@ class ChatActor @Inject constructor(
             is ChatCommand.UploadFile -> flow {
                 val uri = command.uri
                 val contentResolver = command.contentResolver
+                val name = command.name
                 emit(
                     uploadFileUseCase.invoke(
+                        name = name,
                         uri = uri,
                         contentResolver = contentResolver
                     )

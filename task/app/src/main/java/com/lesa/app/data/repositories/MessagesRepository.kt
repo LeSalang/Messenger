@@ -13,7 +13,7 @@ import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.presentation.utils.InputStreamRequestBody
 import kotlinx.coroutines.coroutineScope
-import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
@@ -49,6 +49,7 @@ interface MessagesRepository {
     ) : Message
 
     suspend fun uploadFile(
+        name: String,
         uri: Uri,
         contentResolver: ContentResolver
     ) : String
@@ -97,15 +98,19 @@ class MessagesRepositoryImpl @Inject constructor(
         return api.getMessage(messageId = messageId).message.toMessage(id)
     }
 
-    override suspend fun uploadFile(uri: Uri, contentResolver: ContentResolver) : String {
+    override suspend fun uploadFile(name: String, uri: Uri, contentResolver: ContentResolver) : String {
+        val mediaType = contentResolver
+            .getType(uri)
+            ?.toMediaTypeOrNull()
+            ?: throw IllegalArgumentException("unsupported media type")
         val requestBody = InputStreamRequestBody(
-            contentType = "image/*".toMediaType(),
+            contentType = mediaType,
             contentResolver = contentResolver,
             uri = uri
         )
         val multipartBody = MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart(
-            name = "name",
-            filename = "filename.jpg",
+            name = name,
+            filename = name + "." + mediaType.subtype,
             body = requestBody
         ).build()
         return api.uploadFile(file = multipartBody).uri

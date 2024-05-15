@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.BLACK
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -83,7 +82,11 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 val contentResolver = requireContext().contentResolver
-                store.accept(Event.Ui.UploadFile(uri = uri, contentResolver = contentResolver))
+                store.accept(Event.Ui.UploadFile(
+                    name = "name",
+                    uri = uri,
+                    contentResolver = contentResolver
+                ))
             }
         }
         bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]

@@ -203,7 +203,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 }
 
             is ChatEvent.Ui.UploadFile -> commands {
-                +Command.UploadFile(uri = event.uri, contentResolver = event.contentResolver)
+                +Command.UploadFile(
+                    name = event.name,
+                    uri = event.uri,
+                    contentResolver = event.contentResolver
+                )
             }
         }
         }

@@ -24,6 +24,7 @@ sealed interface ChatEvent {
         ) : Ui
         data object FetchMoreMessages : Ui
         data class UploadFile(
+            val name: String,
             val uri: Uri,
             val contentResolver: ContentResolver
         ) : Ui

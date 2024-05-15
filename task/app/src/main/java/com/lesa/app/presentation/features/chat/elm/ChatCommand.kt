@@ -25,6 +25,7 @@ sealed interface ChatCommand {
         val anchor: MessageAnchor
     ) : ChatCommand
     data class UploadFile(
+        val name: String,
         val uri: Uri,
         val contentResolver: ContentResolver
     ) : ChatCommand
