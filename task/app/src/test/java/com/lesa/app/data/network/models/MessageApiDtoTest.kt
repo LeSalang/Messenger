@@ -23,7 +23,7 @@ class MessageApiDtoTest : BehaviorSpec({
             senderId = 2,
             senderFullName = "John",
             topic = "topic",
-            timestamp = 1715372754
+            timestampSecs = 1715372754
         )
         When("map to Message") {
             val actual = messageApiDto.toMessage(ownId = 2)

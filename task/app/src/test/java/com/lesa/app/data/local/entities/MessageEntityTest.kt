@@ -16,7 +16,7 @@ class MessageEntityTest : BehaviorSpec({
             content = "content",
             senderName = "senderName",
             senderAvatar = "senderAvatar",
-            timestamp = 1715372754,
+            timestampMillis = 1715372754,
             topic = "topic",
             reactions = listOf(
                 ReactionEntity(
@@ -70,7 +70,7 @@ class MessageEntityTest : BehaviorSpec({
                             count = 2
                         )
                     ),
-                    date = Date(1715372754000),
+                    date = Date(1715372754),
                     topic = "topic",
                     isOwn = true
                 )

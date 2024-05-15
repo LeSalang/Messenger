@@ -12,7 +12,7 @@ data class MessageEntity(
     @ColumnInfo("content") val content: String,
     @ColumnInfo("sender_name") val senderName: String,
     @ColumnInfo("sender_avatar") val senderAvatar: String?,
-    @ColumnInfo("timestamp") val timestamp: Long,
+    @ColumnInfo("timestamp") val timestampMillis: Long,
     @ColumnInfo("subject") val topic: String,
     @ColumnInfo("reactions") val reactions: List<ReactionEntity>,
     @ColumnInfo("isOwn") val isOwn: Boolean
@@ -28,8 +28,21 @@ fun MessageEntity.toMessage(): Message {
             it.emojiCode to it.toEmoji()
         }
         ,
-        date = Date(timestamp * 1000),
+        date = Date(timestampMillis),
         topic = topic,
+        isOwn = isOwn
+    )
+}
+
+fun Message.toMessageEntity(): MessageEntity {
+    return MessageEntity(
+        id = id,
+        content = content,
+        senderName = senderName,
+        senderAvatar = senderAvatar,
+        timestampMillis = date.time,
+        topic = topic,
+        reactions = reactions.map { it.value.toReactionEntity() },
         isOwn = isOwn
     )
 }

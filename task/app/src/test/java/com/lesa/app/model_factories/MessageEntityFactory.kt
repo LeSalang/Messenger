@@ -32,7 +32,7 @@ object MessageEntityFactory {
             content = content,
             senderName = senderName,
             senderAvatar = senderAvatar,
-            timestamp = timestamp,
+            timestampMillis = timestamp,
             topic = topic,
             reactions = reactions,
             isOwn = isOwn

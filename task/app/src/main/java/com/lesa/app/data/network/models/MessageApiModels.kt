@@ -40,7 +40,7 @@ data class MessageApiDto(
     @SerialName("subject")
     val topic: String,
     @SerialName("timestamp")
-    val timestamp: Int
+    val timestampSecs: Int
 )
 
 fun MessageApiDto.toMessage(ownId: Int) : Message {
@@ -59,7 +59,7 @@ fun MessageApiDto.toMessage(ownId: Int) : Message {
                     count = 1 + (emoji?.count ?: 0)
                 )
             },
-        date = Date(timestamp.toLong() * 1000),
+        date = Date(timestampSecs.toLong() * 1000),
         topic = topic,
         isOwn = senderId == ownId
     )

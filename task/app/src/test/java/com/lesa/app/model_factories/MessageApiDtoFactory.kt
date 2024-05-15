@@ -38,7 +38,7 @@ object MessageApiDtoFactory {
             senderId = senderId,
             senderFullName = senderFullName,
             topic = topic,
-            timestamp = timestamp
+            timestampSecs = timestamp
         )
     }
 }
