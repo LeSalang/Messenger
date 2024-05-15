@@ -43,13 +43,10 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCachedUsers(): List<User> {
-        val list = coroutineScope {
-            val allUsers = dao.getAll()
-            return@coroutineScope allUsers.map {
-                it.toUser()
-            }
+        val allUsers = dao.getAll()
+        return allUsers.map {
+            it.toUser()
         }
-        return list
     }
 
     override suspend fun getOwnUser(): User {
