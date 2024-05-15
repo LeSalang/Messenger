@@ -8,11 +8,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.ColorUtils
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
@@ -56,8 +56,8 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 ) {
     private val binding: FragmentChatBinding by viewBinding()
     private lateinit var adapter: CompositeAdapter
-    private lateinit var bottomBarViewModel: BottomBarViewModel
-    private lateinit var imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
+    private val bottomBarViewModel: BottomBarViewModel by activityViewModels()
+    private var imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {}
 
     @Inject
     lateinit var storeFactory: ChatStoreFactory
@@ -88,7 +88,6 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 ))
             }
         }
-        bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
         super.onViewCreated(view, savedInstanceState)
         store.accept(ChatEvent.Ui.Init)
         setUpViews()
