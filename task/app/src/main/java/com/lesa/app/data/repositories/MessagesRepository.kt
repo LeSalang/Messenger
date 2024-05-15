@@ -12,7 +12,6 @@ import com.lesa.app.data.network.models.toMessage
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.presentation.utils.InputStreamRequestBody
-import kotlinx.coroutines.coroutineScope
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -82,15 +81,12 @@ class MessagesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAllCachedMessagesInTopic(topicName: String): List<Message> {
-        val list = coroutineScope {
-            val allMessages = dao.getAll()
-            return@coroutineScope allMessages.map {
-                it.toMessage()
-            }.filter {
-                it.topic == topicName
-            }
+        val allMessages = dao.getAll()
+        return allMessages.map {
+            it.toMessage()
+        }.filter {
+            it.topic == topicName
         }
-        return list
     }
 
     override suspend fun getMessage(messageId: Int) : Message {
