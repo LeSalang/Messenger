@@ -34,12 +34,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         if (savedInstanceState == null) router.newRootScreen(Screens.Main())
         window?.statusBarColor = resources.getColor(R.color.gray_18)
-        setupNetworkListener()
+        networkReceiver = makeNetworkReceiver()
     }
 
     override fun onStart() {
         super.onStart()
-        networkReceiver = NetworkReceiver()
         registerReceiver(networkReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
@@ -58,12 +57,13 @@ class MainActivity : AppCompatActivity() {
         networkReceiver?.let { unregisterReceiver(it) }
     }
 
-    private fun setupNetworkListener() {
-        NetworkReceiver.networkReceiverListener = object : NetworkReceiver.NetworkReceiverListener {
+    private fun makeNetworkReceiver(): NetworkReceiver {
+        val networkReceiverListener = object : NetworkReceiver.NetworkReceiverListener {
             override fun onNetworkConnectionChanged(isConnected: Boolean) {
                 toggleNoInternetBar(!isConnected)
             }
         }
+        return NetworkReceiver(networkReceiverListener)
     }
 
     private fun toggleNoInternetBar(display: Boolean) {
