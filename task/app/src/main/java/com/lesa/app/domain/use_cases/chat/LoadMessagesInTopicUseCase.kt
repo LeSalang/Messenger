@@ -8,7 +8,15 @@ import javax.inject.Inject
 class LoadMessagesInTopicUseCase @Inject constructor(
     private val repository: MessagesRepository
 ) {
-    suspend fun invoke(streamName: String, topicName: String, anchor: MessageAnchor): List<Message> {
-        return repository.getMessagesInTopic(streamName = streamName, topicName = topicName, messageAnchor = anchor)
+    suspend fun invoke(
+        streamName: String,
+        topicName: String,
+        anchor: MessageAnchor
+    ): List<Message> {
+        return repository.getMessagesInTopic(
+            streamName = streamName,
+            topicName = topicName,
+            messageAnchor = anchor
+        )
     }
 }

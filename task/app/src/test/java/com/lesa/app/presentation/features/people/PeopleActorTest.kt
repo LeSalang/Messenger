@@ -24,7 +24,6 @@ class PeopleActorTest : BehaviorSpec({
         val users = List(10) { UserFactory.create() }
 
         When("command is LoadUsers") {
-
             And("loading is successful") {
                 coEvery {
                     loadPeopleUseCase.invoke()
@@ -52,7 +51,6 @@ class PeopleActorTest : BehaviorSpec({
         }
 
         When("command is LoadCachedUsers") {
-
             And("loading is successful") {
                 coEvery {
                     loadCachedPeopleUseCase.invoke()

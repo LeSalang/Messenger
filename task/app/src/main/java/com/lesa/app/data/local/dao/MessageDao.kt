@@ -11,9 +11,9 @@ interface MessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateMessages(messages: List<MessageEntity>)
 
-    @Query("DELETE FROM messages WHERE subject = :topicName")
+    @Query("DELETE FROM messages WHERE topic_name = :topicName")
     suspend fun deleteAllInTopic(topicName: String)
 
-    @Query("SELECT * FROM messages")
-    suspend fun getAll(): List<MessageEntity>
+    @Query("SELECT * FROM messages WHERE topic_name = :topicName AND stream_name = :streamName")
+    suspend fun getMessagesInTopic(topicName: String, streamName: String): List<MessageEntity>
 }

@@ -55,9 +55,9 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     R.layout.fragment_chat
 ) {
     private val binding: FragmentChatBinding by viewBinding()
-    private lateinit var adapter: CompositeAdapter
     private val bottomBarViewModel: BottomBarViewModel by activityViewModels()
     private var imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {}
+    private lateinit var adapter: CompositeAdapter
 
     @Inject
     lateinit var storeFactory: ChatStoreFactory
@@ -284,11 +284,14 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         }
     }
 
+    private var shouldScrollToBottom = true
+
     private fun updateList(list: List<MessageUi>) {
         val delegateItems = makeDelegateItems(list = list)
         adapter.submitList(delegateItems) {
             // TODO: scroll to bottom only when first load and send messages
-            // binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
+            if (shouldScrollToBottom) binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
+            shouldScrollToBottom = false
         }
     }
 

@@ -21,7 +21,8 @@ interface MessagesRepository {
     ) : List<Message>
 
     suspend fun getAllCachedMessagesInTopic(
-        topicName: String
+        topicName: String,
+        streamName: String
     ) : List<Message>
 
     suspend fun sendMessage(
@@ -73,12 +74,15 @@ class MessagesRepositoryImpl @Inject constructor(
         )
         .messages
         .map { it.toMessage(id) }
-        updateCachedMessages(list, topicName)
+        updateCachedMessages(list, topicName = topicName, streamName = streamName)
         return list
     }
 
-    override suspend fun getAllCachedMessagesInTopic(topicName: String): List<Message> {
-        val allMessages = dao.getAll()
+    override suspend fun getAllCachedMessagesInTopic(
+        topicName: String,
+        streamName: String
+    ): List<Message> {
+        val allMessages = dao.getMessagesInTopic(topicName = topicName, streamName = streamName)
         return allMessages.map {
             it.toMessage()
         }.filter {
@@ -124,10 +128,14 @@ class MessagesRepositoryImpl @Inject constructor(
 
     private suspend fun updateCachedMessages(
         messages: List<Message>,
-        topicName: String
+        topicName: String,
+        streamName: String,
     ) {
-        val newList = messages.map { it.toMessageEntity() }
-        val oldList = dao.getAll()
+        val newList = messages.map { it.toMessageEntity(streamName) }
+        val oldList = dao.getMessagesInTopic(
+            topicName = topicName,
+            streamName = streamName
+        )
         var finalList = (newList + oldList).sortedBy { it.id }
         if (finalList.size > CACHE_SIZE) {
             finalList = finalList.drop(finalList.size - CACHE_SIZE)

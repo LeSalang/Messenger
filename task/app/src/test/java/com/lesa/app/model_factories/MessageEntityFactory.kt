@@ -10,7 +10,8 @@ object MessageEntityFactory {
         senderName: String = "Name Surnamov",
         senderAvatar: String? = "https://avatar",
         timestamp: Long = 1000000000,
-        topic: String = "topic",
+        topicName: String = "topic",
+        streamName: String = "stream",
         reactions: List<ReactionEntity> = listOf(
             ReactionEntity(
                 emojiCode = "emojiCode1",
@@ -33,9 +34,10 @@ object MessageEntityFactory {
             senderName = senderName,
             senderAvatar = senderAvatar,
             timestampMillis = timestamp,
-            topic = topic,
+            topicName = topicName,
             reactions = reactions,
-            isOwn = isOwn
+            isOwn = isOwn,
+            streamName = streamName
         )
     }
 }

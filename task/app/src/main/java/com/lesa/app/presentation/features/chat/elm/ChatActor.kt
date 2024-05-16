@@ -52,7 +52,11 @@ class ChatActor @Inject constructor(
 
             is ChatCommand.LoadAllCachedMessages -> flow {
                 val topicName = command.topic.name
-                emit(loadAllCachedMessagesUseCase.invoke(topicName))
+                val streamName = command.topic.streamName
+                emit(loadAllCachedMessagesUseCase.invoke(
+                    topicName = topicName,
+                    streamName = streamName
+                ))
             }.mapEvents(
                 eventMapper = {
                     ChatEvent.Internal.AllCachedMessagesLoaded(

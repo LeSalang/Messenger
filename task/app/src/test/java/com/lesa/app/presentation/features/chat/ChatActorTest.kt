@@ -91,7 +91,8 @@ class ChatActorTest : BehaviorSpec({
             And("loading is successful") {
                 coEvery {
                     loadAllCachedMessagesUseCase.invoke(
-                        topicName = any()
+                        topicName = any(),
+                        streamName = any()
                     )
                 } returns messages
                 val actual = chatActor.execute(
@@ -109,7 +110,8 @@ class ChatActorTest : BehaviorSpec({
             And("loading is failed") {
                 coEvery {
                     loadAllCachedMessagesUseCase.invoke(
-                        topicName = any()
+                        topicName = any(),
+                        streamName = any()
                     )
                 } throws Exception()
                 val actual = chatActor.execute(

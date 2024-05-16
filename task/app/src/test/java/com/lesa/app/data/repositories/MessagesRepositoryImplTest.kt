@@ -1,6 +1,5 @@
 package com.lesa.app.data.repositories
 
-import android.content.ContentResolver
 import android.net.Uri
 import com.lesa.app.data.local.dao.MessageDao
 import com.lesa.app.data.local.entities.MessageEntity
@@ -11,6 +10,7 @@ import com.lesa.app.data.network.models.MessageResponseApiDto
 import com.lesa.app.data.network.models.SendMessageResponseApiDto
 import com.lesa.app.data.network.models.UploadFileResponseApiDto
 import com.lesa.app.data.network.models.toMessage
+import com.lesa.app.data.utils.FileRequestBodyFactory
 import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.model_factories.MessageApiDtoFactory
 import com.lesa.app.model_factories.MessageEntityFactory
@@ -20,6 +20,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
@@ -31,7 +32,12 @@ class MessagesRepositoryImplTest : BehaviorSpec({
     Given("messages repository") {
         val api: Api = mockk()
         val dao: MessageDao = mockk()
-        val repository: MessagesRepository = MessagesRepositoryImpl(api = api, dao = dao)
+        val fileRequestBodyFactory: FileRequestBodyFactory = mockk()
+        val repository: MessagesRepository = MessagesRepositoryImpl(
+            api = api,
+            dao = dao,
+            fileRequestBodyFactory = fileRequestBodyFactory
+        )
 
         When("get messages in topic") {
             val messageAnchor = MessageAnchor.Message(id = 1)
@@ -47,7 +53,7 @@ class MessagesRepositoryImplTest : BehaviorSpec({
             } returns AllMessagesApiDto(messages = messagesApiDto)
 
             coEvery {
-                dao.getAll()
+                dao.getMessagesInTopic(any(), any())
             } returns List(40) { MessageEntityFactory.create() }
 
             coEvery {
@@ -73,18 +79,19 @@ class MessagesRepositoryImplTest : BehaviorSpec({
 
         When("get all cached messages in topic") {
             val topicName = "topic2"
+            val streamName = "stream2"
             val cachedMessages = listOf(
-                MessageEntityFactory.create(topic = "topic1"),
-                MessageEntityFactory.create(topic = topicName),
-                MessageEntityFactory.create(topic = topicName),
-                MessageEntityFactory.create(topic = "topic3")
+                MessageEntityFactory.create(topicName = "topic1"),
+                MessageEntityFactory.create(topicName = topicName, streamName = streamName),
+                MessageEntityFactory.create(topicName = topicName, streamName = streamName),
+                MessageEntityFactory.create(topicName = "topic3")
             )
 
             coEvery {
-                dao.getAll()
+                dao.getMessagesInTopic(any(), any())
             } returns cachedMessages
 
-            val actual = repository.getAllCachedMessagesInTopic(topicName)
+            val actual = repository.getAllCachedMessagesInTopic(topicName, streamName = streamName)
 
             Then("should be equal") {
                 val expected = listOf(cachedMessages[1], cachedMessages[2]).map { it.toMessage() }
@@ -116,11 +123,13 @@ class MessagesRepositoryImplTest : BehaviorSpec({
             coEvery {
                 api.uploadFile(any())
             } returns UploadFileResponseApiDto(uri = "uri")
+            every {
+                fileRequestBodyFactory.createRequestBody(any(), any())
+            } returns mockk()
             val uri: Uri = mockk()
-            val contentResolver = mockk<ContentResolver>()
             repository.uploadFile(
-                uri = uri,
-                contentResolver = contentResolver
+                name = "name",
+                uri = uri
             )
 
             Then("api method is called") {
@@ -138,7 +147,11 @@ class MessagesRepositoryImplTest : BehaviorSpec({
                     streamId = 1
                 )
             } returns SendMessageResponseApiDto(id = 1)
-            val actual = repository.sendMessage(content = "content", topicName = "topic name", streamId = 1)
+            val actual = repository.sendMessage(
+                content = "content",
+                topicName = "topic name",
+                streamId = 1
+            )
 
             Then("should be equal") {
                 val expected = 1

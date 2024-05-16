@@ -17,7 +17,8 @@ class MessageEntityTest : BehaviorSpec({
             senderName = "senderName",
             senderAvatar = "senderAvatar",
             timestampMillis = 1715372754,
-            topic = "topic",
+            topicName = "topic",
+            streamName = "stream",
             reactions = listOf(
                 ReactionEntity(
                     emojiCode = "emojiCode1",

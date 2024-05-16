@@ -13,7 +13,8 @@ data class MessageEntity(
     @ColumnInfo("sender_name") val senderName: String,
     @ColumnInfo("sender_avatar") val senderAvatar: String?,
     @ColumnInfo("timestamp") val timestampMillis: Long,
-    @ColumnInfo("subject") val topic: String,
+    @ColumnInfo("topic_name") val topicName: String,
+    @ColumnInfo("stream_name") val streamName: String,
     @ColumnInfo("reactions") val reactions: List<ReactionEntity>,
     @ColumnInfo("isOwn") val isOwn: Boolean
 )
@@ -29,20 +30,21 @@ fun MessageEntity.toMessage(): Message {
         }
         ,
         date = Date(timestampMillis),
-        topic = topic,
+        topic = topicName,
         isOwn = isOwn
     )
 }
 
-fun Message.toMessageEntity(): MessageEntity {
+fun Message.toMessageEntity(streamName: String): MessageEntity {
     return MessageEntity(
         id = id,
         content = content,
         senderName = senderName,
         senderAvatar = senderAvatar,
         timestampMillis = date.time,
-        topic = topic,
+        topicName = topic,
         reactions = reactions.map { it.value.toReactionEntity() },
-        isOwn = isOwn
+        isOwn = isOwn,
+        streamName = streamName
     )
 }
