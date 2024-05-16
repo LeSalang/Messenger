@@ -15,8 +15,6 @@ class InputStreamRequestBody(
 ) : RequestBody() {
     override fun contentType() = contentType
 
-    override fun contentLength(): Long = -1
-
     @Throws(IOException::class)
     override fun writeTo(sink: BufferedSink) {
         val inputStream = contentResolver.openInputStream(uri) ?: throw IOException("Invalid URI: $uri")
