@@ -1,5 +1,6 @@
 package com.lesa.app.presentation.features.streams.elm
 
+import com.lesa.app.domain.use_cases.streams.CreateStreamUseCase
 import com.lesa.app.domain.use_cases.streams.LoadCachedStreamsUseCase
 import com.lesa.app.domain.use_cases.streams.LoadStreamsUseCase
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +10,8 @@ import javax.inject.Inject
 
 class StreamsActor @Inject constructor(
     private val loadStreamsUseCase: LoadStreamsUseCase,
-    private val loadCachedStreamsUseCase: LoadCachedStreamsUseCase
+    private val loadCachedStreamsUseCase: LoadCachedStreamsUseCase,
+    private val createStreamUseCase: CreateStreamUseCase
 ) : Actor<StreamsCommand, StreamsEvent>() {
 
     override fun execute(command: StreamsCommand): Flow<StreamsEvent> {
@@ -37,6 +39,19 @@ class StreamsActor @Inject constructor(
                 },
                 errorMapper = {
                     StreamsEvent.Internal.ErrorCached
+                }
+            )
+
+            is StreamsCommand.CreateStream -> flow {
+                emit(createStreamUseCase.invoke(streamName = command.streamName))
+            }.mapEvents(
+                eventMapper = { streams ->
+                    StreamsEvent.Internal.DataLoaded(
+                        streams = streams
+                    )
+                },
+                errorMapper = {
+                    StreamsEvent.Internal.CreateStreamError
                 }
             )
         }

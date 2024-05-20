@@ -3,6 +3,7 @@ package com.lesa.app.data.repositories
 import com.lesa.app.data.local.dao.StreamDao
 import com.lesa.app.data.local.entities.toStream
 import com.lesa.app.data.network.Api
+import com.lesa.app.data.network.models.SubscriptionsQuery
 import com.lesa.app.data.network.models.toStream
 import com.lesa.app.data.network.models.toTopic
 import com.lesa.app.domain.model.Stream
@@ -14,6 +15,7 @@ import javax.inject.Inject
 interface StreamsRepository {
     suspend fun getAllStreams() : List<Stream>
     suspend fun getCachedStreams() : List<Stream>
+    suspend fun createStream(streamName: String) : List<Stream>
 }
 
 class StreamsRepositoryImpl @Inject constructor(
@@ -50,10 +52,18 @@ class StreamsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCachedStreams(): List<Stream> {
-            val allStreams = dao.getAll()
-            return allStreams.map {
-                it.toStream()
-            }
+        val allStreams = dao.getAll()
+        return allStreams.map {
+            it.toStream()
+        }
+    }
+
+    override suspend fun createStream(streamName: String): List<Stream> {
+        val query = SubscriptionsQuery.createQuery(
+            streamName = streamName
+        )
+        api.createStream(subscriptions = query)
+        return getAllStreams()
     }
 
     private suspend fun updateCachedStreams(streams: List<Stream>) {

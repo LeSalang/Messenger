@@ -2,7 +2,7 @@ package com.lesa.app.presentation.features.streams.model
 
 import com.lesa.app.domain.model.Stream
 
-class StreamsMapper {
+object StreamsMapper {
     fun map(stream: Stream) : StreamUi {
         return StreamUi(
             id = stream.id,

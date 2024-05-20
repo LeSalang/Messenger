@@ -35,7 +35,7 @@ interface Api {
     @GET("streams")
     suspend fun getAllStreams() : AllStreamsApiDto
 
-    @GET("users/me/subscriptions")
+    @GET(SUBSCRIPTIONS)
     suspend fun getAllSubscribedStreams() : AllSubscribedStreamsApiDto
 
     @GET("users/me/{$STREAM_ID}/topics")
@@ -82,11 +82,17 @@ interface Api {
         @Body file: MultipartBody
     ) : UploadFileResponseApiDto
 
+    @POST(SUBSCRIPTIONS)
+    suspend fun createStream(
+        @Query("subscriptions") subscriptions: String
+    )
+
     companion object {
         private const val STREAM_ID = "stream_id"
         private const val MESSAGE_ID = "message_id"
         private const val USER_ID = "user_id"
         private const val USER_UPLOADS = "user_uploads"
+        private const val SUBSCRIPTIONS = "users/me/subscriptions"
         const val NEWEST_MESSAGE_ANCHOR = "newest"
     }
 }

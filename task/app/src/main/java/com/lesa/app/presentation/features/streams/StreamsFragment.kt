@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -60,6 +62,7 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
         super.onViewCreated(view, savedInstanceState)
         store.accept(StreamsEvent.Ui.Init)
         setUpViews()
+        createStreamDialog()
 
         (parentFragment as? StreamsContainerFragment)?.setSearchListener { query ->
             store.accept(
@@ -96,8 +99,7 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
                     shimmerLayout.visibility = VISIBLE
                 }
             }
-
-            LceState.Idle -> TODO()
+            LceState.Idle -> {}
         }
     }
 
@@ -105,6 +107,21 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
         when (effect) {
             is StreamsEffect.OpenChat -> {
                 router.navigateTo(Screens.Chat(topic = effect.topic))
+            }
+
+            is StreamsEffect.ShowStreamExistsError -> {
+                val streamName = effect.streamName
+                val message = String.format(
+                    requireContext().getString(R.string.create_new_stream_exists_error),
+                    streamName
+                )
+                val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
+                toast.show()
+            }
+
+            StreamsEffect.ShowNewStreamError -> {
+                val toast = Toast.makeText(context, getString(R.string.create_new_stream_network_error), Toast.LENGTH_SHORT)
+                toast.show()
             }
         }
     }
@@ -146,6 +163,19 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
     private fun setupRefreshButton() {
         binding.error.refreshButton.setOnClickListener {
             store.accept(StreamsEvent.Ui.ReloadStreams)
+        }
+    }
+
+    private fun createStreamDialog() {
+        setFragmentResultListener(CreateStreamDialogFragment.RESULT_KEY) { key, bundle ->
+            val result = bundle.getString(CreateStreamDialogFragment.BUNDLE_KEY)
+            result?.let {
+                store.accept(
+                    StreamsEvent.Ui.CreateStream(
+                        streamName = result
+                    )
+                )
+            }
         }
     }
 

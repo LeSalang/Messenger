@@ -18,5 +18,4 @@ class MessageDelegateItem(
             false
         }
     }
-
 }

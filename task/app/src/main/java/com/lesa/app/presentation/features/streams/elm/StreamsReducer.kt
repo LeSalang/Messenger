@@ -24,7 +24,7 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                 )
                 val streamUiList = filteredStreams
                     .sortedBy { it.name.uppercase() }
-                    .map { StreamsMapper().map(it) }
+                    .map { StreamsMapper.map(it) }
                 copy(
                     lceState = LceState.Content(streamUiList),
                     streams = event.streams
@@ -48,7 +48,7 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                     )
                     val streams = filteredStreams
                         .sortedBy { it.name.uppercase() }
-                        .map { StreamsMapper().map(it) }
+                        .map { StreamsMapper.map(it) }
                     if (streams.isEmpty()) {
                         copy(
                             lceState = LceState.Loading
@@ -73,6 +73,10 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                 commands {
                     +Command.LoadStreams
                 }
+            }
+
+            StreamsEvent.Internal.CreateStreamError -> effects {
+                +Effect.ShowNewStreamError
             }
         }
     }
@@ -100,7 +104,7 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                     streamList = state.streams
                 )
                 val resultList = search(streams = filteredStreams, query = event.query)
-                    .map { StreamsMapper().map(it) }
+                    .map { StreamsMapper.map(it) }
                 copy(
                     lceState = LceState.Content(resultList)
                 )
@@ -108,6 +112,21 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
 
             is StreamsEvent.Ui.TopicClicked -> effects {
                 +Effect.OpenChat(topic = event.topic)
+            }
+
+            is StreamsEvent.Ui.CreateStream -> {
+                val existingStream = state.streams.firstOrNull() {
+                    it.name == event.streamName
+                }
+                if (existingStream == null) {
+                    commands {
+                        +Command.CreateStream(event.streamName)
+                    }
+                } else {
+                    effects {
+                        +Effect.ShowStreamExistsError(streamName =  event.streamName)
+                    }
+                }
             }
         }
     }

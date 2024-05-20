@@ -41,6 +41,14 @@
             android:layout_height="@dimen/appbar_title_icon_size"
             android:src="@drawable/icon_search"
             android:layout_margin="@dimen/medium_padding"
+            app:tint="@color/white"
+            />
+        <ImageView
+            android:id="@+id/addIcon"
+            android:layout_width="@dimen/appbar_title_icon_size"
+            android:layout_height="@dimen/appbar_title_icon_size"
+            android:src="@drawable/icon_add"
+            app:tint="@color/white"
             />
     </LinearLayout>
 

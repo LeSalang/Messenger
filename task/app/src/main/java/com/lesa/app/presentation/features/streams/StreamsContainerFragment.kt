@@ -29,6 +29,7 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
         bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
         setUpSearchView()
         setUpPager()
+        setAddStreamListener()
     }
 
     private fun setUpPager() {
@@ -76,6 +77,14 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
             it?.let {
                 search(it.toString())
             }
+        }
+    }
+
+    private fun setAddStreamListener() {
+        binding.addIcon.setOnClickListener {
+            CreateStreamDialogFragment().show(
+                childFragmentManager, CreateStreamDialogFragment.TAG
+            )
         }
     }
 }
