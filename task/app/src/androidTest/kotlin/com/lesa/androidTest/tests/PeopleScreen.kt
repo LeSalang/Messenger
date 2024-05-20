@@ -1,11 +1,11 @@
+package com.lesa.androidTest.tests
+
 import android.view.View
 import com.kaspersky.kaspresso.screens.KScreen
 import com.lesa.app.R
 import com.lesa.app.presentation.features.people.PeopleFragment
-import io.github.kakaocup.kakao.image.KImageView
 import io.github.kakaocup.kakao.recycler.KRecyclerItem
 import io.github.kakaocup.kakao.recycler.KRecyclerView
-import io.github.kakaocup.kakao.text.KTextView
 import org.hamcrest.Matcher
 
 object PeopleScreen : KScreen<PeopleScreen>() {

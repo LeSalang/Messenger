@@ -1,4 +1,4 @@
-package utils
+package com.lesa.androidTest.utils
 
 import android.app.Activity
 import android.app.Application

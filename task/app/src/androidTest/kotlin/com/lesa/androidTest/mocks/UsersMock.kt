@@ -1,8 +1,8 @@
-package mocks
+package com.lesa.androidTest.mocks
 
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
-import utils.AssetsUtils
+import com.lesa.androidTest.utils.AssetsUtils
 
 sealed class UsersMock : ApiMock {
     data object GetOwnUser: UsersMock()
@@ -25,8 +25,8 @@ sealed class UsersMock : ApiMock {
 
     override val response: ResponseDefinitionBuilder
         get() = when (this) {
-            GetOwnUser -> WireMock.ok(AssetsUtils.fromAssets("users/getOwnUser.json"))
-            GetAllUsers -> WireMock.ok(AssetsUtils.fromAssets("users/getAllUsers.json"))
-            GetAllUsersPresence -> WireMock.ok(AssetsUtils.fromAssets("users/getAllUsersPresence.json"))
+            GetOwnUser -> WireMock.ok(AssetsUtils.string("users/getOwnUser.json"))
+            GetAllUsers -> WireMock.ok(AssetsUtils.string("users/getAllUsers.json"))
+            GetAllUsersPresence -> WireMock.ok(AssetsUtils.string("users/getAllUsersPresence.json"))
         }
 }

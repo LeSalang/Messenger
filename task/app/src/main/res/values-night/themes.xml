@@ -1,4 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.BaseComponents" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="baseColor">@color/gray_18</item>
+
+
+        <item name="android:colorAccent">@color/red</item>
+        <item name="android:colorButtonNormal">@color/red</item>
+
     </style>
 </resources>

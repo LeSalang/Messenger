@@ -17,8 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner = "com.lesa.app.TestRunner"
+        testInstrumentationRunner = "com.lesa.androidTest.TestRunner"
     }
 
     buildTypes {

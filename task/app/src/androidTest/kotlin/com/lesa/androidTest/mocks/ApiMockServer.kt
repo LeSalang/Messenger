@@ -1,4 +1,4 @@
-package mocks
+package com.lesa.androidTest.mocks
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.MappingBuilder

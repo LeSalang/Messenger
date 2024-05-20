@@ -1,4 +1,6 @@
-package com.lesa.app
+package com.lesa.androidTest
+
+import com.lesa.app.App
 
 class TestApp() : App() {
     override fun provideBaseUrl(): String {

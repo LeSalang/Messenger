@@ -1,4 +1,4 @@
-
+package com.lesa.androidTest.tests
 import android.view.View
 import com.kaspersky.kaspresso.screens.KScreen
 import com.lesa.app.R

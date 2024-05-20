@@ -11,6 +11,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.ColorUtils
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -335,13 +336,19 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
     companion object {
         private const val TOPIC_KEY = "topic_key"
+        private const val LOAD_TRIGGER_MESSAGE_COUNT = 5
+
+        fun createArguments(topic: Topic) = bundleOf(
+            TOPIC_KEY to topic
+        )
+
         fun getNewInstance(topic: Topic): ChatFragment {
             return ChatFragment().apply {
-                arguments = Bundle().apply {
+                arguments = createArguments(topic)
+                    /*Bundle().apply {
                     putParcelable(TOPIC_KEY, topic)
-                }
+                }*/
             }
         }
-        private const val LOAD_TRIGGER_MESSAGE_COUNT = 5
     }
 }

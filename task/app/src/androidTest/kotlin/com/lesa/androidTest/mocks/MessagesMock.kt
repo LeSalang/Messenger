@@ -1,32 +1,32 @@
-package mocks
+package com.lesa.androidTest.mocks
 
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
-import utils.AssetsUtils
+import com.lesa.androidTest.utils.AssetsUtils
 
 sealed class MessagesMock : ApiMock {
     data object GetAllMessagesInStream: MessagesMock()
-    data object GetMessage: MessagesMock()
+    data class GetMessage(val messageId: String = "438647247"): MessagesMock()
     data object SendMessage: MessagesMock()
 
     override val method: HttpMethod
         get() = when (this) {
             GetAllMessagesInStream -> HttpMethod.GET
+            is GetMessage -> HttpMethod.GET
             SendMessage -> HttpMethod.POST
-            GetMessage -> HttpMethod.GET
         }
 
     override val urlPattern: String
         get() = when (this) {
-            GetAllMessagesInStream -> "/messages?"
+            GetAllMessagesInStream -> "/messages"
+            is GetMessage -> "/messages/$messageId"
             SendMessage -> "/messages"
-            GetMessage -> "/messages/438647247"
         }
 
     override val response: ResponseDefinitionBuilder
         get() = when (this) {
-            GetAllMessagesInStream -> WireMock.ok(AssetsUtils.fromAssets("messages/getAllMessagesInStream.json"))
-            SendMessage -> WireMock.ok(AssetsUtils.fromAssets("messages/sendMessage.json"))
-            GetMessage -> WireMock.ok(AssetsUtils.fromAssets("messages/getMessage.json"))
+            GetAllMessagesInStream -> WireMock.ok(AssetsUtils.string("messages/getAllMessagesInStream.json"))
+            is GetMessage -> WireMock.ok(AssetsUtils.string("messages/getMessage.json"))
+            SendMessage -> WireMock.ok(AssetsUtils.string("messages/sendMessage.json"))
         }
 }

@@ -1,4 +1,4 @@
-
+package com.lesa.androidTest.tests
 import com.kaspersky.kaspresso.screens.KScreen
 import com.lesa.app.R
 import com.lesa.app.presentation.features.profile.ProfileFragment

@@ -1,14 +1,14 @@
-
-import android.os.Bundle
+package com.lesa.androidTest.tests
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.lesa.androidTest.mocks.ApiMockServer.Companion.api
+import com.lesa.androidTest.mocks.MessagesMock
+import com.lesa.androidTest.mocks.UsersMock
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.features.chat.ChatFragment
+import com.lesa.app.presentation.features.chat.ChatFragment.Companion.createArguments
 import junit.framework.TestCase
-import mocks.ApiMockServer.Companion.api
-import mocks.MessagesMock
-import mocks.UsersMock
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,18 +25,20 @@ class ChatTest : TestCase() {
             mock(mock = MessagesMock.GetAllMessagesInStream)
             mock(mock = UsersMock.GetOwnUser)
             mock(mock = MessagesMock.SendMessage)
-            mock(mock = MessagesMock.GetMessage)
+            mock(mock = MessagesMock.GetMessage())
         }
+
         launchFragmentInContainer<ChatFragment>(
-            fragmentArgs = Bundle().apply {
-                putParcelable("topic_key", Topic(
+            fragmentArgs = createArguments(
+                Topic(
                     name = "swimming turtles",
                     color = "#000000",
                     streamName = "streamName",
                     streamId = 432915
-                ))
-            }
+                )
+            )
         )
+
         ChatScreen {
             topicTitle {
                 containsText("swimming turtles")
@@ -49,7 +51,6 @@ class ChatTest : TestCase() {
             }
             sendButton {
                 isVisible()
-//                click()
             }
         }
     }
