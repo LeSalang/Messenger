@@ -345,9 +345,6 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         fun getNewInstance(topic: Topic): ChatFragment {
             return ChatFragment().apply {
                 arguments = createArguments(topic)
-                    /*Bundle().apply {
-                    putParcelable(TOPIC_KEY, topic)
-                }*/
             }
         }
     }
