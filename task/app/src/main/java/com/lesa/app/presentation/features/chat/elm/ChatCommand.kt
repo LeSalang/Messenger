@@ -27,4 +27,11 @@ sealed interface ChatCommand {
         val name: String,
         val uri: Uri,
     ) : ChatCommand
+    data class DeleteMessage(
+        val messageId: Int
+    ) : ChatCommand
+    data class EditMessage(
+        val messageId: Int,
+        val content: String
+    ) : ChatCommand
 }

@@ -1,11 +1,13 @@
 package com.lesa.app.presentation.features.chat.elm
 
+import android.text.Html
 import com.lesa.app.R
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.presentation.features.chat.elm.ChatCommand
 import com.lesa.app.presentation.features.chat.elm.ChatEffect
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
+import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuAction
 import com.lesa.app.presentation.features.chat.models.ChatMapper
 import com.lesa.app.presentation.features.chat.models.emojiSetCNCS
 import com.lesa.app.presentation.utils.LceState
@@ -124,6 +126,25 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 val content = "[](${event.uri})"
                 +Command.SendMessage(topic = state.topic, content = content)
             }
+
+            ChatEvent.Internal.ErrorDeleteEmoji -> effects {
+                +Effect.MessageDeletingError
+            }
+
+            is ChatEvent.Internal.MessageDeleted -> state {
+                val messages = messages.toMutableList()
+                messages.removeIf { it.id == event.messageId }
+                val messageUiList = messages.map { ChatMapper.map(it) }
+                copy(
+                    lceState = LceState.Content(messageUiList),
+                    messages = messages,
+                    isPrefetching = false
+                )
+            }
+
+            ChatEvent.Internal.ErrorEditMessage -> effects {
+                +Effect.MessageError
+            }
         }
     }
 
@@ -144,7 +165,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             }
 
             is Event.Ui.ShowEmojiPicker -> effects {
-                +Effect.ShowEmojiPicker(emojiId = event.emojiId)
+                +Effect.ShowEmojiPicker(messageId = event.messageId)
             }
 
             is Event.Ui.ActionButtonClicked -> {
@@ -206,6 +227,55 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 +Command.UploadFile(
                     name = event.name,
                     uri = event.uri
+                )
+            }
+
+            is ChatEvent.Ui.ShowContextMessageBottomSheet -> effects {
+                val message = state.messages.firstOrNull {
+                    it.id == event.messageId
+                }
+
+                +Effect.ShowMessageContextMenu(
+                    messageId = event.messageId,
+                    isOwn = message?.isOwn ?: false
+                )
+            }
+
+            is ChatEvent.Ui.SelectMenuAction -> {
+                val messageId = event.messageId
+                when (event.action) {
+                    MessageContextMenuAction.ADD_REACTION -> effects {
+                        +Effect.ShowEmojiPicker(messageId = messageId)
+                    }
+                    MessageContextMenuAction.DELETE_MESSAGE -> commands {
+                        +Command.DeleteMessage(messageId = messageId)
+                    }
+                    MessageContextMenuAction.EDIT_MESSAGE -> effects {
+                        val content = state.messages.firstOrNull { it.id == messageId }?.content
+                        val rawContent = Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY)
+                            .trimEnd()
+                            .toString()
+                        +Effect.EditMessage(
+                            messageId = messageId,
+                            messageContent = rawContent
+                        )
+                    }
+                    MessageContextMenuAction.CHANGE_TOPIC -> TODO()
+                    MessageContextMenuAction.COPY_MESSAGE -> effects {
+                        val message = state.messages.firstOrNull { it.id == messageId }
+                        val text = Html.fromHtml(
+                            message?.content,
+                            Html.FROM_HTML_MODE_LEGACY
+                        ).trimEnd().toString()
+                        +Effect.MessageCopied(text = text)
+                    }
+                }
+            }
+
+            is ChatEvent.Ui.EditMessage -> commands {
+                +Command.EditMessage(
+                    messageId = event.messageId,
+                    content = event.messageContent
                 )
             }
         }

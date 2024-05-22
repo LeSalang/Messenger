@@ -49,6 +49,15 @@ interface MessagesRepository {
         name: String,
         uri: Uri
     ) : String
+
+    suspend fun deleteMessage(
+        messageId: Int
+    )
+
+    suspend fun editMessageContent(
+        messageId: Int,
+        content: String
+    )
 }
 
 class MessagesRepositoryImpl @Inject constructor(
@@ -98,6 +107,14 @@ class MessagesRepositoryImpl @Inject constructor(
     override suspend fun uploadFile(name: String, uri: Uri) : String {
         val multipartBody = fileRequestBodyFactory.createRequestBody(uri = uri, name = name)
         return api.uploadFile(file = multipartBody).uri
+    }
+
+    override suspend fun deleteMessage(messageId: Int) {
+        api.deleteMessage(messageId = messageId)
+    }
+
+    override suspend fun editMessageContent(messageId: Int, content: String) {
+        api.editMessageContent(messageId = messageId, content = content)
     }
 
     override suspend fun sendMessage(

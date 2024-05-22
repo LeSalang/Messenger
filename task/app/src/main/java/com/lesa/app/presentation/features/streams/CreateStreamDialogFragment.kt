@@ -19,10 +19,8 @@ class CreateStreamDialogFragment : DialogFragment() {
             val view = inflater.inflate(R.layout.dialog_create_stream, null)
             builder.setView(view)
             val dialog = builder.create()
-
             val editText = view.findViewById<EditText>(R.id.newTopicName)
-
-            val button = view.findViewById<Button>(R.id.positiveButton)
+            val button = view.findViewById<Button>(R.id.createStreamPositiveButton)
             button.setOnClickListener {
                 val text = editText.text.toString()
                 setFragmentResult(requestKey = RESULT_KEY, result = bundleOf(BUNDLE_KEY to text))

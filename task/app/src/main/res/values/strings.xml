@@ -35,13 +35,22 @@
     <string name="error">ERROR!\nCheck your internet connection</string>
     <string name="no_internet_connection">No internet connection!</string>
     <string name="error_emoji">ERROR! Can\'t update emoji</string>
-    <string name="error_message">ERROR! Can\'t update message</string>
+    <string name="error_message_updating">ERROR! Can\'t update message</string>
+    <string name="error_message_deleting">ERROR! Can\'t delete message</string>
+    <string name="message_copied">Message copied to clipboard</string>
     <string name="loading">Loading…</string>
     <string name="refresh">Refresh</string>
+    <string name="confirm">Confirm</string>
+    <string name="edite_message_content">Edit message</string>
 
     <string name="create_new_stream">Create new stream</string>
     <string name="add">Add</string>
     <string name="create_new_stream_exists_error">Stream %s already exists</string>
     <string name="create_new_stream_network_error">Stream creation failed, please try again.</string>
 
+    <string name="context_menu_add_reaction">Add reaction</string>
+    <string name="context_menu_delete_message">Delete message</string>
+    <string name="context_menu_edit_message">Edit message"</string>
+    <string name="context_menu_change_topic">Change topic</string>
+    <string name="context_menu_copy_message">Copy message</string>"
 </resources>

@@ -15,6 +15,7 @@ import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -43,7 +44,7 @@ interface Api {
         @Path(STREAM_ID) id: Int
     ) : AllTopicsInStreamApiDto
 
-    @GET("messages")
+    @GET(MESSAGES)
     suspend fun getAllMessagesInStream(
         @Query("num_before") numBefore: Int = 20,
         @Query("num_after") numAfter: Int = 0,
@@ -52,7 +53,7 @@ interface Api {
         @Query("narrow") narrow: String
     ) : AllMessagesApiDto
 
-    @POST("messages")
+    @POST(MESSAGES)
     suspend fun sendMessage(
         @Query("type") type: String = "stream",
         @Query("to") streamId: Int,
@@ -87,9 +88,22 @@ interface Api {
         @Query("subscriptions") subscriptions: String
     )
 
+    @DELETE("$MESSAGES/{$MESSAGE_ID}")
+    suspend fun deleteMessage(
+        @Path(MESSAGE_ID) messageId: Int
+    )
+
+    @PATCH("$MESSAGES/{$MESSAGE_ID}")
+    suspend fun editMessageContent(
+        @Path(MESSAGE_ID) messageId: Int,
+        @Query(CONTENT) content: String,
+    )
+
     companion object {
+        private const val MESSAGES = "messages"
         private const val STREAM_ID = "stream_id"
         private const val MESSAGE_ID = "message_id"
+        private const val CONTENT = "content"
         private const val USER_ID = "user_id"
         private const val USER_UPLOADS = "user_uploads"
         private const val SUBSCRIPTIONS = "users/me/subscriptions"

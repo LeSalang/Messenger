@@ -1,5 +1,7 @@
 package com.lesa.app.presentation.features.chat
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Color.BLACK
@@ -10,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
@@ -40,6 +43,12 @@ import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomShe
 import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_MESSAGE_KEY
 import com.lesa.app.presentation.features.chat.message.MessageDelegateAdapter
 import com.lesa.app.presentation.features.chat.message.MessageView
+import com.lesa.app.presentation.features.chat.message_context_menu.EditMessageDialogFragment
+import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuAction
+import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuBottomSheetFragment
+import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuBottomSheetFragment.Companion.CONTEXT_MENU_REQUEST_KEY
+import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuBottomSheetFragment.Companion.CONTEXT_MENU_RESULT_KEY_ACTION
+import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuBottomSheetFragment.Companion.CONTEXT_MENU_RESULT_KEY_MESSAGE_ID
 import com.lesa.app.presentation.features.chat.models.EmojiCNCS
 import com.lesa.app.presentation.features.chat.models.MessageUi
 import com.lesa.app.presentation.utils.BottomBarViewModel
@@ -82,7 +91,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                val contentResolver = requireContext().contentResolver
+                requireContext().contentResolver
                 store.accept(Event.Ui.UploadFile(
                     name = "name",
                     uri = uri
@@ -145,9 +154,19 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     override fun handleEffect(effect: Effect) {
         when (effect) {
             is Effect.ShowEmojiPicker -> {
-                val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment.newInstance(effect.emojiId)
+                val emojiPickerBottomSheetFragment = EmojiPickerBottomSheetFragment.newInstance(effect.messageId)
                 emojiPickerBottomSheetFragment.show(
                     childFragmentManager, EmojiPickerBottomSheetFragment.TAG
+                )
+            }
+
+            is Effect.ShowMessageContextMenu -> {
+                val messageContextMenuFragment = MessageContextMenuBottomSheetFragment.newInstance(
+                    messageId = effect.messageId,
+                    isOwn = effect.isOwn
+                )
+                messageContextMenuFragment.show(
+                    childFragmentManager, MessageContextMenuBottomSheetFragment.TAG
                 )
             }
 
@@ -162,8 +181,11 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
             }
 
             Effect.MessageError -> {
-                val toast = Toast.makeText(context, getText(R.string.error_message), Toast.LENGTH_SHORT)
-                toast.show()
+                Toast.makeText(
+                    context,
+                    getText(R.string.error_message_updating),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             Effect.ShowAttachmentsPicker -> {
@@ -176,9 +198,38 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 binding.messageEditText.text.clear()
             }
 
-            is ChatEffect.UpdateActionButton -> {
+            is Effect.UpdateActionButton -> {
                 binding.sendButton.setImageResource(effect.icon)
                 binding.sendButton.setBackgroundResource(effect.background)
+            }
+
+            Effect.MessageDeletingError -> {
+                Toast.makeText(
+                    context,
+                    getText(R.string.error_message_deleting),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            is ChatEffect.MessageCopied -> {
+                val clipboardManager = getSystemService(
+                    requireContext(),
+                    ClipboardManager::class.java
+                ) as ClipboardManager
+                val text = effect.text
+                val clipData = ClipData.newPlainText("text", text)
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(context, getText(R.string.message_copied), Toast.LENGTH_SHORT).show()
+            }
+
+            is ChatEffect.EditMessage -> {
+                val editMessageDialogFragment = EditMessageDialogFragment.newInstance(
+                    messageId = effect.messageId,
+                    messageContent = effect.messageContent
+                )
+                editMessageDialogFragment.show(
+                    childFragmentManager, EditMessageDialogFragment.TAG
+                )
             }
         }
     }
@@ -190,11 +241,13 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         setUpEmojiPicker()
         setupRefreshButton()
         setUpActions()
+        setUpMessageContextMenu()
+        setUpEditMessageDialog()
     }
 
     private fun setUpTitle() {
         val topic = store.states.value.topic
-        val color = ColorUtils.blendARGB(Color.parseColor(topic.color), BLACK, 0.6f)
+        val color = ColorUtils.blendARGB(Color.parseColor(topic.color), BLACK, COLOR_RATIO)
         binding.toolBar.setBackgroundColor(color)
         activity?.window?.statusBarColor = color
         binding.streamName.text = topic.streamName
@@ -219,7 +272,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                 MessageDelegateAdapter(
                     actions = MessageView.Actions(
                         onLongClick = { id ->
-                            store.accept(Event.Ui.ShowEmojiPicker(emojiId = id))
+                            store.accept(Event.Ui.ShowContextMessageBottomSheet(id))
                         },
                         onEmojiClick = { id, emojiCode ->
                             onSelectEmoji(
@@ -228,7 +281,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                             )
                         },
                         onPlusButtonClick = { id ->
-                            store.accept(Event.Ui.ShowEmojiPicker(emojiId = id))
+                            store.accept(Event.Ui.ShowEmojiPicker(messageId = id))
                         }
                     )
                 ),
@@ -260,6 +313,23 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     messageId = messageId, selectedEmojiCNCS = emoji
                 )
             }
+        }
+    }
+
+    private fun setUpMessageContextMenu() {
+        childFragmentManager.setFragmentResultListener(
+            CONTEXT_MENU_REQUEST_KEY, this
+        ) { _, bundle ->
+            val actionName = bundle.getString(CONTEXT_MENU_RESULT_KEY_ACTION)
+            val action = actionName?.let { MessageContextMenuAction.valueOf(it) }
+            val messageId = bundle.getInt(CONTEXT_MENU_RESULT_KEY_MESSAGE_ID)
+            if (action == null || messageId == 0) return@setFragmentResultListener
+            store.accept(
+                Event.Ui.SelectMenuAction(
+                    action = action,
+                    messageId = messageId
+                )
+            )
         }
     }
 
@@ -334,9 +404,28 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         )
     }
 
+    private fun setUpEditMessageDialog() {
+        childFragmentManager.setFragmentResultListener(
+            EditMessageDialogFragment.EDIT_MESSAGE_REQUEST_KEY,
+            this
+        ) { key, bundle ->
+            val id = bundle.getInt(EditMessageDialogFragment.EDIT_MESSAGE_RESULT_KEY_ID)
+            val content = bundle.getString(EditMessageDialogFragment.EDIT_MESSAGE_RESULT_KEY_CONTENT)
+            content?.let {
+                store.accept(
+                    ChatEvent.Ui.EditMessage(
+                        messageId = id,
+                        messageContent = content
+                    )
+                )
+            }
+        }
+    }
+
     companion object {
         private const val TOPIC_KEY = "topic_key"
         private const val LOAD_TRIGGER_MESSAGE_COUNT = 5
+        private const val COLOR_RATIO = 0.6f
 
         fun createArguments(topic: Topic) = bundleOf(
             TOPIC_KEY to topic

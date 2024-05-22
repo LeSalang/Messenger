@@ -3,7 +3,9 @@ package com.lesa.app.presentation.features.chat.elm
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.domain.use_cases.chat.AddReactionUseCase
+import com.lesa.app.domain.use_cases.chat.DeleteMessageUseCase
 import com.lesa.app.domain.use_cases.chat.DeleteReactionUseCase
+import com.lesa.app.domain.use_cases.chat.EditMessageContentUseCase
 import com.lesa.app.domain.use_cases.chat.LoadAllCachedMessagesUseCase
 import com.lesa.app.domain.use_cases.chat.LoadMessagesInTopicUseCase
 import com.lesa.app.domain.use_cases.chat.LoadSelectedMessageUseCase
@@ -18,13 +20,15 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 class ChatActor @Inject constructor(
-    private val loadMessagesInTopicUseCase: LoadMessagesInTopicUseCase,
-    private val loadAllCachedMessagesUseCase: LoadAllCachedMessagesUseCase,
-    private val sendMessageUseCase: SendMessageUseCase,
-    private val loadSelectedMessageUseCase: LoadSelectedMessageUseCase,
     private val addReactionUseCase: AddReactionUseCase,
+    private val deleteMessageUseCase: DeleteMessageUseCase,
+    private val editMessageContentUseCase: EditMessageContentUseCase,
+    private val loadAllCachedMessagesUseCase: LoadAllCachedMessagesUseCase,
+    private val loadMessagesInTopicUseCase: LoadMessagesInTopicUseCase,
+    private val loadSelectedMessageUseCase: LoadSelectedMessageUseCase,
     private val removeReactionUseCase: DeleteReactionUseCase,
-    private val uploadFileUseCase: UploadFileUseCase
+    private val sendMessageUseCase: SendMessageUseCase,
+    private val uploadFileUseCase: UploadFileUseCase,
     ) : Actor<ChatCommand, ChatEvent>() {
     private val mutexMap = ConcurrentHashMap<String, Mutex>()
 
@@ -155,6 +159,29 @@ class ChatActor @Inject constructor(
                     ChatEvent.Internal.Error
                 }
             )
+
+            is ChatCommand.DeleteMessage -> flow {
+                val messageId = command.messageId
+                emit(deleteMessageUseCase.invoke(messageId = messageId))
+            }.mapEvents(
+                eventMapper = {
+                    ChatEvent.Internal.MessageDeleted(messageId = command.messageId)
+                },
+                errorMapper = {
+                    ChatEvent.Internal.ErrorDeleteEmoji
+                }
+            )
+
+            is ChatCommand.EditMessage -> flow {
+                emit(editMessageContent(command))
+            }.mapEvents(
+                eventMapper = {
+                    ChatEvent.Internal.MessageUpdated(updatedMessage = it)
+                },
+                errorMapper = {
+                    ChatEvent.Internal.ErrorEditMessage
+                }
+            )
         }
     }
 
@@ -170,6 +197,14 @@ class ChatActor @Inject constructor(
         removeReactionUseCase.invoke(
             messageId = command.messageId,
             emojiName = command.emojiName
+        )
+        return loadSelectedMessageUseCase.invoke(command.messageId)
+    }
+
+    private suspend fun editMessageContent(command: ChatCommand.EditMessage): Message {
+        editMessageContentUseCase.invoke(
+            messageId = command.messageId,
+            content = command.content
         )
         return loadSelectedMessageUseCase.invoke(command.messageId)
     }
