@@ -252,6 +252,17 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
+            is ChatEffect.MessageMovedToAnotherTopic -> {
+                Toast.makeText(
+                    context,
+                    String.format(
+                        getString(R.string.message_moved_to_another_topic),
+                        effect.topicName
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -382,7 +393,6 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     private fun updateList(list: List<MessageUi>) {
         val delegateItems = makeDelegateItems(list = list)
         adapter.submitList(delegateItems) {
-            // TODO: scroll to bottom only when first load and send messages
             if (shouldScrollToBottom) binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
             shouldScrollToBottom = false
         }

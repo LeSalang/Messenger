@@ -20,6 +20,7 @@ sealed interface ChatEffect {
     data object MessageError : ChatEffect
     data object MessageChangeTopicError : ChatEffect
     data object MessageDeletingError : ChatEffect
+    data class MessageMovedToAnotherTopic(val topicName: String) : ChatEffect
     data object ShowAttachmentsPicker : ChatEffect
     data object ClearMessageInput : ChatEffect
     data class UpdateActionButton(

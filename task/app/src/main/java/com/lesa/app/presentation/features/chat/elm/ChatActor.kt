@@ -194,12 +194,7 @@ class ChatActor @Inject constructor(
                 )
             }.mapEvents(
                 eventMapper = {
-                    ChatEvent.Ui.ReloadChat // TODO
-
-
-
-
-
+                    ChatEvent.Internal.MessageRemovedToAnotherTopic(topicName = command.topicName)
                 },
                 errorMapper = {
                     ChatEvent.Internal.ErrorMessageChangeTopic

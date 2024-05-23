@@ -49,6 +49,7 @@ sealed interface ChatEvent {
         data class AllMessagesLoaded(val messages: List<Message>) : Internal
         data class FileUploaded(val uri: String) : Internal
         data class MessageDeleted(val messageId: Int) : Internal
+        data class MessageRemovedToAnotherTopic(val topicName: String) : Internal
         data class MessageSent(val sentMessage: Message) : Internal
         data class MessageUpdated(val updatedMessage: Message) : Internal
         data class OldMessagesLoaded(val messages: List<Message>) : Internal

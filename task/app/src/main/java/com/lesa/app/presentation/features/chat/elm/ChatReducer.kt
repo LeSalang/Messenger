@@ -149,6 +149,15 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             ChatEvent.Internal.ErrorMessageChangeTopic -> effects {
                 +Effect.MessageChangeTopicError
             }
+
+            is ChatEvent.Internal.MessageRemovedToAnotherTopic -> {
+                effects {
+                    +Effect.MessageMovedToAnotherTopic(topicName = event.topicName)
+                }
+                commands {
+                    +Command.LoadAllMessages(topic = state.topic)
+                }
+            }
         }
     }
 
