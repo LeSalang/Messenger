@@ -16,6 +16,7 @@ import com.lesa.app.composite_adapter.CompositeAdapter
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentStreamsBinding
 import com.lesa.app.di.streams.StreamsComponentViewModel
+import com.lesa.app.domain.model.Stream
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.streams.elm.StreamsEffect
@@ -106,7 +107,12 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
     override fun handleEffect(effect: StreamsEffect) {
         when (effect) {
             is StreamsEffect.OpenChat -> {
-                router.navigateTo(Screens.Chat(topic = effect.topic))
+                router.navigateTo(
+                    Screens.Chat(
+                        topic = effect.topic,
+                        stream = effect.stream
+                    )
+                )
             }
 
             is StreamsEffect.ShowStreamExistsError -> {
@@ -140,8 +146,11 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
                     }
                 ),
                 TopicDelegateAdapter(
-                    onClick = {
-                        openChat(it)
+                    onClick = { topic ->
+                        openChat(
+                            topic = topic,
+                            stream = store.states.value.streams.find { it.id == topic.streamId }!!
+                        )
                     }
                 )
             )
@@ -149,8 +158,8 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
         binding.channelsRecycleView.adapter = adapter
     }
 
-    private fun openChat(topic: Topic) {
-        store.accept(Event.Ui.TopicClicked(topic = topic))
+    private fun openChat(topic: Topic, stream: Stream) {
+        store.accept(Event.Ui.TopicClicked(topic = topic, stream = stream))
     }
 
     private fun updateList(streams: List<StreamUi>, expandedStreamId: Int?) {

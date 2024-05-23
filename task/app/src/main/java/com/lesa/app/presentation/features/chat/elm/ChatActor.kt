@@ -3,6 +3,7 @@ package com.lesa.app.presentation.features.chat.elm
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.domain.use_cases.chat.AddReactionUseCase
+import com.lesa.app.domain.use_cases.chat.ChangeMessageTopicUseCase
 import com.lesa.app.domain.use_cases.chat.DeleteMessageUseCase
 import com.lesa.app.domain.use_cases.chat.DeleteReactionUseCase
 import com.lesa.app.domain.use_cases.chat.EditMessageContentUseCase
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 class ChatActor @Inject constructor(
     private val addReactionUseCase: AddReactionUseCase,
+    private val changeMessageTopicUseCase: ChangeMessageTopicUseCase,
     private val deleteMessageUseCase: DeleteMessageUseCase,
     private val editMessageContentUseCase: EditMessageContentUseCase,
     private val loadAllCachedMessagesUseCase: LoadAllCachedMessagesUseCase,
@@ -180,6 +182,27 @@ class ChatActor @Inject constructor(
                 },
                 errorMapper = {
                     ChatEvent.Internal.ErrorEditMessage
+                }
+            )
+
+            is ChatCommand.ChangeMessageTopic -> flow {
+                emit(
+                    changeMessageTopicUseCase.invoke(
+                        messageId = command.messageId,
+                        topicName = command.topicName
+                    )
+                )
+            }.mapEvents(
+                eventMapper = {
+                    ChatEvent.Ui.ReloadChat // TODO
+
+
+
+
+
+                },
+                errorMapper = {
+                    ChatEvent.Internal.ErrorMessageChangeTopic
                 }
             )
         }

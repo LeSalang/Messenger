@@ -36,7 +36,7 @@ interface Api {
     @GET("streams")
     suspend fun getAllStreams() : AllStreamsApiDto
 
-    @GET(SUBSCRIPTIONS)
+    @GET("users/me/$SUBSCRIPTIONS")
     suspend fun getAllSubscribedStreams() : AllSubscribedStreamsApiDto
 
     @GET("users/me/{$STREAM_ID}/topics")
@@ -61,18 +61,18 @@ interface Api {
         @Query("content") content: String,
     ) : SendMessageResponseApiDto
 
-    @GET("messages/{$MESSAGE_ID}")
+    @GET("$MESSAGES/{$MESSAGE_ID}")
     suspend fun getMessage(
         @Path(MESSAGE_ID) messageId: Int
     ) : MessageResponseApiDto
 
-    @POST("messages/{$MESSAGE_ID}/reactions")
+    @POST("$MESSAGES/{$MESSAGE_ID}/reactions")
     suspend fun addReaction(
         @Path(MESSAGE_ID, encoded = true) messageId: Int,
         @Query("emoji_name") emojiName: String
     )
 
-    @DELETE("messages/{$MESSAGE_ID}/reactions")
+    @DELETE("$MESSAGES/{$MESSAGE_ID}/reactions")
     suspend fun deleteReaction(
         @Path(MESSAGE_ID, encoded = true) messageId: Int,
         @Query("emoji_name") emojiName: String
@@ -83,9 +83,9 @@ interface Api {
         @Body file: MultipartBody
     ) : UploadFileResponseApiDto
 
-    @POST(SUBSCRIPTIONS)
+    @POST("users/me/$SUBSCRIPTIONS")
     suspend fun createStream(
-        @Query("subscriptions") subscriptions: String
+        @Query(SUBSCRIPTIONS) subscriptions: String
     )
 
     @DELETE("$MESSAGES/{$MESSAGE_ID}")
@@ -99,14 +99,21 @@ interface Api {
         @Query(CONTENT) content: String,
     )
 
+    @PATCH("$MESSAGES/{$MESSAGE_ID}")
+    suspend fun changeMessageTopic(
+        @Path(MESSAGE_ID) messageId: Int,
+        @Query(TOPIC) topicName: String,
+    )
+
     companion object {
-        private const val MESSAGES = "messages"
-        private const val STREAM_ID = "stream_id"
-        private const val MESSAGE_ID = "message_id"
         private const val CONTENT = "content"
+        private const val MESSAGES = "messages"
+        private const val MESSAGE_ID = "message_id"
+        private const val STREAM_ID = "stream_id"
+        private const val SUBSCRIPTIONS = "subscriptions"
+        private const val TOPIC = "topic"
         private const val USER_ID = "user_id"
         private const val USER_UPLOADS = "user_uploads"
-        private const val SUBSCRIPTIONS = "users/me/subscriptions"
         const val NEWEST_MESSAGE_ANCHOR = "newest"
     }
 }

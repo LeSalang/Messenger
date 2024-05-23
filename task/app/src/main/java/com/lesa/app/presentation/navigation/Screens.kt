@@ -1,6 +1,7 @@
 package com.lesa.app.presentation.navigation
 
 import com.github.terrakok.cicerone.androidx.FragmentScreen
+import com.lesa.app.domain.model.Stream
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.features.chat.ChatFragment
 import com.lesa.app.presentation.features.people.PeopleFragment
@@ -19,8 +20,8 @@ object Screens {
         StreamsContainerFragment()
     }
 
-    fun Chat(topic: Topic) = FragmentScreen {
-        ChatFragment.getNewInstance(topic)
+    fun Chat(topic: Topic, stream: Stream) = FragmentScreen {
+        ChatFragment.getNewInstance(topic, stream)
     }
 
     fun Main() = FragmentScreen {

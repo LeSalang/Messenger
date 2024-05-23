@@ -30,6 +30,7 @@ import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentChatBinding
 import com.lesa.app.di.chat.ChatComponentViewModel
+import com.lesa.app.domain.model.Stream
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.chat.date.DateDelegateAdapter
@@ -41,9 +42,10 @@ import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomShe
 import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.ON_SELECT_EMOJI_REQUEST_KEY
 import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_EMOJI_KEY
 import com.lesa.app.presentation.features.chat.emoji_picker.EmojiPickerBottomSheetFragment.Companion.SELECTED_MESSAGE_KEY
+import com.lesa.app.presentation.features.chat.message.ChangeTopicDialogFragment
+import com.lesa.app.presentation.features.chat.message.EditMessageDialogFragment
 import com.lesa.app.presentation.features.chat.message.MessageDelegateAdapter
 import com.lesa.app.presentation.features.chat.message.MessageView
-import com.lesa.app.presentation.features.chat.message_context_menu.EditMessageDialogFragment
 import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuAction
 import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuBottomSheetFragment
 import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuBottomSheetFragment.Companion.CONTEXT_MENU_REQUEST_KEY
@@ -78,8 +80,9 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
         elmRenderer = this
     ) {
-        val topic : Topic = requireArguments().getParcelable(TOPIC_KEY)!! // TODO
-        storeFactory.create(topic)
+        val topic : Topic = requireArguments().getParcelable(TOPIC_KEY)!!
+        val stream : Stream = requireArguments().getParcelable(STREAM_KEY)!!
+        storeFactory.create(topic, stream)
     }
 
     override fun onAttach(context: Context) {
@@ -231,6 +234,24 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     childFragmentManager, EditMessageDialogFragment.TAG
                 )
             }
+
+            is ChatEffect.ShowChangeTopicDialog -> {
+                val changeTopicDialogFragment = ChangeTopicDialogFragment.newInstance(
+                    messageId = effect.messageId,
+                    stream = effect.stream
+                )
+                changeTopicDialogFragment.show(
+                    childFragmentManager, ChangeTopicDialogFragment.TAG
+                )
+            }
+
+            ChatEffect.MessageChangeTopicError -> {
+                Toast.makeText(
+                    context,
+                    getText(R.string.error_message_changing_topic),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -243,6 +264,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         setUpActions()
         setUpMessageContextMenu()
         setUpEditMessageDialog()
+        setUpChangeTopicDialog()
     }
 
     private fun setUpTitle() {
@@ -422,18 +444,38 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         }
     }
 
+    private fun setUpChangeTopicDialog() {
+        childFragmentManager.setFragmentResultListener(
+            ChangeTopicDialogFragment.CHANGE_TOPIC_REQUEST_KEY,
+            this
+        ) { key, bundle ->
+            val topicName = bundle.getString(ChangeTopicDialogFragment.CHANGE_TOPIC_TOPIC_NAME_RESULT_KEY)
+            val messageId = bundle.getInt(ChangeTopicDialogFragment.CHANGE_TOPIC_MESSAGE_ID_RESULT_KEY)
+            topicName?.let {
+                store.accept(
+                    ChatEvent.Ui.ChangeMessageTopic(
+                        messageId = messageId,
+                        topicName = it
+                    )
+                )
+            }
+        }
+    }
+
     companion object {
         private const val TOPIC_KEY = "topic_key"
+        private const val STREAM_KEY = "stream_key"
         private const val LOAD_TRIGGER_MESSAGE_COUNT = 5
         private const val COLOR_RATIO = 0.6f
 
-        fun createArguments(topic: Topic) = bundleOf(
-            TOPIC_KEY to topic
+        fun createArguments(topic: Topic, stream: Stream) = bundleOf(
+            TOPIC_KEY to topic,
+            STREAM_KEY to stream
         )
 
-        fun getNewInstance(topic: Topic): ChatFragment {
+        fun getNewInstance(topic: Topic, stream: Stream): ChatFragment {
             return ChatFragment().apply {
-                arguments = createArguments(topic)
+                arguments = createArguments(topic, stream)
             }
         }
     }

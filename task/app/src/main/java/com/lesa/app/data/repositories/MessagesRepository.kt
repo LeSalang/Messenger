@@ -58,6 +58,11 @@ interface MessagesRepository {
         messageId: Int,
         content: String
     )
+
+    suspend fun changeMessageTopic(
+        messageId: Int,
+        topicName: String
+    )
 }
 
 class MessagesRepositoryImpl @Inject constructor(
@@ -115,6 +120,10 @@ class MessagesRepositoryImpl @Inject constructor(
 
     override suspend fun editMessageContent(messageId: Int, content: String) {
         api.editMessageContent(messageId = messageId, content = content)
+    }
+
+    override suspend fun changeMessageTopic(messageId: Int, topicName: String) {
+        api.changeMessageTopic(messageId = messageId, topicName = topicName)
     }
 
     override suspend fun sendMessage(

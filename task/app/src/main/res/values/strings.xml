@@ -37,11 +37,13 @@
     <string name="error_emoji">ERROR! Can\'t update emoji</string>
     <string name="error_message_updating">ERROR! Can\'t update message</string>
     <string name="error_message_deleting">ERROR! Can\'t delete message</string>
+    <string name="error_message_changing_topic">ERROR! Can\'t change topic for message</string>
     <string name="message_copied">Message copied to clipboard</string>
     <string name="loading">Loading…</string>
     <string name="refresh">Refresh</string>
     <string name="confirm">Confirm</string>
     <string name="edite_message_content">Edit message</string>
+    <string name="change_message_topic">Choose new topic</string>
 
     <string name="create_new_stream">Create new stream</string>
     <string name="add">Add</string>

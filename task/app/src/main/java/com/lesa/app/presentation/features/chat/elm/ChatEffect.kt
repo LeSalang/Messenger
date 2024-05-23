@@ -1,5 +1,7 @@
 package com.lesa.app.presentation.features.chat.elm
 
+import com.lesa.app.domain.model.Stream
+
 sealed interface ChatEffect {
     data class ShowEmojiPicker(val messageId: Int) : ChatEffect
     data class ShowMessageContextMenu(
@@ -16,11 +18,16 @@ sealed interface ChatEffect {
         val text: String
     ) : ChatEffect
     data object MessageError : ChatEffect
+    data object MessageChangeTopicError : ChatEffect
     data object MessageDeletingError : ChatEffect
     data object ShowAttachmentsPicker : ChatEffect
     data object ClearMessageInput : ChatEffect
     data class UpdateActionButton(
         val icon: Int,
         val background: Int
+    ) : ChatEffect
+    data class ShowChangeTopicDialog(
+        val messageId: Int,
+        val stream: Stream
     ) : ChatEffect
 }

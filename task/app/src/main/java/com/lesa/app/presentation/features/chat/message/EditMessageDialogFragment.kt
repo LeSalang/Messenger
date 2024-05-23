@@ -1,4 +1,4 @@
-package com.lesa.app.presentation.features.chat.message_context_menu
+package com.lesa.app.presentation.features.chat.message
 
 import android.app.AlertDialog
 import android.app.Dialog

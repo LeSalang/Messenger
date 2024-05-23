@@ -145,6 +145,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             ChatEvent.Internal.ErrorEditMessage -> effects {
                 +Effect.MessageError
             }
+
+            ChatEvent.Internal.ErrorMessageChangeTopic -> effects {
+                +Effect.MessageChangeTopicError
+            }
         }
     }
 
@@ -260,7 +264,12 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                             messageContent = rawContent
                         )
                     }
-                    MessageContextMenuAction.CHANGE_TOPIC -> TODO()
+                    MessageContextMenuAction.CHANGE_TOPIC -> effects {
+                        +Effect.ShowChangeTopicDialog(
+                            stream = state.stream,
+                            messageId = event.messageId
+                        )
+                    }
                     MessageContextMenuAction.COPY_MESSAGE -> effects {
                         val message = state.messages.firstOrNull { it.id == messageId }
                         val text = Html.fromHtml(
@@ -276,6 +285,13 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 +Command.EditMessage(
                     messageId = event.messageId,
                     content = event.messageContent
+                )
+            }
+
+            is ChatEvent.Ui.ChangeMessageTopic -> commands {
+                +Command.ChangeMessageTopic(
+                    messageId = event.messageId,
+                    topicName = event.topicName
                 )
             }
         }

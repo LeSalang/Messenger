@@ -38,6 +38,10 @@ sealed interface ChatEvent {
             val messageId: Int,
             val messageContent: String
         ) : Ui
+        data class ChangeMessageTopic(
+            val messageId: Int,
+            val topicName: String
+        ) : Ui
     }
 
     sealed interface Internal : ChatEvent {
@@ -53,6 +57,7 @@ sealed interface ChatEvent {
         data object ErrorDeleteEmoji : Internal
         data object ErrorEmoji : Internal
         data object ErrorMessage : Internal
+        data object ErrorMessageChangeTopic : Internal
         data object ErrorEditMessage : Internal
     }
 }
