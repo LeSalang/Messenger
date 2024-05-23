@@ -11,11 +11,17 @@ data class MessageFilter(
     @SerialName("operand") val operand: String
 ) {
     companion object {
-        fun createNarrow(streamName: String, topicName: String): String {
-            val narrow = listOf(
-                MessageFilter(operator = "stream", operand = streamName),
-                MessageFilter(operator = "topic", operand = topicName)
-            )
+        fun createNarrow(streamName: String, topicName: String?): String {
+            val narrow = if (topicName == null) {
+                listOf(
+                    MessageFilter(operator = "stream", operand = streamName)
+                )
+            } else {
+                listOf(
+                    MessageFilter(operator = "stream", operand = streamName),
+                    MessageFilter(operator = "topic", operand = topicName)
+                )
+            }
             return Json.encodeToString(value = narrow)
         }
     }

@@ -2,14 +2,14 @@ package com.lesa.app.presentation.features.chat.elm
 
 import android.net.Uri
 import com.lesa.app.domain.model.MessageAnchor
-import com.lesa.app.domain.model.Topic
 
 sealed interface ChatCommand {
-    data class LoadAllMessages(val topic: Topic) : ChatCommand
-    data class LoadAllCachedMessages(val topic: Topic) : ChatCommand
+    data class LoadAllMessages(val topicName: String?, val streamName: String) : ChatCommand
+    data class LoadAllCachedMessages(val topicName: String?, val streamName: String) : ChatCommand
     data class SendMessage(
         val content: String,
-        val topic: Topic
+        val topicName: String?,
+        val streamId: Int
     ) : ChatCommand
     data class AddReaction(
         val messageId: Int,
@@ -20,7 +20,8 @@ sealed interface ChatCommand {
         val emojiName: String
     ) : ChatCommand
     data class FetchMoreMessages(
-        val topic: Topic,
+        val topicName: String?,
+        val streamName: String,
         val anchor: MessageAnchor
     ) : ChatCommand
     data class UploadFile(

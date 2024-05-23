@@ -14,6 +14,9 @@ interface MessageDao {
     @Query("DELETE FROM messages WHERE topic_name = :topicName")
     suspend fun deleteAllInTopic(topicName: String)
 
+    @Query("SELECT * FROM messages WHERE stream_name = :streamName")
+    suspend fun getMessagesInStream(streamName: String): List<MessageEntity>
+
     @Query("SELECT * FROM messages WHERE topic_name = :topicName AND stream_name = :streamName")
     suspend fun getMessagesInTopic(topicName: String, streamName: String): List<MessageEntity>
 }

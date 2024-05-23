@@ -65,7 +65,7 @@ class MessagesRepositoryImplTest : BehaviorSpec({
                 dao.updateMessages(messages = capture(cachedMessagesSlot))
             } just Runs
 
-            val actual = repository.getMessagesInTopic("Stream name", "topic name", messageAnchor)
+            val actual = repository.getMessages("Stream name", "topic name", messageAnchor)
 
             Then("should be equal") {
                 val expected = messagesApiDto.map { it.toMessage(ownId = userId) }
@@ -91,7 +91,7 @@ class MessagesRepositoryImplTest : BehaviorSpec({
                 dao.getMessagesInTopic(any(), any())
             } returns cachedMessages
 
-            val actual = repository.getAllCachedMessagesInTopic(topicName, streamName = streamName)
+            val actual = repository.getAllCachedMessages(topicName, streamName = streamName)
 
             Then("should be equal") {
                 val expected = listOf(cachedMessages[1], cachedMessages[2]).map { it.toMessage() }

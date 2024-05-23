@@ -8,7 +8,7 @@ object StreamsMapper {
             id = stream.id,
             name = stream.name,
             isSubscribed = stream.isSubscribed,
-            topics = stream.topics,
+            topics = stream.topics.sortedBy { it.name.uppercase() },
             color = stream.color
         )
     }

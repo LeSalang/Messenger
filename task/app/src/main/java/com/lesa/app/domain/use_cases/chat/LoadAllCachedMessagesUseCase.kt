@@ -7,8 +7,8 @@ import javax.inject.Inject
 class LoadAllCachedMessagesUseCase @Inject constructor(
     private val repository: MessagesRepository
 ) {
-    suspend fun invoke(topicName: String, streamName: String) : List<Message> {
-        return repository.getAllCachedMessagesInTopic(
+    suspend fun invoke(topicName: String?, streamName: String) : List<Message> {
+        return repository.getAllCachedMessages(
             topicName = topicName,
             streamName = streamName
         )

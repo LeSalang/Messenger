@@ -37,11 +37,12 @@ class ChatActor @Inject constructor(
     override fun execute(command: ChatCommand): Flow<ChatEvent> {
         return when (command) {
             is ChatCommand.LoadAllMessages -> flow {
-                val topic = command.topic
+                val topicName = command.topicName
+                val streamName = command.streamName
                 emit(
                     loadMessagesInTopicUseCase.invoke(
-                        streamName = topic.streamName,
-                        topicName = topic.name,
+                        streamName = streamName,
+                        topicName = topicName,
                         anchor = MessageAnchor.Newest
                     )
                 )
@@ -57,8 +58,8 @@ class ChatActor @Inject constructor(
             )
 
             is ChatCommand.LoadAllCachedMessages -> flow {
-                val topicName = command.topic.name
-                val streamName = command.topic.streamName
+                val topicName = command.topicName
+                val streamName = command.streamName
                 emit(loadAllCachedMessagesUseCase.invoke(
                     topicName = topicName,
                     streamName = streamName
@@ -77,8 +78,8 @@ class ChatActor @Inject constructor(
             is ChatCommand.SendMessage -> flow {
                 val messageId = sendMessageUseCase.invoke(
                     content = command.content,
-                    topicName = command.topic.name,
-                    streamId = command.topic.streamId
+                    topicName = command.topicName,
+                    streamId = command.streamId
                 )
                 emit(loadSelectedMessageUseCase.invoke(messageId))
             }.mapEvents(
@@ -123,11 +124,10 @@ class ChatActor @Inject constructor(
             )
 
             is ChatCommand.FetchMoreMessages -> flow {
-                val topic = command.topic
                 emit(
                     loadMessagesInTopicUseCase.invoke(
-                        streamName = topic.streamName,
-                        topicName = topic.name,
+                        streamName = command.streamName,
+                        topicName = command.topicName,
                         anchor = command.anchor
                     )
                 )

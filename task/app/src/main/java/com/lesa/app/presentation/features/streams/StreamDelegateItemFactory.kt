@@ -3,19 +3,19 @@ package com.lesa.app.presentation.features.streams
 import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.presentation.features.streams.model.StreamUi
 
-class ChannelsDelegateItemFactory {
+class StreamDelegateItemFactory {
     fun makeDelegateItems(
         list: List<StreamUi>,
-        expandedChannelId: Int?,
+        expandedStreamId: Int?,
     ): MutableList<DelegateItem> {
         val result = mutableListOf<DelegateItem>()
-        list.forEach { channel ->
-            val isExpanded = channel.id == expandedChannelId
+        list.forEach { streamUi ->
+            val isExpanded = streamUi.id == expandedStreamId
             result.add(
-                ChannelDelegateItem(channel, isExpanded)
+                StreamDelegateItem(streamUi, isExpanded)
             )
             if (isExpanded) {
-                channel.topics.forEach { topic ->
+                streamUi.topics.forEach { topic ->
                     result.add(
                         TopicDelegateItem(topic)
                     )

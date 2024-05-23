@@ -3,7 +3,7 @@ package com.lesa.app.presentation.features.streams
 import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.presentation.features.streams.model.StreamUi
 
-class ChannelDelegateItem(
+class StreamDelegateItem(
     val stream: StreamUi,
     val isExpanded: Boolean,
 ) : DelegateItem {
@@ -14,7 +14,7 @@ class ChannelDelegateItem(
         get() = Pair(stream, isExpanded)
 
     override fun compareToOther(other: DelegateItem): Boolean {
-        return if (other is ChannelDelegateItem) {
+        return if (other is StreamDelegateItem) {
             other.stream == stream && other.isExpanded == isExpanded
         } else {
             false

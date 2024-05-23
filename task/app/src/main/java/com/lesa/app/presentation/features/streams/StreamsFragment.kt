@@ -106,10 +106,19 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
 
     override fun handleEffect(effect: StreamsEffect) {
         when (effect) {
-            is StreamsEffect.OpenChat -> {
+            is StreamsEffect.OpenTopic -> {
                 router.navigateTo(
                     Screens.Chat(
                         topic = effect.topic,
+                        stream = effect.stream
+                    )
+                )
+            }
+
+            is StreamsEffect.OpenStream -> {
+                router.navigateTo(
+                    Screens.Chat(
+                        topic = null,
                         stream = effect.stream
                     )
                 )
@@ -140,9 +149,14 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
     private fun setUpRecycleView() {
         adapter = CompositeAdapter(
             delegatesList(
-                ChannelDelegateAdapter(
-                    onClick = {
+                StreamDelegateAdapter(
+                    onArrowClick = {
                         store.accept(StreamsEvent.Ui.ExpandStream(streamId = it))
+                    },
+                    onStreamClick = { streamName ->
+                        openChat(
+                            stream = store.states.value.streams.find { it.name == streamName }!!
+                        )
                     }
                 ),
                 TopicDelegateAdapter(
@@ -162,9 +176,13 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
         store.accept(Event.Ui.TopicClicked(topic = topic, stream = stream))
     }
 
+    private fun openChat(stream: Stream) {
+        store.accept(Event.Ui.StreamClicked(stream = stream))
+    }
+
     private fun updateList(streams: List<StreamUi>, expandedStreamId: Int?) {
-        val items = ChannelsDelegateItemFactory().makeDelegateItems(
-            list = streams, expandedChannelId = expandedStreamId
+        val items = StreamDelegateItemFactory().makeDelegateItems(
+            list = streams, expandedStreamId = expandedStreamId
         )
         adapter.submitList(items)
     }

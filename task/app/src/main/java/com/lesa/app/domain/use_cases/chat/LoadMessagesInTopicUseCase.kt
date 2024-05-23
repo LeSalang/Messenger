@@ -10,10 +10,10 @@ class LoadMessagesInTopicUseCase @Inject constructor(
 ) {
     suspend fun invoke(
         streamName: String,
-        topicName: String,
+        topicName: String?,
         anchor: MessageAnchor
     ): List<Message> {
-        return repository.getMessagesInTopic(
+        return repository.getMessages(
             streamName = streamName,
             topicName = topicName,
             messageAnchor = anchor

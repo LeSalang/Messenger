@@ -8,7 +8,7 @@ import vivid.money.elmslie.core.store.Store
 import javax.inject.Inject
 
 class ChatStoreFactory @Inject constructor(private val actor: ChatActor) {
-    fun create(topic: Topic, stream: Stream) : Store<ChatEvent, ChatEffect, ChatState> {
+    fun create(topic: Topic?, stream: Stream) : Store<ChatEvent, ChatEffect, ChatState> {
         return ElmStore(
             initialState = ChatState(
                 lceState = LceState.Loading,

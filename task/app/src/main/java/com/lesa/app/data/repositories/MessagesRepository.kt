@@ -14,20 +14,20 @@ import com.lesa.app.domain.model.MessageAnchor
 import javax.inject.Inject
 
 interface MessagesRepository {
-    suspend fun getMessagesInTopic(
+    suspend fun getMessages(
         streamName: String,
-        topicName: String,
+        topicName: String?,
         messageAnchor: MessageAnchor
     ) : List<Message>
 
-    suspend fun getAllCachedMessagesInTopic(
-        topicName: String,
+    suspend fun getAllCachedMessages(
+        topicName: String?,
         streamName: String
     ) : List<Message>
 
     suspend fun sendMessage(
         content: String,
-        topicName: String,
+        topicName: String?,
         streamId: Int
     ) : Int
 
@@ -71,9 +71,9 @@ class MessagesRepositoryImpl @Inject constructor(
     private val fileRequestBodyFactory: FileRequestBodyFactory
 ) : MessagesRepository {
 
-    override suspend fun getMessagesInTopic(
+    override suspend fun getMessages(
         streamName: String,
-        topicName: String,
+        topicName: String?,
         messageAnchor: MessageAnchor
     ): List<Message> {
         val id = api.getOwnUser().id // TODO: request once after login
@@ -92,15 +92,17 @@ class MessagesRepositoryImpl @Inject constructor(
         return list
     }
 
-    override suspend fun getAllCachedMessagesInTopic(
-        topicName: String,
+    override suspend fun getAllCachedMessages(
+        topicName: String?,
         streamName: String
     ): List<Message> {
-        val allMessages = dao.getMessagesInTopic(topicName = topicName, streamName = streamName)
+        val allMessages = if (topicName == null) {
+            dao.getMessagesInStream(streamName = streamName)
+        } else {
+            dao.getMessagesInTopic(topicName = topicName, streamName = streamName)
+        }
         return allMessages.map {
             it.toMessage()
-        }.filter {
-            it.topic == topicName
         }
     }
 
@@ -128,12 +130,12 @@ class MessagesRepositoryImpl @Inject constructor(
 
     override suspend fun sendMessage(
         content: String,
-        topicName: String,
+        topicName: String?,
         streamId: Int
     ) : Int {
         return api.sendMessage(
             streamId = streamId,
-            topicName = topicName,
+            topicName = topicName ?: "(no topic)",
             content = content
         ).id
     }
@@ -154,16 +156,17 @@ class MessagesRepositoryImpl @Inject constructor(
 
     private suspend fun updateCachedMessages(
         messages: List<Message>,
-        topicName: String,
+        topicName: String?,
         streamName: String,
     ) {
         val newList = messages.map { it.toMessageEntity(streamName) }
-        val oldList = dao.getMessagesInTopic(
-            topicName = topicName,
-            streamName = streamName
-        )
+        val oldList = if (topicName == null) {
+            dao.getMessagesInStream(streamName = streamName)
+        } else {
+            dao.getMessagesInTopic(topicName = topicName, streamName = streamName)
+        }
         var finalList = (newList + oldList).sortedBy { it.id }
-        if (finalList.size > CACHE_SIZE) {
+        if (finalList.size > CACHE_SIZE && topicName != null) {
             finalList = finalList.drop(finalList.size - CACHE_SIZE)
             dao.deleteAllInTopic(topicName)
         }

@@ -50,7 +50,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     }
                 }
                 commands {
-                    +Command.LoadAllMessages(topic = state.topic)
+                    +Command.LoadAllMessages(
+                        topicName = state.topic?.name,
+                        streamName = state.stream.name
+                    )
                 }
             }
 
@@ -72,7 +75,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     )
                 }
                 commands {
-                    +Command.LoadAllMessages(topic = state.topic)
+                    +Command.LoadAllMessages(
+                        topicName = state.topic?.name,
+                        streamName = state.stream.name
+                    )
                 }
             }
 
@@ -124,7 +130,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
 
             is ChatEvent.Internal.FileUploaded -> commands {
                 val content = "[](${event.uri})"
-                +Command.SendMessage(topic = state.topic, content = content)
+                +Command.SendMessage(
+                    topicName = state.topic?.name,
+                    streamId = state.stream.id,
+                    content = content
+                )
             }
 
             ChatEvent.Internal.ErrorDeleteEmoji -> effects {
@@ -155,7 +165,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     +Effect.MessageMovedToAnotherTopic(topicName = event.topicName)
                 }
                 commands {
-                    +Command.LoadAllMessages(topic = state.topic)
+                    +Command.LoadAllMessages(
+                        topicName = state.topic?.name,
+                        streamName = state.stream.name
+                    )
                 }
             }
         }
@@ -164,8 +177,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
     override fun Result.ui(event: Event.Ui): Any {
         return when (event) {
             is Event.Ui.Init -> commands {
-                val topic = state.topic
-                +Command.LoadAllCachedMessages(topic = topic)
+                +Command.LoadAllCachedMessages(
+                    topicName = state.topic?.name,
+                    streamName = state.stream.name
+                )
             }
 
             is Event.Ui.SelectEmoji -> commands {
@@ -188,7 +203,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     }
                 } else {
                     commands {
-                        +Command.SendMessage(content = event.content, topic = state.topic)
+                        +Command.SendMessage(
+                            content = event.content,
+                            topicName = state.topic?.name,
+                            streamId = state.stream.id
+                        )
                     }
                     effects {
                         +Effect.ClearMessageInput
@@ -201,7 +220,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             }
 
             Event.Ui.ReloadChat -> commands {
-                +Command.LoadAllMessages(topic = state.topic)
+                +Command.LoadAllMessages(
+                    topicName = state.topic?.name,
+                    streamName = state.stream.name
+                )
             }
 
             is ChatEvent.Ui.MessageTextChanged -> effects {
@@ -229,7 +251,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                         val oldestMessageId = state.messages.firstOrNull()?.id
                         if (oldestMessageId != null) {
                             val anchor = MessageAnchor.Message(id = oldestMessageId)
-                            +Command.FetchMoreMessages(topic = state.topic, anchor = anchor)
+                            +Command.FetchMoreMessages(
+                                topicName = state.topic?.name,
+                                streamName = state.stream.name,
+                                anchor = anchor
+                            )
                         }
                     }
                 } else {

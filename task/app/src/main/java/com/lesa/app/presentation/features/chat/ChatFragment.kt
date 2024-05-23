@@ -80,7 +80,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     override val store: Store<Event, Effect, State> by elmStoreWithRenderer(
         elmRenderer = this
     ) {
-        val topic : Topic = requireArguments().getParcelable(TOPIC_KEY)!!
+        val topic : Topic? = requireArguments().getParcelable(TOPIC_KEY)
         val stream : Stream = requireArguments().getParcelable(STREAM_KEY)!!
         storeFactory.create(topic, stream)
     }
@@ -280,14 +280,19 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
     private fun setUpTitle() {
         val topic = store.states.value.topic
-        val color = ColorUtils.blendARGB(Color.parseColor(topic.color), BLACK, COLOR_RATIO)
+        val stream = store.states.value.stream
+        val color = ColorUtils.blendARGB(Color.parseColor(stream.color), BLACK, COLOR_RATIO)
         binding.toolBar.setBackgroundColor(color)
         activity?.window?.statusBarColor = color
-        binding.streamName.text = topic.streamName
-        binding.topicName.text = String.format(
-            requireContext().getString(R.string.title_chat_Topic_name),
-            topic.name
-        )
+        binding.streamName.text = stream.name
+        if (topic != null) {
+            binding.topicName.text = String.format(
+                requireContext().getString(R.string.title_chat_Topic_name), topic.name
+            )
+            binding.topicName.visibility = View.VISIBLE
+        } else {
+            binding.topicName.visibility = View.GONE
+        }
     }
 
     private fun setUpBackButton() {
@@ -478,12 +483,12 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         private const val LOAD_TRIGGER_MESSAGE_COUNT = 5
         private const val COLOR_RATIO = 0.6f
 
-        fun createArguments(topic: Topic, stream: Stream) = bundleOf(
+        fun createArguments(topic: Topic?, stream: Stream) = bundleOf(
             TOPIC_KEY to topic,
             STREAM_KEY to stream
         )
 
-        fun getNewInstance(topic: Topic, stream: Stream): ChatFragment {
+        fun getNewInstance(topic: Topic?, stream: Stream): ChatFragment {
             return ChatFragment().apply {
                 arguments = createArguments(topic, stream)
             }

@@ -20,7 +20,7 @@ object Screens {
         StreamsContainerFragment()
     }
 
-    fun Chat(topic: Topic, stream: Stream) = FragmentScreen {
+    fun Chat(topic: Topic?, stream: Stream) = FragmentScreen {
         ChatFragment.getNewInstance(topic, stream)
     }
 

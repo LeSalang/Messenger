@@ -6,7 +6,9 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:background="@color/gray_18"
-    android:paddingHorizontal="@dimen/medium_padding">
+    android:paddingStart="@dimen/medium_padding"
+    android:paddingEnd="0dp"
+    >
 
     <TextView
         android:id="@+id/channelNameTextView"
@@ -20,7 +22,7 @@
 
     <ImageView
         android:id="@+id/channelExpandIcon"
-        android:layout_width="40sp"
+        android:layout_width="60dp"
         android:layout_height="40dp"
         android:layout_margin="@dimen/small_padding"
         android:src="@drawable/icon_expand_selector" />

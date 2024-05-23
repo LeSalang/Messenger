@@ -111,8 +111,14 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
             }
 
             is StreamsEvent.Ui.TopicClicked -> effects {
-                +Effect.OpenChat(
+                +Effect.OpenTopic(
                     topic = event.topic,
+                    stream = event.stream
+                )
+            }
+
+            is StreamsEvent.Ui.StreamClicked -> effects {
+                +Effect.OpenStream(
                     stream = event.stream
                 )
             }
