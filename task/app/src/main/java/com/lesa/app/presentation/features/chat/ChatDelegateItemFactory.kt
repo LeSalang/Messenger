@@ -40,7 +40,8 @@ class ChatDelegateItemFactory {
                         MessageView.Model.Type.OUTGOING
                     } else {
                         MessageView.Model.Type.INCOMING
-                    }
+                    },
+                    topicName = message.topicName
                 )
                 result.add(
                     MessageDelegateItem(itemModel)

@@ -55,6 +55,12 @@ class MessageView @JvmOverloads constructor(
     private val textCard: CardView
         get() = binding.messageTextCardView
 
+    private val topicNameCard: CardView
+        get() = binding.topicCardView
+
+    private val topicNameTextView: TextView
+        get() = binding.topicNameTextView
+
     init {
         App.INSTANCE.appComponent.inject(this)
         val inflater = LayoutInflater.from(context)
@@ -150,6 +156,15 @@ class MessageView @JvmOverloads constructor(
         emojiFlexBox.addPlusButtonClickListener {
             actions.onPlusButtonClick(model.id)
         }
+        if (model.topicName == null) {
+            topicNameCard.visibility = GONE
+        } else {
+            topicNameCard.visibility = VISIBLE
+            topicNameCard.setOnClickListener {
+                actions.onTopicClick(model.topicName)
+            }
+            topicNameTextView.text = model.topicName
+        }
     }
 
     data class Model(
@@ -159,6 +174,7 @@ class MessageView @JvmOverloads constructor(
         val text: String,
         val emojiList: List<EmojiView.Model>,
         val type: Type,
+        val topicName: String?
     ) {
         enum class Type {
             INCOMING, OUTGOING
@@ -169,6 +185,7 @@ class MessageView @JvmOverloads constructor(
         val onLongClick: (Int) -> Unit,
         val onEmojiClick: (Int, String) -> Unit,
         val onPlusButtonClick: (Int) -> Unit,
+        val onTopicClick: (String) -> Unit
     )
 
     companion object {

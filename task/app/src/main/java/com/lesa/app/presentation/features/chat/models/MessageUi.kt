@@ -9,6 +9,6 @@ data class MessageUi(
     val senderName: String,
     val reactions: Map<String, EmojiUi>,
     val date: Date,
-    val topic: String,
+    val topicName: String?,
     val isOwn: Boolean
 )

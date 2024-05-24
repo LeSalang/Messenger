@@ -53,6 +53,7 @@ import com.lesa.app.presentation.features.chat.message_context_menu.MessageConte
 import com.lesa.app.presentation.features.chat.message_context_menu.MessageContextMenuBottomSheetFragment.Companion.CONTEXT_MENU_RESULT_KEY_MESSAGE_ID
 import com.lesa.app.presentation.features.chat.models.EmojiCNCS
 import com.lesa.app.presentation.features.chat.models.MessageUi
+import com.lesa.app.presentation.navigation.Screens
 import com.lesa.app.presentation.utils.BottomBarViewModel
 import com.lesa.app.presentation.utils.LceState
 import kotlinx.coroutines.launch
@@ -263,6 +264,15 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
+            is ChatEffect.OpenTopic -> {
+                router.navigateTo(
+                    Screens.Chat(
+                        topic = effect.topic,
+                        stream = effect.stream
+                    )
+                )
+            }
         }
     }
 
@@ -320,6 +330,9 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                         },
                         onPlusButtonClick = { id ->
                             store.accept(Event.Ui.ShowEmojiPicker(messageId = id))
+                        },
+                        onTopicClick = {
+                            store.accept(Event.Ui.OnTopicClick(topicName = it))
                         }
                     )
                 ),

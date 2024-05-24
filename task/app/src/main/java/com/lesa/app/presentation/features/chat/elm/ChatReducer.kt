@@ -24,8 +24,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
     override fun Result.internal(event: Event.Internal): Any {
         return when (event) {
             is Event.Internal.AllMessagesLoaded -> state {
-                val messageUiList = event.messages.map {
-                    ChatMapper.map(it)
+                val messageUiList = event.messages.map { message ->
+                    ChatMapper.map(
+                        message,
+                        needShowTopic = state.topic == null
+                    )
                 }
                 copy(
                     lceState = LceState.Content(messageUiList),
@@ -36,7 +39,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             is Event.Internal.AllCachedMessagesLoaded -> {
                 state {
                     val messageUiList = event.messages.map {
-                        ChatMapper.map(it)
+                        ChatMapper.map(
+                            it,
+                            needShowTopic = state.topic == null
+                        )
                     }
                     if (event.messages.isEmpty()) {
                         copy(
@@ -93,7 +99,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             is ChatEvent.Internal.MessageSent -> state {
                 val messages = state.messages + event.sentMessage
                 val messageUiList = messages.map {
-                    ChatMapper.map(it)
+                    ChatMapper.map(
+                        it,
+                        needShowTopic = state.topic == null
+                    )
                 }
                 copy(
                     lceState = LceState.Content(messageUiList),
@@ -108,7 +117,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 val messageList = messages.toMutableList()
                 messageList[messageIndex] = event.updatedMessage
                 val messageUiList = messageList.map {
-                    ChatMapper.map(it)
+                    ChatMapper.map(
+                        it,
+                        needShowTopic = state.topic == null
+                    )
                 }
                 copy(
                     lceState = LceState.Content(messageUiList),
@@ -119,7 +131,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             is ChatEvent.Internal.OldMessagesLoaded -> state {
                 val messages = event.messages + state.messages
                 val messageUiList = messages.map {
-                    ChatMapper.map(it)
+                    ChatMapper.map(
+                        it,
+                        needShowTopic = state.topic == null
+                    )
                 }
                 copy(
                     lceState = LceState.Content(messageUiList),
@@ -144,7 +159,12 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             is ChatEvent.Internal.MessageDeleted -> state {
                 val messages = messages.toMutableList()
                 messages.removeIf { it.id == event.messageId }
-                val messageUiList = messages.map { ChatMapper.map(it) }
+                val messageUiList = messages.map {
+                    ChatMapper.map(
+                        it,
+                        needShowTopic = state.topic == null
+                    )
+                }
                 copy(
                     lceState = LceState.Content(messageUiList),
                     messages = messages,
@@ -327,6 +347,16 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 +Command.ChangeMessageTopic(
                     messageId = event.messageId,
                     topicName = event.topicName
+                )
+            }
+
+            is ChatEvent.Ui.OnTopicClick -> effects {
+                val topic = state.stream.topics.firstOrNull {
+                    it.name == event.topicName
+                }
+                +Effect.OpenTopic(
+                    topic = topic,
+                    stream = state.stream
                 )
             }
         }

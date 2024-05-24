@@ -42,6 +42,9 @@ sealed interface ChatEvent {
             val messageId: Int,
             val topicName: String
         ) : Ui
+        data class OnTopicClick(
+            val topicName: String
+        ) : Ui
     }
 
     sealed interface Internal : ChatEvent {

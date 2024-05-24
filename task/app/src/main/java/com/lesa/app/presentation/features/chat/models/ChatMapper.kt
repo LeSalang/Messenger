@@ -5,7 +5,7 @@ import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.Topic
 
 object ChatMapper {
-    fun map(message: Message) : MessageUi {
+    fun map(message: Message, needShowTopic: Boolean) : MessageUi {
         return MessageUi(
             id = message.id,
             avatar = message.senderAvatar,
@@ -13,17 +13,8 @@ object ChatMapper {
             senderName = message.senderName,
             reactions = reactionMapToUi(message.reactions),
             date = message.date,
-            topic = message.topic,
+            topicName = if (needShowTopic) message.topic else null,
             isOwn = message.isOwn
-        )
-    }
-
-    fun topicToUiMap(topic: Topic) : TopicUi {
-        return TopicUi(
-            name = topic.name,
-            color = topic.color,
-            streamName = topic.streamName,
-            streamId = topic.streamId
         )
     }
 
