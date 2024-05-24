@@ -2,7 +2,10 @@ package com.lesa.app.presentation.features.chat
 
 import com.lesa.app.domain.model.MessageAnchor
 import com.lesa.app.domain.use_cases.chat.AddReactionUseCase
+import com.lesa.app.domain.use_cases.chat.ChangeMessageTopicUseCase
+import com.lesa.app.domain.use_cases.chat.DeleteMessageUseCase
 import com.lesa.app.domain.use_cases.chat.DeleteReactionUseCase
+import com.lesa.app.domain.use_cases.chat.EditMessageContentUseCase
 import com.lesa.app.domain.use_cases.chat.LoadAllCachedMessagesUseCase
 import com.lesa.app.domain.use_cases.chat.LoadMessagesInTopicUseCase
 import com.lesa.app.domain.use_cases.chat.LoadSelectedMessageUseCase
@@ -25,25 +28,33 @@ import org.junit.runners.JUnit4
 class ChatActorTest : BehaviorSpec({
 
     Given("chat actor") {
-        val loadMessagesInTopicUseCase: LoadMessagesInTopicUseCase = mockk()
-        val loadAllCachedMessagesUseCase: LoadAllCachedMessagesUseCase = mockk()
-        val sendMessageUseCase: SendMessageUseCase = mockk()
-        val loadSelectedMessageUseCase: LoadSelectedMessageUseCase = mockk()
         val addReactionUseCase: AddReactionUseCase = mockk()
+        val changeMessageTopicUseCase: ChangeMessageTopicUseCase = mockk()
+        val deleteMessageUseCase: DeleteMessageUseCase = mockk()
+        val editMessageContentUseCase: EditMessageContentUseCase = mockk()
+        val loadAllCachedMessagesUseCase: LoadAllCachedMessagesUseCase = mockk()
+        val loadMessagesInTopicUseCase: LoadMessagesInTopicUseCase = mockk()
+        val loadSelectedMessageUseCase: LoadSelectedMessageUseCase = mockk()
         val removeReactionUseCase: DeleteReactionUseCase = mockk()
+        val sendMessageUseCase: SendMessageUseCase = mockk()
         val uploadFileUseCase: UploadFileUseCase = mockk()
         val chatActor = ChatActor(
-            loadMessagesInTopicUseCase,
-            loadAllCachedMessagesUseCase,
-            sendMessageUseCase,
-            loadSelectedMessageUseCase,
             addReactionUseCase,
+            changeMessageTopicUseCase,
+            deleteMessageUseCase,
+            editMessageContentUseCase,
+            loadAllCachedMessagesUseCase,
+            loadMessagesInTopicUseCase,
+            loadSelectedMessageUseCase,
             removeReactionUseCase,
+            sendMessageUseCase,
             uploadFileUseCase
         )
         val message = MessageFactory.create()
         val messages = List(10) { message }
         val topic = TopicFactory.create(name = "topic")
+        val topicName = "topic"
+        val streamName = "stream"
 
         When("command is LoadAllMessages") {
             And("loading is successful") {
@@ -56,7 +67,8 @@ class ChatActorTest : BehaviorSpec({
                 } returns messages
                 val actual = chatActor.execute(
                     ChatCommand.LoadAllMessages(
-                        TopicFactory.create(name = "topic")
+                        topicName = topicName,
+                        streamName = streamName
                     )
                 ).single()
 
@@ -76,7 +88,8 @@ class ChatActorTest : BehaviorSpec({
                 } throws Exception()
                 val actual = chatActor.execute(
                     ChatCommand.LoadAllMessages(
-                        TopicFactory.create(name = "topic")
+                        topicName = topicName,
+                        streamName = streamName
                     )
                 ).single()
 
@@ -97,7 +110,8 @@ class ChatActorTest : BehaviorSpec({
                 } returns messages
                 val actual = chatActor.execute(
                     ChatCommand.LoadAllCachedMessages(
-                        TopicFactory.create(name = "topic")
+                        topicName = topicName,
+                        streamName = streamName
                     )
                 ).single()
 
@@ -115,7 +129,10 @@ class ChatActorTest : BehaviorSpec({
                     )
                 } throws Exception()
                 val actual = chatActor.execute(
-                    ChatCommand.LoadAllCachedMessages(topic)
+                    ChatCommand.LoadAllCachedMessages(
+                        topicName = topicName,
+                        streamName = streamName
+                    )
                 ).single()
 
                 Then("all cached messages are not loaded") {
@@ -140,7 +157,11 @@ class ChatActorTest : BehaviorSpec({
                     )
                 } returns message
                 val actual = chatActor.execute(
-                    ChatCommand.SendMessage(content = "content", topic = topic)
+                    ChatCommand.SendMessage(
+                        content = "content",
+                        topicName = topicName,
+                        streamId = topic.streamId
+                    )
                 )
 
                 Then("message is sent") {
@@ -163,7 +184,11 @@ class ChatActorTest : BehaviorSpec({
                     )
                 } throws Exception()
                 val actual = chatActor.execute(
-                    ChatCommand.SendMessage(content = "content", topic = topic)
+                    ChatCommand.SendMessage(
+                        content = "content",
+                        topicName = topicName,
+                        streamId = topic.streamId
+                    )
                 )
 
                 Then("message is sent") {
@@ -182,7 +207,9 @@ class ChatActorTest : BehaviorSpec({
                 } returns messages
                 val actual = chatActor.execute(
                     ChatCommand.FetchMoreMessages(
-                        topic = topic, anchor = MessageAnchor.Message(1)
+                        topicName = topicName,
+                        streamName = streamName,
+                        anchor = MessageAnchor.Message(1)
                     )
                 )
 
@@ -200,7 +227,9 @@ class ChatActorTest : BehaviorSpec({
                 } throws Exception()
                 val actual = chatActor.execute(
                     ChatCommand.FetchMoreMessages(
-                        topic = topic, anchor = MessageAnchor.Message(1)
+                        topicName = topicName,
+                        streamName = streamName,
+                        anchor = MessageAnchor.Message(1)
                     )
                 )
 

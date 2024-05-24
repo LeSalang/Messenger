@@ -81,10 +81,8 @@ class MessagesRepositoryImplTest : BehaviorSpec({
             val topicName = "topic2"
             val streamName = "stream2"
             val cachedMessages = listOf(
-                MessageEntityFactory.create(topicName = "topic1"),
                 MessageEntityFactory.create(topicName = topicName, streamName = streamName),
                 MessageEntityFactory.create(topicName = topicName, streamName = streamName),
-                MessageEntityFactory.create(topicName = "topic3")
             )
 
             coEvery {
@@ -94,7 +92,7 @@ class MessagesRepositoryImplTest : BehaviorSpec({
             val actual = repository.getAllCachedMessages(topicName, streamName = streamName)
 
             Then("should be equal") {
-                val expected = listOf(cachedMessages[1], cachedMessages[2]).map { it.toMessage() }
+                val expected = cachedMessages.map { it.toMessage() }
                 actual shouldBe expected
             }
         }
