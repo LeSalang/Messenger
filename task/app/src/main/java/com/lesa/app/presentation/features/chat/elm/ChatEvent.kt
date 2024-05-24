@@ -11,7 +11,8 @@ sealed interface ChatEvent {
             val emojiCode: String
         ) : Ui
         data class ActionButtonClicked(
-            val content: String
+            val content: String,
+            val topicName: String
         ) : Ui
         data class ShowEmojiPicker(
             val messageId: Int

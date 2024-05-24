@@ -8,6 +8,7 @@ import android.graphics.Color.BLACK
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
@@ -128,8 +129,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     chatRecyclerView.visibility = View.VISIBLE
                     error.errorItem.visibility = View.GONE
                     shimmerLayout.visibility = View.GONE
-                    messageEditText.visibility = View.VISIBLE
-                    sendButton.visibility = View.VISIBLE
+                    bottomInputViews.visibility = View.VISIBLE
                 }
                 updateList(list = dataToRender.content)
             }
@@ -138,8 +138,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     chatRecyclerView.visibility = View.GONE
                     error.errorItem.visibility = View.VISIBLE
                     shimmerLayout.visibility = View.GONE
-                    messageEditText.visibility = View.GONE
-                    sendButton.visibility = View.GONE
+                    bottomInputViews.visibility = View.GONE
                 }
             }
             LceState.Loading -> {
@@ -147,8 +146,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     chatRecyclerView.visibility = View.GONE
                     error.errorItem.visibility = View.GONE
                     shimmerLayout.visibility = View.VISIBLE
-                    messageEditText.visibility = View.VISIBLE
-                    sendButton.visibility = View.VISIBLE
+                    bottomInputViews.visibility = View.GONE
                 }
             }
             LceState.Idle -> Unit
@@ -286,6 +284,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         setUpMessageContextMenu()
         setUpEditMessageDialog()
         setUpChangeTopicDialog()
+        setUpTopicInput()
     }
 
     private fun setUpTitle() {
@@ -418,8 +417,12 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
     private fun onActionButtonClicked() {
         val messageText = binding.messageEditText.text.toString()
+        val topicName = binding.topicInput.text.toString()
         store.accept(
-            ChatEvent.Ui.ActionButtonClicked(content = messageText)
+            ChatEvent.Ui.ActionButtonClicked(
+                content = messageText,
+                topicName = topicName
+            )
         )
     }
 
@@ -487,6 +490,22 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     )
                 )
             }
+        }
+    }
+
+    private fun setUpTopicInput() {
+        if (store.states.value.topic != null) {
+            binding.topicInput.visibility = View.GONE
+            binding.senToTopicTextView.visibility = View.GONE
+        } else {
+            binding.topicInput.visibility = View.VISIBLE
+            val list = store.states.value.stream.topics.map { it.name }
+            val placeHolderAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                list
+            )
+            binding.topicInput.setAdapter(placeHolderAdapter)
         }
     }
 

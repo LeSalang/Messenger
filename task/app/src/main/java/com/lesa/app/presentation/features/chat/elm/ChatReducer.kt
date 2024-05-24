@@ -2,8 +2,11 @@ package com.lesa.app.presentation.features.chat.elm
 
 import android.text.Html
 import com.lesa.app.R
+import com.lesa.app.data.network.models.FALLBACK_STREAM_COLOR
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
+import com.lesa.app.domain.model.Stream
+import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.features.chat.elm.ChatCommand
 import com.lesa.app.presentation.features.chat.elm.ChatEffect
 import com.lesa.app.presentation.features.chat.elm.ChatEvent
@@ -26,13 +29,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             is Event.Internal.AllMessagesLoaded -> state {
                 val messageUiList = event.messages.map { message ->
                     ChatMapper.map(
-                        message,
-                        needShowTopic = state.topic == null
+                        message, needShowTopic = state.topic == null
                     )
                 }
                 copy(
-                    lceState = LceState.Content(messageUiList),
-                    messages = event.messages
+                    lceState = LceState.Content(messageUiList), messages = event.messages
                 )
             }
 
@@ -40,8 +41,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 state {
                     val messageUiList = event.messages.map {
                         ChatMapper.map(
-                            it,
-                            needShowTopic = state.topic == null
+                            it, needShowTopic = state.topic == null
                         )
                     }
                     if (event.messages.isEmpty()) {
@@ -50,15 +50,13 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                         )
                     } else {
                         copy(
-                            lceState = LceState.Content(messageUiList),
-                            messages = event.messages
+                            lceState = LceState.Content(messageUiList), messages = event.messages
                         )
                     }
                 }
                 commands {
                     +Command.LoadAllMessages(
-                        topicName = state.topic?.name,
-                        streamName = state.stream.name
+                        topicName = state.topic?.name, streamName = state.stream.name
                     )
                 }
             }
@@ -66,8 +64,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             Event.Internal.Error -> state {
                 if (messages.isEmpty()) {
                     copy(
-                        lceState = LceState.Error,
-                        isPrefetching = false
+                        lceState = LceState.Error, isPrefetching = false
                     )
                 } else {
                     return@state this
@@ -82,8 +79,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 }
                 commands {
                     +Command.LoadAllMessages(
-                        topicName = state.topic?.name,
-                        streamName = state.stream.name
+                        topicName = state.topic?.name, streamName = state.stream.name
                     )
                 }
             }
@@ -97,16 +93,16 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             }
 
             is ChatEvent.Internal.MessageSent -> state {
+                val topicName = event.sentMessage.topic
+                val stream = updateStreamIfNeeded(topicName = topicName, stream = state.stream)
                 val messages = state.messages + event.sentMessage
                 val messageUiList = messages.map {
                     ChatMapper.map(
-                        it,
-                        needShowTopic = state.topic == null
+                        it, needShowTopic = state.topic == null
                     )
                 }
                 copy(
-                    lceState = LceState.Content(messageUiList),
-                    messages = messages
+                    lceState = LceState.Content(messageUiList), messages = messages, stream = stream
                 )
             }
 
@@ -118,13 +114,11 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 messageList[messageIndex] = event.updatedMessage
                 val messageUiList = messageList.map {
                     ChatMapper.map(
-                        it,
-                        needShowTopic = state.topic == null
+                        it, needShowTopic = state.topic == null
                     )
                 }
                 copy(
-                    lceState = LceState.Content(messageUiList),
-                    messages = messageList
+                    lceState = LceState.Content(messageUiList), messages = messageList
                 )
             }
 
@@ -132,8 +126,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 val messages = event.messages + state.messages
                 val messageUiList = messages.map {
                     ChatMapper.map(
-                        it,
-                        needShowTopic = state.topic == null
+                        it, needShowTopic = state.topic == null
                     )
                 }
                 copy(
@@ -146,9 +139,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             is ChatEvent.Internal.FileUploaded -> commands {
                 val content = "[](${event.uri})"
                 +Command.SendMessage(
-                    topicName = state.topic?.name,
-                    streamId = state.stream.id,
-                    content = content
+                    topicName = state.topic?.name, streamId = state.stream.id, content = content
                 )
             }
 
@@ -161,8 +152,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 messages.removeIf { it.id == event.messageId }
                 val messageUiList = messages.map {
                     ChatMapper.map(
-                        it,
-                        needShowTopic = state.topic == null
+                        it, needShowTopic = state.topic == null
                     )
                 }
                 copy(
@@ -186,8 +176,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 }
                 commands {
                     +Command.LoadAllMessages(
-                        topicName = state.topic?.name,
-                        streamName = state.stream.name
+                        topicName = state.topic?.name, streamName = state.stream.name
                     )
                 }
             }
@@ -198,8 +187,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
         return when (event) {
             is Event.Ui.Init -> commands {
                 +Command.LoadAllCachedMessages(
-                    topicName = state.topic?.name,
-                    streamName = state.stream.name
+                    topicName = state.topic?.name, streamName = state.stream.name
                 )
             }
 
@@ -223,9 +211,10 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     }
                 } else {
                     commands {
+                        val topicName = event.topicName.ifEmpty { state.topic?.name }
                         +Command.SendMessage(
                             content = event.content,
-                            topicName = state.topic?.name,
+                            topicName = topicName,
                             streamId = state.stream.id
                         )
                     }
@@ -241,8 +230,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
 
             Event.Ui.ReloadChat -> commands {
                 +Command.LoadAllMessages(
-                    topicName = state.topic?.name,
-                    streamName = state.stream.name
+                    topicName = state.topic?.name, streamName = state.stream.name
                 )
             }
 
@@ -260,32 +248,30 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 }
             }
 
-            ChatEvent.Ui.FetchMoreMessages ->
-                if (!state.isPrefetching){
-                    state {
-                        copy(
-                            isPrefetching = true
+            ChatEvent.Ui.FetchMoreMessages -> if (!state.isPrefetching) {
+                state {
+                    copy(
+                        isPrefetching = true
+                    )
+                }
+                commands {
+                    val oldestMessageId = state.messages.firstOrNull()?.id
+                    if (oldestMessageId != null) {
+                        val anchor = MessageAnchor.Message(id = oldestMessageId)
+                        +Command.FetchMoreMessages(
+                            topicName = state.topic?.name,
+                            streamName = state.stream.name,
+                            anchor = anchor
                         )
                     }
-                    commands {
-                        val oldestMessageId = state.messages.firstOrNull()?.id
-                        if (oldestMessageId != null) {
-                            val anchor = MessageAnchor.Message(id = oldestMessageId)
-                            +Command.FetchMoreMessages(
-                                topicName = state.topic?.name,
-                                streamName = state.stream.name,
-                                anchor = anchor
-                            )
-                        }
-                    }
-                } else {
-                    Unit
                 }
+            } else {
+                Unit
+            }
 
             is ChatEvent.Ui.UploadFile -> commands {
                 +Command.UploadFile(
-                    name = event.name,
-                    uri = event.uri
+                    name = event.name, uri = event.uri
                 )
             }
 
@@ -295,8 +281,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 }
 
                 +Effect.ShowMessageContextMenu(
-                    messageId = event.messageId,
-                    isOwn = message?.isOwn ?: false
+                    messageId = event.messageId, isOwn = message?.isOwn ?: false
                 )
             }
 
@@ -306,30 +291,30 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     MessageContextMenuAction.ADD_REACTION -> effects {
                         +Effect.ShowEmojiPicker(messageId = messageId)
                     }
+
                     MessageContextMenuAction.DELETE_MESSAGE -> commands {
                         +Command.DeleteMessage(messageId = messageId)
                     }
+
                     MessageContextMenuAction.EDIT_MESSAGE -> effects {
                         val content = state.messages.firstOrNull { it.id == messageId }?.content
-                        val rawContent = Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY)
-                            .trimEnd()
-                            .toString()
+                        val rawContent =
+                            Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY).trimEnd().toString()
                         +Effect.EditMessage(
-                            messageId = messageId,
-                            messageContent = rawContent
+                            messageId = messageId, messageContent = rawContent
                         )
                     }
+
                     MessageContextMenuAction.CHANGE_TOPIC -> effects {
                         +Effect.ShowChangeTopicDialog(
-                            stream = state.stream,
-                            messageId = event.messageId
+                            stream = state.stream, messageId = event.messageId
                         )
                     }
+
                     MessageContextMenuAction.COPY_MESSAGE -> effects {
                         val message = state.messages.firstOrNull { it.id == messageId }
                         val text = Html.fromHtml(
-                            message?.content,
-                            Html.FROM_HTML_MODE_LEGACY
+                            message?.content, Html.FROM_HTML_MODE_LEGACY
                         ).trimEnd().toString()
                         +Effect.MessageCopied(text = text)
                     }
@@ -338,15 +323,13 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
 
             is ChatEvent.Ui.EditMessage -> commands {
                 +Command.EditMessage(
-                    messageId = event.messageId,
-                    content = event.messageContent
+                    messageId = event.messageId, content = event.messageContent
                 )
             }
 
             is ChatEvent.Ui.ChangeMessageTopic -> commands {
                 +Command.ChangeMessageTopic(
-                    messageId = event.messageId,
-                    topicName = event.topicName
+                    messageId = event.messageId, topicName = event.topicName
                 )
             }
 
@@ -355,19 +338,15 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     it.name == event.topicName
                 }
                 +Effect.OpenTopic(
-                    topic = topic,
-                    stream = state.stream
+                    topic = topic, stream = state.stream
                 )
             }
         }
     }
-}
 
     private fun selectEmoji(
-        messageList: List<Message>,
-        messageId: Int,
-        emojiCode: String
-    ) : ChatCommand? {
+        messageList: List<Message>, messageId: Int, emojiCode: String
+    ): ChatCommand? {
         val message = messageList.firstOrNull {
             it.id == messageId
         } ?: return null
@@ -388,8 +367,25 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                 it.code == emojiCode
             }?.name ?: return null
             return ChatCommand.AddReaction(
-                messageId = message.id,
-                emojiName = emojiName
+                messageId = message.id, emojiName = emojiName
             )
         }
     }
+
+    private fun updateStreamIfNeeded(topicName: String, stream: Stream): Stream {
+        return if (stream.topics.firstOrNull { it.name == topicName } == null) {
+            val newTopic = Topic(
+                name = topicName,
+                color = stream.color ?: FALLBACK_STREAM_COLOR,
+                streamName = stream.name,
+                streamId = stream.id
+            )
+            val allTopics = stream.topics + newTopic
+            stream.copy(
+                topics = allTopics
+            )
+        } else {
+            stream
+        }
+    }
+}
