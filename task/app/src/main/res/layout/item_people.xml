@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/small_padding"
-    android:paddingVertical="@dimen/small_padding"
-    android:background="@color/gray_18">
+    android:paddingHorizontal="@dimen/space_size_medium"
+    android:paddingVertical="@dimen/space_size_medium"
+    >
 
     <ImageView
         android:id="@+id/peopleNetStatusIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/net_status_indicator"
         android:elevation="3dp"
+        android:src="@drawable/net_status_indicator"
         app:layout_constraintBottom_toBottomOf="@+id/peopleLogoCard"
-        app:layout_constraintEnd_toEndOf="@+id/peopleLogoCard" />
+        app:layout_constraintEnd_toEndOf="@+id/peopleLogoCard"
+        />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/peopleLogoCard"
@@ -25,13 +25,15 @@
         app:cardCornerRadius="@dimen/people_user_logo_card_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <ImageView
             android:id="@+id/peopleLogoImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/gray_234" />
+            android:background="@color/gray_239_alfa_100"
+            />
 
     </androidx.cardview.widget.CardView>
 
@@ -39,26 +41,26 @@
         android:id="@+id/peopleNameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/space_size_medium"
         android:text="User name"
-        android:textSize="@dimen/people_user_name_text_size"
-        android:textColor="@color/gray_250"
-        android:paddingHorizontal="@dimen/small_padding"
         app:layout_constraintBottom_toTopOf="@+id/peopleEmailTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/peopleLogoCard"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/TextViewStyle.UserNameInPeopleScreen"
+        />
 
     <TextView
         android:id="@+id/peopleEmailTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/space_size_medium"
         android:text="user email"
-        android:textColor="@color/gray_161"
-        android:textSize="@dimen/people_user_email_text_size"
-        android:paddingHorizontal="@dimen/small_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/peopleLogoCard"
-        app:layout_constraintTop_toBottomOf="@+id/peopleNameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/peopleNameTextView"
+        style="@style/TextViewStyle.UserEmail"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

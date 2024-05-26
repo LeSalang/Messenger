@@ -1,47 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="small_padding">8dp</dimen>
-    <dimen name="medium_padding">16dp</dimen>
-    <dimen name="huge_padding">120dp</dimen>
 
-    <dimen name="emoji_flex_box_interitem_spacing">10dp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_small_x">14sp</dimen>
+    <dimen name="text_size_small_xx">16sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="text_size_large_x">22sp</dimen>
+    <dimen name="text_size_large_xx">24sp</dimen>
+    <dimen name="text_size_large_xxx">32sp</dimen>
+
+    <dimen name="space_size_x_small">2dp</dimen>
+    <dimen name="space_size_small">4dp</dimen>
+    <dimen name="space_size_medium">8dp</dimen>
+    <dimen name="space_size_large">10dp</dimen>
+    <dimen name="space_size_large_x">16dp</dimen>
+    <dimen name="space_huge">120dp</dimen>
+
+    <dimen name="appbar_title_icon_size">28dp</dimen>
     <dimen name="message_user_logo_size">37dp</dimen>
+    <dimen name="people_user_logo_card_size">64dp</dimen>
+    <dimen name="profile_user_logo_card_radius">15dp</dimen>
+    <dimen name="profile_user_logo_card_size">185dp</dimen>
 
     <dimen name="message_width_factor">0.8</dimen>
 
-    <dimen name="chat_topic_name_text_size">20sp</dimen>
-
-    <dimen name="profile_user_logo_card_size">185dp</dimen>
-    <dimen name="profile_user_logo_card_margin">16dp</dimen>
-    <dimen name="profile_user_logo_card_radius">15dp</dimen>
-    <dimen name="profile_user_name_text_size">32sp</dimen>
-
-    <dimen name="profile_user_chat_status_text_size">20sp</dimen>
-    <dimen name="profile_user_net_status_text_size">16sp</dimen>
-
-    <dimen name="profile_log_out_button_text_size">20sp</dimen>
-
-    <dimen name="appbar_title_text_size">24sp</dimen>
-    <dimen name="appbar_title_icon_size">28dp</dimen>
-
-    <dimen name="people_user_logo_card_size">64dp</dimen>
-    <dimen name="people_user_name_text_size">22sp</dimen>
-    <dimen name="people_user_email_text_size">16sp</dimen>
-
-    <dimen name="channels_channel_text_size">18sp</dimen>
-    <dimen name="channels_topic_text_size">18sp</dimen>
-    <dimen name="channels_mes_count_text_size">16sp</dimen>
-
-    <dimen name="user_name_text_size">14sp</dimen>
-    <dimen name="date_text_size">14sp</dimen>
-    <dimen name="emoji_text_size">14sp</dimen>
-    <dimen name="message_text_size">16sp</dimen>
-
-    <dimen name="error_text_size">20sp</dimen>
-
-
-    <dimen name="text_size_small">14sp</dimen>
-    <dimen name="text_size_medium">18sp</dimen>
-    <dimen name="text_size_large">22sp</dimen>
-    <dimen name="text_size_x_large">26sp</dimen>
 </resources>

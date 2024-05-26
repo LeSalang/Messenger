@@ -32,7 +32,7 @@ class TopicDelegateAdapter (
             binding.topicNameTextView.text = topic.name
             val color = topic.color.runCatching {
                 Color.parseColor(this)
-            }.getOrDefault(itemView.resources.getColor(R.color.gray_18))
+            }.getOrDefault(itemView.resources.getColor(R.color.gray_15_alfa_100))
             val alfaColor = ColorUtils.setAlphaComponent(color, 80)
             binding.root.setBackgroundColor(alfaColor)
             itemView.setOnClickListener {

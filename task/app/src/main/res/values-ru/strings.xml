@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">App</string>
+    <string name="add_emoji_button_title">Добавить эмодзи</string>
+    <string name="title_people">Люди</string>
+    <string name="title_profile">Профиль</string>
+    <string name="error_emoji">ОШИБКА! Не получается обновить эмодзи</string>
+    <string name="error_message_deleting">ОШИБКА! Не получается удалить сообщение</string>
+    <string name="message_copied">Сообщение скопировано</string>
+    <string name="status_active">Активный</string>
+    <string name="status_cached">Кэшированный</string>
+    <string name="status_offline">Оффлайн</string>
+    <string name="context_menu_add_reaction">Добавить реакцию</string>
+    <string name="context_menu_change_topic">Сменить тему</string>
+    <string name="context_menu_copy_message">Скопировать сообщение</string>
+    <string name="context_menu_delete_message">Удалить сообщение</string>
+    <string name="context_menu_edit_message">Редактировать сообщение</string>
+    <string name="change_message_topic">Выбрать другой топик</string>
+    <string name="edite_message_content">Редактировать сообщение</string>
+    <string name="error_message_changing_topic">ОШИБКА! Не получается изменить тему сообщения</string>
+    <string name="error_message_updating">ОШИБКА! Не получается обновить сообщения</string>
+    <string name="message_hint">Напишите...</string>
+    <string name="message_moved_to_another_topic">Сообщение перемещено в %s</string>
+    <string name="send_to_topic">Отправить в тему:</string>
+    <string name="title_chat_topic_name">Тема: #%s</string>
+    <string name="channels_all_streams">Все каналы</string>
+    <string name="channels_subscribed">Подписанные</string>
+    <string name="create_new_stream">Создать новый канал</string>
+    <string name="create_new_stream_exists_error">Канал %s уже существует</string>
+    <string name="create_new_stream_network_error">Не удалось создать канал, пожалуйста, попробуйте снова</string>
+    <string name="create_stream_hint">Создать канал</string>
+    <string name="title_channels">Каналы</string>
+    <string name="add">Добавить</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="error">ОШИБКА! Проверьте ваше интернет соединение</string>
+    <string name="no_internet_connection">Нет связи с интернетом</string>
+    <string name="refresh">Обновить</string>
+    <string name="search_hint">Поиск...</string>
+</resources>

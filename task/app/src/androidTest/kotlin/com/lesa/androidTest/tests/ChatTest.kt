@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.lesa.androidTest.mocks.ApiMockServer.Companion.api
 import com.lesa.androidTest.mocks.MessagesMock
 import com.lesa.androidTest.mocks.UsersMock
+import com.lesa.app.domain.model.Stream
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.features.chat.ChatFragment
 import com.lesa.app.presentation.features.chat.ChatFragment.Companion.createArguments
@@ -35,6 +36,20 @@ class ChatTest : TestCase() {
                     color = "#000000",
                     streamName = "streamName",
                     streamId = 432915
+                ),
+                Stream(
+                    name = "streamName",
+                    id = 432915,
+                    isSubscribed = true,
+                    topics = listOf(
+                        Topic(
+                            name = "swimming turtles",
+                            color = "#000000",
+                            streamName = "streamName",
+                            streamId = 432915
+                        )
+                    ),
+                    color = "#000000"
                 )
             )
         )

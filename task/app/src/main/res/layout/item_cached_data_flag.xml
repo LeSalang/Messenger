@@ -10,13 +10,13 @@
         android:id="@+id/cachedDataItemTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/medium_padding"
-        android:gravity="center_horizontal"
-        android:textColor="@color/white"
-        android:text="@string/no_internet_connection"
-        android:textSize="@dimen/error_text_size"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:layout_marginVertical="@dimen/space_size_large_x"
+        android:maxLines="1"
+        android:text="@string/no_internet_connection"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_large"
         />
 
 </FrameLayout>

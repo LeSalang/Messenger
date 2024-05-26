@@ -35,7 +35,7 @@ class EmojiFlexBox @JvmOverloads constructor(
     private var onPlusButtonClick: (() -> Unit)? = null
 
     private val interItemSpacing =
-        resources.getDimensionPixelOffset(R.dimen.emoji_flex_box_interitem_spacing)
+        resources.getDimensionPixelOffset(R.dimen.space_size_large)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight

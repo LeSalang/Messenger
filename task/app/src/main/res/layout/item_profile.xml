@@ -3,41 +3,46 @@
     android:id="@+id/itemProfile"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_18">
+    android:background="?attr/tfs_background_color"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/userLogoCard"
         android:layout_width="@dimen/profile_user_logo_card_size"
         android:layout_height="@dimen/profile_user_logo_card_size"
-        android:layout_marginTop="@dimen/huge_padding"
+        android:layout_marginTop="@dimen/space_huge"
         app:cardCornerRadius="@dimen/profile_user_logo_card_radius"
-        app:cardElevation="0dp">
+        app:cardElevation="0dp"
+        >
 
         <ImageView
             android:id="@+id/userLogoImage"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:layout_width="match_parent"
+            />
 
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/userNameTextView"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        tools:text="User name"
         style="@style/TextViewStyle.UserName"
-        tools:text="User name" />
+        />
 
     <TextView
         android:id="@+id/userNetStatusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/profile_user_net_status_text_size"
-        android:textColor="@color/green"
         android:gravity="center_horizontal"
-        tools:text="net status" />
+        android:textColor="@color/green"
+        android:textSize="@dimen/text_size_small_xx"
+        tools:text="net status"
+        />
 
 </LinearLayout>

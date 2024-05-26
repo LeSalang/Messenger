@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/errorItem"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_18">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/errorImageView"
         android:layout_width="@dimen/profile_user_logo_card_size"
         android:layout_height="@dimen/profile_user_logo_card_size"
-        android:layout_marginTop="@dimen/huge_padding"
+        android:layout_marginTop="@dimen/space_huge"
         android:src="@drawable/error"
+        app:tint="?attr/tfs_text_base_color"
         />
 
     <TextView
         android:id="@+id/errorMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/medium_padding"
         android:gravity="center_horizontal"
-        android:textColor="@color/white"
+        android:layout_marginVertical="@dimen/space_size_large_x"
         android:text="@string/error"
-        android:textSize="@dimen/error_text_size"
+        android:textColor="?attr/tfs_text_base_color"
+        android:textSize="@dimen/text_size_large"
         android:textStyle="bold"
         />
 
@@ -31,9 +32,9 @@
         android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="?attr/tfs_surface_on_surface_color"
         android:text="@string/refresh"
-        android:textColor="@color/black"
+        android:textColor="?attr/tfs_text_base_color"
         />
 
 </LinearLayout>

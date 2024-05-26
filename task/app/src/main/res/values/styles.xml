@@ -1,24 +1,67 @@
 <resources>
-    <style name="Emoji">
-        <item name="android:padding">@dimen/small_padding</item>
-    </style>
-    <style name="Widget.Theme.BaseComponents.MyView" parent="">
-        <item name="android:background">@color/gray_400</item>
-    </style>
-
     <style name="TextViewStyle" parent="TextAppearance.AppCompat" >
-        <item name="android:textColor">?attr/baseColor</item>
+        <item name="android:textColor">?attr/tfs_text_base_color</item>
     </style>
 
     <style name="TextViewStyle.UserName" >
-        <item name="android:textSize">@dimen/profile_user_name_text_size</item>
+        <item name="android:textSize">@dimen/text_size_large_xxx</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+    <style name="TextViewStyle.HeadLine" >
+        <item name="android:textSize">@dimen/text_size_large_xx</item>
+    </style>
+
+    <style name="TextViewStyle.UserNameInPeopleScreen" >
+        <item name="android:textSize">@dimen/text_size_large_x</item>
+    </style>
+
+    <style name="TextViewStyle.TopicNameInChatTitle" >
+        <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+
+    <style name="TextViewStyle.UserEmail" >
+        <item name="android:textSize">@dimen/text_size_small_xx</item>
+        <item name="android:textColor">?attr/tfs_text_shadow_color</item>
+    </style>
+
+    <style name="TextViewStyle.TitleInTopicAndStreamItem" >
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="TextViewStyle.EditText" >
+        <item name="android:textSize">@dimen/text_size_small_xx</item>
+        <item name="android:textColor">?attr/tfs_text_base_color</item>
+        <item name="android:textColorHint">?attr/tfs_text_shadow_color</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <style name="TextViewStyle.TopicNameInMessageView" >
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">?attr/tfs_text_glassy_color</item>
+    </style>
+
+    <style name="TextViewStyle.MessageContent" >
+        <item name="android:textSize">@dimen/text_size_small_xx</item>
+    </style>
+
+    <style name="TextViewStyle.TitleInDialogMenu" >
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/cyan</item>
+    </style>
+
+    <style name="CardViewStyle" parent="CardView">
+        <item name="android:background">?attr/tfs_surface_color</item>
+    </style>
+
+    <style name="ButtonStyle" parent="TextAppearance.AppCompat.Button">
+        <item name="android:backgroundTint">?attr/tfs_surface_on_surface_color</item>
+        <item name="android:textColor">?attr/tfs_text_base_color</item>
+    </style>
+
     <style name="Dialog" parent="android:Theme.Material.Light.Dialog.Alert" >
-        <item name="android:colorBackground">@color/gray_30</item>
+        <item name="android:colorBackground">?attr/tfs_surface_on_surface_color</item>
         <item name="android:textColorPrimary">@color/green</item>
-        <item name="android:textColorSecondary">@color/red</item>
     </style>
 </resources>

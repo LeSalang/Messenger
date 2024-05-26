@@ -3,8 +3,11 @@ package com.lesa.app.presentation.features.chat
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.graphics.Color
 import android.graphics.Color.BLACK
+import android.graphics.Color.WHITE
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -290,13 +293,18 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     private fun setUpTitle() {
         val topic = store.states.value.topic
         val stream = store.states.value.stream
-        val color = ColorUtils.blendARGB(Color.parseColor(stream.color), BLACK, COLOR_RATIO)
+        val isDarkTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
+        val color = ColorUtils.blendARGB(
+            Color.parseColor(stream.color),
+            if (isDarkTheme) BLACK else WHITE,
+            COLOR_RATIO
+        )
         binding.toolBar.setBackgroundColor(color)
         activity?.window?.statusBarColor = color
         binding.streamName.text = stream.name
         if (topic != null) {
             binding.topicName.text = String.format(
-                requireContext().getString(R.string.title_chat_Topic_name), topic.name
+                requireContext().getString(R.string.title_chat_topic_name), topic.name
             )
             binding.topicName.visibility = View.VISIBLE
         } else {

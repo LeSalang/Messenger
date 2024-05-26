@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <TextView
         android:id="@+id/changeTopicDialogTitle"
-        android:textColor="@color/cyan"
-        android:textSize="@dimen/text_size_medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/space_size_medium"
         android:text="@string/change_message_topic"
-        android:padding="@dimen/small_padding"
+        style="@style/TextViewStyle.TitleInDialogMenu"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -22,13 +22,5 @@
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_topic"
-        />
-
-    <Button
-        android:id="@+id/changeTopicPositiveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/confirm"
-        android:layout_gravity="end"
         />
 </LinearLayout>

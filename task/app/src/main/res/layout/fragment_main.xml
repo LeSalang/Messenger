@@ -3,26 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/tfs_background_color"
     android:orientation="vertical"
-    android:background="@color/gray_18">
+    >
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mainFragmentContainer"
         android:name="com.lesa.app.presentation.features.streams.StreamsContainerFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainBottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray_30"
-        app:itemRippleColor="@color/gray_18"
-        app:itemActiveIndicatorStyle="@color/gray_30"
+        android:background="?attr/tfs_surface_color"
+        app:itemActiveIndicatorStyle="?attr/tfs_text_shadow_color"
         app:itemIconTint="@drawable/selector_bottom_menu_icon_color"
+        app:itemRippleColor="?attr/tfs_text_shadow_color"
         app:itemTextColor="@drawable/selector_bottom_menu_icon_color"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/bottom_navigation_menu"
+        />
 
 </LinearLayout>

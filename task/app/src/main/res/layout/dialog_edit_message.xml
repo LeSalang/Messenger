@@ -2,35 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/tfs_surface_color"
     android:orientation="vertical"
-    android:background="@color/gray_30"
+    android:padding="@dimen/space_size_medium"
     >
 
     <TextView
         android:id="@+id/editMessageDialogTitle"
-        android:textColor="@color/cyan"
-        android:textSize="@dimen/text_size_medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/space_size_medium"
         android:text="@string/edite_message_content"
-        android:padding="@dimen/small_padding"
+        style="@style/TextViewStyle.TitleInDialogMenu"
         />
 
     <EditText
         android:id="@+id/newMessageText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/medium_padding"
-        android:textColor="@color/white"
+        android:paddingHorizontal="@dimen/space_size_large_x"
         android:visibility="visible"
-        android:textSize="@dimen/text_size_small"
+        style="@style/TextViewStyle.EditText"
         />
 
     <Button
         android:id="@+id/editMessagePositiveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/confirm"
         android:layout_gravity="end"
+        android:text="@string/confirm"
+        style="@style/ButtonStyle"
         />
 </LinearLayout>

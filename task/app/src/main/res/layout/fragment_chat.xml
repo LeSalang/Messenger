@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_18"
+    android:background="?attr/tfs_background_color"
     android:fitsSystemWindows="true"
     tools:context=".presentation.features.chat.ChatFragment">
 
@@ -12,58 +13,58 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray_30"
+        android:background="?attr/tfs_surface_color"
         android:gravity="center_horizontal"
-        android:titleTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_arrow_back" />
+            android:src="@drawable/icon_arrow_back"
+            app:tint="?attr/tfs_text_base_color"
+            />
 
         <TextView
             android:id="@+id/streamName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:paddingLeft="@dimen/medium_padding"
+            android:paddingLeft="@dimen/space_size_large_x"
             android:text="@string/title_profile"
-            android:textColor="@color/white"
-            android:textSize="@dimen/appbar_title_text_size" />
-
+            style="@style/TextViewStyle.HeadLine"
+            />
     </Toolbar>
 
     <TextView
         android:id="@+id/topicName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray_30"
+        android:background="?attr/tfs_surface_color"
         android:gravity="center"
-        android:padding="@dimen/small_padding"
-        android:text="@string/title_chat_Topic_name"
-        android:textColor="@color/white"
-        android:textSize="@dimen/chat_topic_name_text_size"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="@dimen/space_size_medium"
+        android:text="@string/title_chat_topic_name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        style="@style/TextViewStyle.TopicNameInChatTitle"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingBottom="@dimen/small_padding"
+        android:paddingBottom="@dimen/space_size_medium"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/bottomInputViews"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topicName"
         tools:listitem="@layout/item_message"
-        android:visibility="gone"
         />
 
     <com.facebook.shimmer.ShimmerFrameLayout
@@ -73,7 +74,9 @@
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/bottomInputViews"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topicName">
+        app:layout_constraintTop_toBottomOf="@+id/topicName"
+        >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -89,32 +92,33 @@
 
     <include
         android:id="@+id/error"
-        layout="@layout/item_error"
         android:layout_height="0dp"
         android:layout_width="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bottomInputViews"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolBar"
-        android:visibility="gone"
+        layout="@layout/item_error"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomInputViews"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="?attr/tfs_surface_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/gray_18"
+        app:layout_constraintStart_toStartOf="parent"
         >
+
         <TextView
             android:id="@+id/senToTopicTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send to topic: "
-            android:textColor="@color/gray_234"
-            android:padding="@dimen/small_padding"
+            android:text="@string/send_to_topic"
+            android:textColor="?attr/tfs_text_base_color"
+            android:padding="@dimen/space_size_medium"
             app:layout_constraintStart_toStartOf="@+id/messageEditText"
             app:layout_constraintBottom_toTopOf="@+id/messageEditText"
             app:layout_constraintTop_toTopOf="parent"
@@ -122,50 +126,49 @@
 
         <AutoCompleteTextView
             android:id="@+id/topicInput"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_234"
-            app:layout_constraintStart_toEndOf="@+id/senToTopicTextView"
+            android:layout_width="0dp"
             app:layout_constraintBottom_toTopOf="@+id/messageEditText"
             app:layout_constraintEnd_toEndOf="@+id/bottomInputViews"
+            app:layout_constraintStart_toEndOf="@+id/senToTopicTextView"
+            style="@style/TextViewStyle.EditText"
             />
 
             <EditText
                 android:id="@+id/messageEditText"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/small_padding"
-                android:layout_marginLeft="@dimen/small_padding"
-                android:layout_marginRight="@dimen/small_padding"
                 android:layout_weight="1"
                 android:background="@drawable/message_input_field_bg"
                 android:ems="10"
                 android:hint="@string/message_hint"
-                android:inputType="text"
+                android:imeOptions="actionSend"
+                android:layout_marginBottom="@dimen/space_size_medium"
+                android:layout_marginLeft="@dimen/space_size_medium"
+                android:layout_marginRight="@dimen/space_size_medium"
+                android:layout_width="0dp"
                 android:minHeight="48dp"
-                android:paddingHorizontal="@dimen/medium_padding"
-                android:paddingVertical="@dimen/small_padding"
-                android:textColor="@color/gray_234"
-                android:textColorHint="@color/gray_153"
+                android:paddingHorizontal="@dimen/space_size_large_x"
+                android:paddingVertical="@dimen/space_size_medium"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/sendButton"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="SpeakableTextPresentCheck"
-                android:visibility="visible"
-                android:imeOptions="actionSend"
+                style="@style/TextViewStyle.EditText"
                 />
 
             <ImageButton
                 android:id="@+id/sendButton"
                 android:layout_width="39dp"
                 android:layout_height="39dp"
-                android:layout_marginRight="@dimen/small_padding"
                 android:background="@drawable/circle_button_add_file_bg"
+                android:layout_marginRight="@dimen/space_size_medium"
                 android:src="@drawable/circle_button_add_message_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/messageEditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/messageEditText"
-                tools:ignore="RtlHardcoded" />
+                tools:ignore="RtlHardcoded"
+                />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

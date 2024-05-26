@@ -2,17 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/shimmerLogoCard"
         android:layout_width="@dimen/profile_user_logo_card_size"
         android:layout_height="@dimen/profile_user_logo_card_size"
-        android:layout_marginTop="@dimen/huge_padding"
+        android:layout_marginTop="@dimen/space_huge"
         app:cardCornerRadius="@dimen/profile_user_logo_card_radius"
         app:cardElevation="0dp"
         >
@@ -29,22 +29,22 @@
         android:id="@+id/shimmerNameTextView"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"
-        android:layout_margin="@dimen/small_padding"
         android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:layout_margin="@dimen/space_size_medium"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
         />
 
     <TextView
         android:id="@+id/shimmerNetStatusTextView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
-        android:textColor="@color/green"
-        android:gravity="center_horizontal"
         android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:textColor="@color/green"
+        android:textSize="@dimen/text_size_small"
         tools:text="net status"
         />
 

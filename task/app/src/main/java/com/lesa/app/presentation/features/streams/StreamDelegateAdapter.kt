@@ -44,7 +44,7 @@ class StreamDelegateAdapter (
             }
             val color = item.stream.color?.runCatching {
                 Color.parseColor(this)
-            }?.getOrNull() ?: itemView.resources.getColor(R.color.gray_18)
+            }?.getOrNull() ?: itemView.resources.getColor(R.color.gray_15_alfa_100)
             val alfaColor = ColorUtils.setAlphaComponent(color, 100)
             binding.root.setBackgroundColor(alfaColor)
         }

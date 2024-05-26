@@ -1,6 +1,7 @@
 package com.lesa.app.presentation.features.chat.message.emoji
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.text.TextPaint
@@ -34,15 +35,18 @@ class EmojiView @JvmOverloads constructor(
         }
 
     private val textPaint = TextPaint().apply {
-        color = resources.getColor(R.color.gray_234)
-        textSize = resources.getDimension(R.dimen.emoji_text_size)
+        val isDarkTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        color = resources.getColor(
+            if (isDarkTheme) R.color.gray_223_alfa_100 else R.color.gray_31_alfa_100
+        )
+        textSize = resources.getDimension(R.dimen.text_size_small_x)
     }
 
     private val textRect = Rect()
 
     init {
         setPadding(
-            resources.getDimensionPixelOffset(R.dimen.small_padding)
+            resources.getDimensionPixelOffset(R.dimen.space_size_medium)
         )
         setBackgroundResource(R.drawable.emoji_bg)
     }

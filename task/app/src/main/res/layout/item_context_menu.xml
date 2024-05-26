@@ -2,26 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
     android:orientation="horizontal"
-    android:padding="@dimen/small_padding"
+    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
     <ImageView
         android:id="@+id/contextMenuIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_add"
+        app:tint="?attr/tfs_text_base_color"
         />
 
     <Space
-        android:layout_width="@dimen/medium_padding"
-        android:layout_height="@dimen/medium_padding"
+        android:layout_width="@dimen/space_size_large_x"
+        android:layout_height="@dimen/space_size_large_x"
         />
 
     <TextView
         android:id="@+id/contextMenuName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?attr/tfs_text_base_color"
         />
 
 </LinearLayout>

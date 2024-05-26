@@ -1,6 +1,7 @@
 package com.lesa.app.presentation.features.chat.message
 
 import android.content.Context
+import android.content.res.Configuration
 import android.text.Html
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -132,17 +133,28 @@ class MessageView @JvmOverloads constructor(
             emojiFlexBox.emojiList = model.emojiList
             emojiFlexBox.isGone = emojiFlexBox.emojiList.isEmpty()
         }
+        val isDarkTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         when (model.type) {
             Model.Type.INCOMING -> {
                 logoCard.visibility = VISIBLE
                 nameTextView.visibility = VISIBLE
-                textCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.gray_28))
+                textCard.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        if (isDarkTheme) R.color.gray_31_alfa_100 else R.color.gray_223_alfa_100
+                    )
+                )
             }
 
             Model.Type.OUTGOING -> {
                 logoCard.visibility = INVISIBLE
                 nameTextView.visibility = GONE
-                textCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.cyan))
+                textCard.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        if (isDarkTheme) R.color.cyan else R.color.cyan_light
+                    )
+                )
             }
         }
         this.model = model

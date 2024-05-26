@@ -3,13 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_18"
+    android:background="?attr/tfs_background_color"
     android:orientation="vertical"
     >
 
     <include
         android:id="@+id/user"
-        layout="@layout/item_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -17,21 +16,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        layout="@layout/item_profile"
         />
 
     <include
         android:id="@+id/error"
-        layout="@layout/item_error"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        layout="@layout/item_error"
         />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

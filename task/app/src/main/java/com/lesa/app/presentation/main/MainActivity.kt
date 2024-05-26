@@ -1,6 +1,7 @@
 package com.lesa.app.presentation.main
 
 import android.content.IntentFilter
+import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
@@ -33,7 +34,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if (savedInstanceState == null) router.newRootScreen(Screens.Main())
-        window?.statusBarColor = resources.getColor(R.color.gray_18)
+        val isDarkTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        window?.statusBarColor = resources.getColor(
+            if (isDarkTheme) R.color.gray_15_alfa_100 else R.color.gray_223_alfa_100
+        )
         networkReceiver = makeNetworkReceiver()
     }
 
