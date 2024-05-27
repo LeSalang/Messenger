@@ -27,25 +27,31 @@ class StreamsRepositoryImpl @Inject constructor(
             it.id
         }
         val allStreams = coroutineScope {
-            api.getAllStreams().streams.map { stream ->
-                val deferredTopics = async {
-                    api.getTopicsInStream(stream.id)
+            val unsubscribedStreams = api.getAllStreams().streams
+                .filter {
+                    !subscribedStreams.containsKey(it.id)
                 }
-                return@map stream to deferredTopics
-            }.map {
-                val (stream, deferredTopics) = it
-                val topicApiDtos = deferredTopics.await()
-                val topics = topicApiDtos.topics.map {
-                    it.toTopic(
-                        color = subscribedStreams[stream.id]?.color,
-                        streamId = stream.id,
-                        streamName = stream.name
+            (subscribedStreams.values + unsubscribedStreams)
+                .take(20)
+                .map { stream ->
+                    val deferredTopics = async {
+                        api.getTopicsInStream(stream.id)
+                    }
+                    return@map stream to deferredTopics
+                }.map {
+                    val (stream, deferredTopics) = it
+                    val topicApiDtos = deferredTopics.await()
+                    val topics = topicApiDtos.topics.map {
+                        it.toTopic(
+                            color = subscribedStreams[stream.id]?.color,
+                            streamId = stream.id,
+                            streamName = stream.name
+                        )
+                    }
+                    stream.toStream(
+                        subscribedStreams = subscribedStreams, topics = topics
                     )
                 }
-                stream.toStream(
-                    subscribedStreams = subscribedStreams, topics = topics
-                )
-            }
         }
         updateCachedStreams(allStreams)
         return allStreams

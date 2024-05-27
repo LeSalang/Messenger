@@ -21,7 +21,6 @@ import javax.inject.Inject
 class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding: FragmentMainBinding by viewBinding()
     private lateinit var navigator: AppNavigator
-
     private val bottomBarViewModel by activityViewModels<BottomBarViewModel>()
 
     @Inject
@@ -31,21 +30,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     lateinit var router: Router
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        App.INSTANCE.appComponent.inject(this)
-        //bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
-
         super.onViewCreated(view, savedInstanceState)
+        App.INSTANCE.appComponent.inject(this)
         navigator = AppNavigator(
             requireActivity(), R.id.mainFragmentContainer,
             childFragmentManager
         )
-
         viewLifecycleOwner.lifecycleScope.launch {
             bottomBarViewModel.isBottomBarShown.collect {
                 showBottomBar(it)
             }
         }
-
         val bottomNavigationBar = binding.mainBottomNavigation
         bottomNavigationBar.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {

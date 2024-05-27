@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App</string>
+    <string name="app_name">Мессенджер</string>
     <string name="add_emoji_button_title">Добавить эмодзи</string>
     <string name="title_people">Люди</string>
     <string name="title_profile">Профиль</string>

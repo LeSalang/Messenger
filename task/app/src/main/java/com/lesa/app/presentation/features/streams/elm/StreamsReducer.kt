@@ -104,6 +104,7 @@ class StreamsReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, 
                     streamList = state.streams
                 )
                 val resultList = search(streams = filteredStreams, query = event.query)
+                    .sortedBy { it.name.uppercase() }
                     .map { StreamsMapper.map(it) }
                 copy(
                     lceState = LceState.Content(resultList)

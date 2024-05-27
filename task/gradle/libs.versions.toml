@@ -1,7 +1,7 @@
 [versions]
 activity = "1.9.0"
-androidx-test = "1.5.0"
 agp = "8.4.1"
+androidx-test = "1.5.0"
 appcompat = "1.6.1"
 cicerone = "7.1"
 constraintlayout = "2.1.4"
@@ -12,29 +12,29 @@ espressoCore = "3.5.1"
 facebook-shimmer = "0.5.0"
 flexbox = "3.0.0"
 fragment = "1.7.0"
-junit = "4.13.2"
-junitVersion = "1.1.5"
 hamcrest = "2.2"
 httpclientAndroid = "4.3.5.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
 kaspresso = "1.5.5"
+kotest = "5.9.0"
 kotlin = "1.9.0"
 kotlin-parselable = "1.8.10"
 kotlin-serialization = "1.9.22"
 kotlinx-coroutines-android = "1.7.1"
-kotest = "5.9.0"
 material = "1.12.0"
 mockk = "1.13.10"
 okhttp3 = "4.12.0"
 okhttp3-interceptor = "4.12.0"
 picasso = "2.8"
+playServicesBase = "18.4.0"
 retrofit = "2.11.0"
 room = "2.6.1"
+runner = "1.5.2"
 serialization = "1.6.3"
 viewbindingpropertydelegate = "1.5.9"
 viewpager2 = "1.0.0"
-playServicesBase = "18.4.0"
 wiremock = "2.27.2"
-runner = "1.5.2"
 
 [libraries]
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
@@ -42,31 +42,33 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
-androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment"}
 androidx-fragment-test = { group = "androidx.fragment", name = "fragment-testing", version.ref = "fragment"}
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion"}
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test" }
 cicerone = { group = "com.github.terrakok", name = "cicerone", version.ref = "cicerone"}
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger"}
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger"}
-elmslie-core = { group = "com.github.vivid-money.elmslie", name = "elmslie-core", version.ref = "elmslie"}
 elmslie-android = { group = "com.github.vivid-money.elmslie", name = "elmslie-android", version.ref = "elmslie"}
+elmslie-core = { group = "com.github.vivid-money.elmslie", name = "elmslie-core", version.ref = "elmslie"}
 facebook-shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "facebook-shimmer"}
 google-android-flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox"}
-junit = { group = "junit", name = "junit", version.ref = "junit"}
 hamcrest = { group = "org.hamcrest", name = "hamcrest", version.ref = "hamcrest" }
 httpclient-android = { module = "org.apache.httpcomponents:httpclient-android", version.ref = "httpclientAndroid" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion"}
+junit = { group = "junit", name = "junit", version.ref = "junit"}
 kaspresso = { group = "com.kaspersky.android-components", name = "kaspresso", version.ref = "kaspresso" }
 kirich1409-viewbindingpropertydelegate = { group = "com.github.kirich1409", name = "viewbindingpropertydelegate", version.ref = "viewbindingpropertydelegate" }
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android"}
-kotest-junit = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest"}
 kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest"}
+kotest-junit = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest"}
 kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotest"}
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android"}
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3" }
 okhttp3-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3-interceptor" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso"}
+play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
@@ -74,9 +76,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
 serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2"}
-play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 wiremock = { group = "com.github.tomakehurst", name = "wiremock-standalone", version.ref = "wiremock" }
-androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

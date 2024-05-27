@@ -7,5 +7,6 @@
         <item name="tfs_text_base_color">@color/gray_239_alfa_100</item>
         <item name="tfs_text_shadow_color">@color/gray_159_alfa_100</item>
         <item name="tfs_text_glassy_color">@color/gray_239_alfa_50</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>

@@ -93,8 +93,6 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             }
 
             is ChatEvent.Internal.MessageSent -> state {
-                val topicName = event.sentMessage.topic
-                val stream = updateStreamIfNeeded(topicName = topicName, stream = state.stream)
                 val messages = state.messages + event.sentMessage
                 val messageUiList = messages.map {
                     ChatMapper.map(
@@ -102,7 +100,7 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     )
                 }
                 copy(
-                    lceState = LceState.Content(messageUiList), messages = messages, stream = stream
+                    lceState = LceState.Content(messageUiList), messages = messages, stream = state.stream
                 )
             }
 
@@ -298,8 +296,8 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
 
                     MessageContextMenuAction.EDIT_MESSAGE -> effects {
                         val content = state.messages.firstOrNull { it.id == messageId }?.content
-                        val rawContent =
-                            Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY).trimEnd().toString()
+                        val rawContent = Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY)
+                            .trimEnd().toString()
                         +Effect.EditMessage(
                             messageId = messageId, messageContent = rawContent
                         )
@@ -336,7 +334,12 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             is ChatEvent.Ui.OnTopicClick -> effects {
                 val topic = state.stream.topics.firstOrNull {
                     it.name == event.topicName
-                }
+                } ?: Topic(
+                    name = event.topicName,
+                    color = state.stream.color ?: FALLBACK_STREAM_COLOR,
+                    streamName = state.stream.name,
+                    streamId = state.stream.id
+                )
                 +Effect.OpenTopic(
                     topic = topic, stream = state.stream
                 )
@@ -369,23 +372,6 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
             return ChatCommand.AddReaction(
                 messageId = message.id, emojiName = emojiName
             )
-        }
-    }
-
-    private fun updateStreamIfNeeded(topicName: String, stream: Stream): Stream {
-        return if (stream.topics.firstOrNull { it.name == topicName } == null) {
-            val newTopic = Topic(
-                name = topicName,
-                color = stream.color ?: FALLBACK_STREAM_COLOR,
-                streamName = stream.name,
-                streamId = stream.id
-            )
-            val allTopics = stream.topics + newTopic
-            stream.copy(
-                topics = allTopics
-            )
-        } else {
-            stream
         }
     }
 }

@@ -6,45 +6,53 @@ import com.lesa.app.presentation.features.chat.message_context_menu.MessageConte
 
 sealed interface ChatEvent {
     sealed interface Ui : ChatEvent {
-        data class SelectEmoji(
-            val messageId: Int,
-            val emojiCode: String
-        ) : Ui
-        data class ActionButtonClicked(
-            val content: String,
-            val topicName: String
-        ) : Ui
-        data class ShowEmojiPicker(
-            val messageId: Int
-        ) : Ui
-        data class ShowContextMessageBottomSheet(
-            val messageId: Int
-        ) : Ui
+        // chat events:
         data object Back : Ui
         data object Init : Ui
         data object ReloadChat : Ui
+        data object FetchMoreMessages : Ui
+
+        // message events:
+        data class ActionButtonClicked(
+            val content: String, val topicName: String
+        ) : Ui
+
+        data class UploadFile(
+            val name: String, val uri: Uri
+        ) : Ui
+
         data class MessageTextChanged(
             val text: String
         ) : Ui
-        data object FetchMoreMessages : Ui
-        data class UploadFile(
-            val name: String,
-            val uri: Uri
+
+        data class ShowContextMessageBottomSheet(
+            val messageId: Int
         ) : Ui
-        data class SelectMenuAction(
-            val messageId: Int,
-            val action: MessageContextMenuAction
-        ) : Ui
-        data class EditMessage(
-            val messageId: Int,
-            val messageContent: String
-        ) : Ui
-        data class ChangeMessageTopic(
-            val messageId: Int,
-            val topicName: String
-        ) : Ui
+
         data class OnTopicClick(
             val topicName: String
+        ) : Ui
+
+        // actions menu events:
+        data class SelectMenuAction(
+            val messageId: Int, val action: MessageContextMenuAction
+        ) : Ui
+
+        data class ChangeMessageTopic(
+            val messageId: Int, val topicName: String
+        ) : Ui
+
+        data class EditMessage(
+            val messageId: Int, val messageContent: String
+        ) : Ui
+
+        // emoji events:
+        data class ShowEmojiPicker(
+            val messageId: Int
+        ) : Ui
+
+        data class SelectEmoji(
+            val messageId: Int, val emojiCode: String
         ) : Ui
     }
 

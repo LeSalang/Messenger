@@ -37,12 +37,10 @@ class ChatActor @Inject constructor(
     override fun execute(command: ChatCommand): Flow<ChatEvent> {
         return when (command) {
             is ChatCommand.LoadAllMessages -> flow {
-                val topicName = command.topicName
-                val streamName = command.streamName
                 emit(
                     loadMessagesInTopicUseCase.invoke(
-                        streamName = streamName,
-                        topicName = topicName,
+                        streamName = command.streamName,
+                        topicName = command.topicName,
                         anchor = MessageAnchor.Newest
                     )
                 )
@@ -58,11 +56,9 @@ class ChatActor @Inject constructor(
             )
 
             is ChatCommand.LoadAllCachedMessages -> flow {
-                val topicName = command.topicName
-                val streamName = command.streamName
                 emit(loadAllCachedMessagesUseCase.invoke(
-                    topicName = topicName,
-                    streamName = streamName
+                    topicName = command.topicName,
+                    streamName = command.streamName
                 ))
             }.mapEvents(
                 eventMapper = {
@@ -143,12 +139,10 @@ class ChatActor @Inject constructor(
             )
 
             is ChatCommand.UploadFile -> flow {
-                val uri = command.uri
-                val name = command.name
                 emit(
                     uploadFileUseCase.invoke(
-                        name = name,
-                        uri = uri
+                        name = command.name,
+                        uri = command.uri
                     )
                 )
             }.mapEvents(
@@ -163,8 +157,7 @@ class ChatActor @Inject constructor(
             )
 
             is ChatCommand.DeleteMessage -> flow {
-                val messageId = command.messageId
-                emit(deleteMessageUseCase.invoke(messageId = messageId))
+                emit(deleteMessageUseCase.invoke(messageId = command.messageId))
             }.mapEvents(
                 eventMapper = {
                     ChatEvent.Internal.MessageDeleted(messageId = command.messageId)
