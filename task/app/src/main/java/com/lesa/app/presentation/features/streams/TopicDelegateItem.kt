@@ -1,7 +1,7 @@
 package com.lesa.app.presentation.features.streams
 
-import com.lesa.app.composite_adapter.DelegateItem
 import com.lesa.app.domain.model.Topic
+import com.lesa.app.presentation.composite_adapter.DelegateItem
 
 class TopicDelegateItem  (
     val topic: Topic

@@ -7,9 +7,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
-import com.lesa.app.composite_adapter.CompositeAdapter
-import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.domain.model.Stream
+import com.lesa.app.presentation.composite_adapter.CompositeAdapter
+import com.lesa.app.presentation.composite_adapter.delegatesList
 import com.lesa.app.presentation.features.streams.TopicDelegateAdapter
 import com.lesa.app.presentation.features.streams.TopicDelegateItem
 

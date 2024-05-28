@@ -1,4 +1,4 @@
-package com.lesa.app.composite_adapter
+package com.lesa.app.presentation.composite_adapter
 
 import androidx.recyclerview.widget.DiffUtil
 

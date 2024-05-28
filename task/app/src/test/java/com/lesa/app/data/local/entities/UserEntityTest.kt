@@ -31,7 +31,10 @@ class UserEntityTest : BehaviorSpec({
                         name = "name",
                         email = "@email",
                         avatar = "https://avatar",
-                        presence = User.Presence(status = User.Presence.Status.OFFLINE, timestamp = Date(1715372754))
+                        presence = User.Presence(
+                            status = User.Presence.Status.OFFLINE,
+                            timestamp = Date(1715372754)
+                        )
                     )
                     actual shouldBe expected
                 }
@@ -57,7 +60,10 @@ class UserEntityTest : BehaviorSpec({
                         name = "name",
                         email = "@email",
                         avatar = "https://avatar",
-                        presence = User.Presence(status = User.Presence.Status.ACTIVE, timestamp = Date(1715372754))
+                        presence = User.Presence(
+                            status = User.Presence.Status.ACTIVE,
+                            timestamp = Date(1715372754)
+                        )
                     )
                     actual shouldBe expected
                 }

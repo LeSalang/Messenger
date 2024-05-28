@@ -34,7 +34,6 @@ class PeopleActorTest : BehaviorSpec({
                     val expected = PeopleEvent.Internal.DataLoaded(users = users)
                     actual shouldBe expected
                 }
-
             }
 
             And("loading is failed") {

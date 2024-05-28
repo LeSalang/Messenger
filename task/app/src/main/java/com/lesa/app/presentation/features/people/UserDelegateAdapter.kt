@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
-import com.lesa.app.composite_adapter.DelegateAdapter
 import com.lesa.app.databinding.ItemPeopleBinding
+import com.lesa.app.presentation.composite_adapter.DelegateAdapter
 import com.lesa.app.presentation.features.people.model.UserUi
 import com.squareup.picasso.Picasso
 
@@ -16,7 +16,8 @@ class UserDelegateAdapter (
 ) : DelegateAdapter<UserDelegateItem, UserDelegateAdapter.ViewHolder>(UserDelegateItem::class.java) {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_people, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_people, parent, false)
         return ViewHolder(view, onClick)
     }
 

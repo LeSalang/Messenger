@@ -1,6 +1,6 @@
 package com.lesa.app.presentation.features.people
 
-import com.lesa.app.composite_adapter.DelegateItem
+import com.lesa.app.presentation.composite_adapter.DelegateItem
 import com.lesa.app.presentation.features.people.model.UserUi
 
 class UserDelegateItem(

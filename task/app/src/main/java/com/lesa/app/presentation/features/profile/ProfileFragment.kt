@@ -73,7 +73,6 @@ class ProfileFragment : ElmBaseFragment<Effect, State, Event>(
                 binding.error.errorItem.visibility = GONE
                 binding.shimmer.visibility = VISIBLE
             }
-
             LceState.Idle -> TODO()
         }
     }

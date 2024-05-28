@@ -17,7 +17,7 @@ sealed interface ChatCommand {
         val topicName: String?, val streamName: String, val anchor: MessageAnchor
     ) : ChatCommand
 
-    // commands for one message:
+    // commands for single message:
     data class SendMessage(
         val content: String, val topicName: String?, val streamId: Int
     ) : ChatCommand

@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
-import com.lesa.app.composite_adapter.DelegateAdapter
 import com.lesa.app.databinding.ItemDateBinding
+import com.lesa.app.presentation.composite_adapter.DelegateAdapter
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -14,7 +14,8 @@ class DateDelegateAdapter :
     DelegateAdapter<DateDelegateItem, DateDelegateAdapter.ViewHolder>(DateDelegateItem::class.java) {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_date, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_date, parent, false)
 
         return ViewHolder(view)
     }
@@ -33,4 +34,4 @@ class DateDelegateAdapter :
     }
 }
 
-const val DATE_PATTERN = "dd MMM"
+private const val DATE_PATTERN = "dd MMM"

@@ -10,12 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.Router
 import com.lesa.app.R
-import com.lesa.app.composite_adapter.CompositeAdapter
-import com.lesa.app.composite_adapter.DelegateItem
-import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentPeopleBinding
 import com.lesa.app.di.people.PeopleComponent
 import com.lesa.app.di.people.PeopleComponentViewModel
+import com.lesa.app.presentation.composite_adapter.CompositeAdapter
+import com.lesa.app.presentation.composite_adapter.DelegateItem
+import com.lesa.app.presentation.composite_adapter.delegatesList
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.people.elm.PeopleEffect
 import com.lesa.app.presentation.features.people.elm.PeopleEvent

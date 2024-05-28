@@ -1,6 +1,6 @@
 package com.lesa.app.presentation.features.chat
 
-import com.lesa.app.composite_adapter.DelegateItem
+import com.lesa.app.presentation.composite_adapter.DelegateItem
 import com.lesa.app.presentation.features.chat.date.DateDelegateItem
 import com.lesa.app.presentation.features.chat.message.MessageDelegateItem
 import com.lesa.app.presentation.features.chat.message.MessageView
@@ -52,4 +52,4 @@ class ChatDelegateItemFactory {
     }
 }
 
-const val DATE_PATTERN = "yyyyMMdd"
+private const val DATE_PATTERN = "yyyyMMdd"

@@ -27,8 +27,7 @@ fun MessageEntity.toMessage(): Message {
         senderName = senderName,
         reactions = reactions.associate {
             it.emojiCode to it.toEmoji()
-        }
-        ,
+        },
         date = Date(timestampMillis),
         topic = topicName,
         isOwn = isOwn

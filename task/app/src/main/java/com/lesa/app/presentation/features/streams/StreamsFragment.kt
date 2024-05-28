@@ -12,12 +12,12 @@ import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.Router
 import com.lesa.app.R
-import com.lesa.app.composite_adapter.CompositeAdapter
-import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentStreamsBinding
 import com.lesa.app.di.streams.StreamsComponentViewModel
 import com.lesa.app.domain.model.Stream
 import com.lesa.app.domain.model.Topic
+import com.lesa.app.presentation.composite_adapter.CompositeAdapter
+import com.lesa.app.presentation.composite_adapter.delegatesList
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.streams.elm.StreamsEffect
 import com.lesa.app.presentation.features.streams.elm.StreamsEvent

@@ -8,7 +8,7 @@ import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class FileRequestBodyFactory @Inject constructor(
-    private val applicationContext: Context
+    applicationContext: Context
 ) {
     private val contentResolver = applicationContext.contentResolver
 

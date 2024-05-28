@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.lesa.androidTest.mocks.ApiMockServer.Companion.api
 import com.lesa.androidTest.mocks.MessagesMock
 import com.lesa.androidTest.mocks.UsersMock
+import com.lesa.app.R
 import com.lesa.app.domain.model.Stream
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.features.chat.ChatFragment
@@ -51,7 +52,8 @@ class ChatTest : TestCase() {
                     ),
                     color = "#000000"
                 )
-            )
+            ),
+            themeResId = R.style.Theme_BaseComponents
         )
 
         ChatScreen {

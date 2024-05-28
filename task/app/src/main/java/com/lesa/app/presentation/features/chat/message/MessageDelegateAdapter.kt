@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
-import com.lesa.app.composite_adapter.DelegateAdapter
 import com.lesa.app.databinding.ItemMessageBinding
+import com.lesa.app.presentation.composite_adapter.DelegateAdapter
 
 class MessageDelegateAdapter(
     private val actions: MessageView.Actions,
@@ -14,7 +14,8 @@ class MessageDelegateAdapter(
     DelegateAdapter<MessageDelegateItem, MessageDelegateAdapter.ViewHolder>(MessageDelegateItem::class.java) {
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_message, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_message, parent, false)
         return ViewHolder(
             view = view,
             actions = actions

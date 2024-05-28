@@ -5,7 +5,6 @@ import com.lesa.app.R
 import com.lesa.app.data.network.models.FALLBACK_STREAM_COLOR
 import com.lesa.app.domain.model.Message
 import com.lesa.app.domain.model.MessageAnchor
-import com.lesa.app.domain.model.Stream
 import com.lesa.app.domain.model.Topic
 import com.lesa.app.presentation.features.chat.elm.ChatCommand
 import com.lesa.app.presentation.features.chat.elm.ChatEffect
@@ -100,7 +99,8 @@ class ChatReducer : ScreenDslReducer<Event, Event.Ui, Event.Internal, State, Eff
                     )
                 }
                 copy(
-                    lceState = LceState.Content(messageUiList), messages = messages, stream = state.stream
+                    lceState = LceState.Content(messageUiList),
+                    messages = messages, stream = state.stream
                 )
             }
 

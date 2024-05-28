@@ -29,13 +29,13 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.Router
 import com.lesa.app.R
-import com.lesa.app.composite_adapter.CompositeAdapter
-import com.lesa.app.composite_adapter.DelegateItem
-import com.lesa.app.composite_adapter.delegatesList
 import com.lesa.app.databinding.FragmentChatBinding
 import com.lesa.app.di.chat.ChatComponentViewModel
 import com.lesa.app.domain.model.Stream
 import com.lesa.app.domain.model.Topic
+import com.lesa.app.presentation.composite_adapter.CompositeAdapter
+import com.lesa.app.presentation.composite_adapter.DelegateItem
+import com.lesa.app.presentation.composite_adapter.delegatesList
 import com.lesa.app.presentation.elm.ElmBaseFragment
 import com.lesa.app.presentation.features.chat.date.DateDelegateAdapter
 import com.lesa.app.presentation.features.chat.elm.ChatEffect
@@ -222,7 +222,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
                     ClipboardManager::class.java
                 ) as ClipboardManager
                 val text = effect.text
-                val clipData = ClipData.newPlainText("text", text)
+                val clipData = ClipData.newPlainText("message", text)
                 clipboardManager.setPrimaryClip(clipData)
                 Toast.makeText(context, getText(R.string.message_copied), Toast.LENGTH_SHORT).show()
             }

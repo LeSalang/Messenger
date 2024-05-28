@@ -7,7 +7,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching
 import com.github.tomakehurst.wiremock.matching.UrlPattern
 
 class ApiMockServer(private val wireMockServer: WireMockServer) {
-
     fun mock(mock: ApiMock) {
         val urlPattern = urlPathMatching(mock.urlPattern)
         val matcher = matcher(method = mock.method, urlPattern = urlPattern)

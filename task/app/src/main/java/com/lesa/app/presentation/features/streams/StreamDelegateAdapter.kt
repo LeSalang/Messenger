@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.lesa.app.R
-import com.lesa.app.composite_adapter.DelegateAdapter
 import com.lesa.app.databinding.ItemChannelBinding
+import com.lesa.app.presentation.composite_adapter.DelegateAdapter
 
 class StreamDelegateAdapter (
     private val onArrowClick: (Int) -> Unit,
