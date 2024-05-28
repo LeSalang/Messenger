@@ -30,16 +30,16 @@
 * Тестирование: _JUnit, Kotest, Kaspresso, Wiremock_
 
 <p align="center">
-<img src = "gitlab/stream_light_eng.png" width="19%" />&nbsp;
-<img src = "gitlab/all_stream_dark_ru.png" width="19%" />&nbsp;
-<img src = "gitlab/create_new_stream_dark_ru.png" width="19%" />&nbsp;
-<img src = "gitlab/search_dark_ru.png" width="19%" />&nbsp;
-<img src = "gitlab/image_dark_eng.png" width="19%" />&nbsp;
+<img src = "task/gitlab/stream_light_eng.png" width="19%" />&nbsp;
+<img src = "task/gitlab/all_stream_dark_ru.png" width="19%" />&nbsp;
+<img src = "task/gitlab/create_new_stream_dark_ru.png" width="19%" />&nbsp;
+<img src = "task/gitlab/search_dark_ru.png" width="19%" />&nbsp;
+<img src = "task/gitlab/image_dark_eng.png" width="19%" />&nbsp;
 <br>
-<img src = "gitlab/emoji_light_eng.png" width="19%" />&nbsp;
-<img src = "gitlab/message_actions_dark_eng.png" width="19%" />&nbsp;
-<img src = "gitlab/users_dark_eng.png" width="19%" />&nbsp;
-<img src = "gitlab/user_profile_dark_eng.png" width="19%" />&nbsp;
-<img src = "gitlab/own_profile_dark_eng.png" width="19%" />&nbsp;
+<img src = "task/gitlab/emoji_light_eng.png" width="19%" />&nbsp;
+<img src = "task/gitlab/message_actions_dark_eng.png" width="19%" />&nbsp;
+<img src = "task/gitlab/users_dark_eng.png" width="19%" />&nbsp;
+<img src = "task/gitlab/user_profile_dark_eng.png" width="19%" />&nbsp;
+<img src = "task/gitlab/own_profile_dark_eng.png" width="19%" />&nbsp;
 <br>
 </p>
