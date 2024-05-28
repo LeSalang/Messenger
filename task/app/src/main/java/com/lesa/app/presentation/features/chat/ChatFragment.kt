@@ -177,7 +177,7 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
 
             Effect.Back -> {
                 activity?.window?.statusBarColor = BLACK
-                router.exit()
+                router.backTo(Screens.StreamsContainer())
             }
 
             Effect.EmojiError -> {
