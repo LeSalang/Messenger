@@ -4,7 +4,6 @@ import com.kaspersky.kaspresso.screens.KScreen
 import com.lesa.app.R
 import com.lesa.app.presentation.features.chat.ChatFragment
 import io.github.kakaocup.kakao.edit.KEditText
-import io.github.kakaocup.kakao.image.KImageView
 import io.github.kakaocup.kakao.recycler.KRecyclerItem
 import io.github.kakaocup.kakao.recycler.KRecyclerView
 import io.github.kakaocup.kakao.text.KButton
@@ -19,8 +18,6 @@ object ChatScreen : KScreen<ChatScreen>() {
         builder = { withId(R.id.chatRecyclerView) },
         itemTypeBuilder = { itemType { KMessageItem(it) } }
     )
-
-    val errorImage = KImageView{ withId(R.id.errorImageView) }
 
     val topicTitle = KTextView { withId(R.id.topicName) }
 

@@ -135,8 +135,11 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
             }
 
             StreamsEffect.ShowNewStreamError -> {
-                val toast = Toast.makeText(context, getString(R.string.create_new_stream_network_error), Toast.LENGTH_SHORT)
-                toast.show()
+                Toast.makeText(
+                    context,
+                    getString(R.string.create_new_stream_network_error),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -172,6 +175,12 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
         binding.channelsRecycleView.adapter = adapter
     }
 
+    private fun setupRefreshButton() {
+        binding.error.refreshButton.setOnClickListener {
+            store.accept(StreamsEvent.Ui.ReloadStreams)
+        }
+    }
+
     private fun openChat(topic: Topic, stream: Stream) {
         store.accept(Event.Ui.TopicClicked(topic = topic, stream = stream))
     }
@@ -185,12 +194,6 @@ class StreamsFragment : ElmBaseFragment<Effect, State, Event>(
             list = streams, expandedStreamId = expandedStreamId
         )
         adapter.submitList(items)
-    }
-
-    private fun setupRefreshButton() {
-        binding.error.refreshButton.setOnClickListener {
-            store.accept(StreamsEvent.Ui.ReloadStreams)
-        }
     }
 
     private fun createStreamDialog() {

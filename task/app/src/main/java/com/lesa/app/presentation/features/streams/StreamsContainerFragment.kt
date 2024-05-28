@@ -27,9 +27,21 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bottomBarViewModel = ViewModelProvider(requireActivity())[BottomBarViewModel::class.java]
-        setUpSearchView()
-        setUpPager()
+        setUpViews()
+    }
+
+    private fun setUpViews() {
         setAddStreamListener()
+        setUpPager()
+        setUpSearchView()
+    }
+
+    private fun setAddStreamListener() {
+        binding.addIcon.setOnClickListener {
+            CreateStreamDialogFragment().show(
+                childFragmentManager, CreateStreamDialogFragment.TAG
+            )
+        }
     }
 
     private fun setUpPager() {
@@ -77,14 +89,6 @@ class StreamsContainerFragment : Fragment(R.layout.fragment_streams_container) {
             it?.let {
                 search(it.toString())
             }
-        }
-    }
-
-    private fun setAddStreamListener() {
-        binding.addIcon.setOnClickListener {
-            CreateStreamDialogFragment().show(
-                childFragmentManager, CreateStreamDialogFragment.TAG
-            )
         }
     }
 }

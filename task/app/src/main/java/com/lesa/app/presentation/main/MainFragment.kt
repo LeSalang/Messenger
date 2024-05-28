@@ -19,8 +19,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainFragment : Fragment(R.layout.fragment_main) {
-    private val binding: FragmentMainBinding by viewBinding()
     private lateinit var navigator: AppNavigator
+    private val binding: FragmentMainBinding by viewBinding()
     private val bottomBarViewModel by activityViewModels<BottomBarViewModel>()
 
     @Inject

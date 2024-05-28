@@ -23,7 +23,10 @@ class CreateStreamDialogFragment : DialogFragment() {
             val button = view.findViewById<Button>(R.id.createStreamPositiveButton)
             button.setOnClickListener {
                 val text = editText.text.toString()
-                setFragmentResult(requestKey = RESULT_KEY, result = bundleOf(BUNDLE_KEY to text))
+                setFragmentResult(
+                    requestKey = RESULT_KEY,
+                    result = bundleOf(BUNDLE_KEY to text)
+                )
                 dismiss()
             }
             return dialog

@@ -16,10 +16,6 @@ object Screens {
         UserFragment.getNewInstance(user)
     }
 
-    fun StreamsContainer() = FragmentScreen {
-        StreamsContainerFragment()
-    }
-
     fun Chat(topic: Topic?, stream: Stream) = FragmentScreen {
         ChatFragment.getNewInstance(topic, stream)
     }
@@ -34,5 +30,9 @@ object Screens {
 
     fun Profile() = FragmentScreen {
         ProfileFragment()
+    }
+
+    fun StreamsContainer() = FragmentScreen {
+        StreamsContainerFragment()
     }
 }

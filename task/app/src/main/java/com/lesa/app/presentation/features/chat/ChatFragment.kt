@@ -278,37 +278,31 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
     }
 
     private fun setUpViews() {
-        setUpTitle()
-        setUpBackButton()
-        setUpRecycleView()
-        setUpEmojiPicker()
-        setupRefreshButton()
         setUpActions()
-        setUpMessageContextMenu()
-        setUpEditMessageDialog()
+        setUpBackButton()
         setUpChangeTopicDialog()
+        setUpEditMessageDialog()
+        setUpEmojiPicker()
+        setUpMessageContextMenu()
+        setUpRecycleView()
+        setUpTitle()
         setUpTopicInput()
+        setupRefreshButton()
     }
 
-    private fun setUpTitle() {
-        val topic = store.states.value.topic
-        val stream = store.states.value.stream
-        val isDarkTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
-        val color = ColorUtils.blendARGB(
-            Color.parseColor(stream.color),
-            if (isDarkTheme) BLACK else WHITE,
-            COLOR_RATIO
-        )
-        binding.toolBar.setBackgroundColor(color)
-        activity?.window?.statusBarColor = color
-        binding.streamName.text = stream.name
-        if (topic != null) {
-            binding.topicName.text = String.format(
-                requireContext().getString(R.string.title_chat_topic_name), topic.name
-            )
-            binding.topicName.visibility = View.VISIBLE
-        } else {
-            binding.topicName.visibility = View.GONE
+    private fun setUpActions() {
+        binding.messageEditText.doOnTextChanged { _, _, _, _ ->
+            val text = binding.messageEditText.text.toString()
+            store.accept(Event.Ui.MessageTextChanged(text))
+        }
+        binding.messageEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                onActionButtonClicked()
+            }
+            return@setOnEditorActionListener true
+        }
+        binding.sendButton.setOnClickListener {
+            onActionButtonClicked()
         }
     }
 
@@ -318,6 +312,73 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             store.accept(Event.Ui.Back)
+        }
+    }
+
+    private fun setUpChangeTopicDialog() {
+        childFragmentManager.setFragmentResultListener(
+            ChangeTopicDialogFragment.CHANGE_TOPIC_REQUEST_KEY,
+            this
+        ) { key, bundle ->
+            val topicName = bundle.getString(ChangeTopicDialogFragment.CHANGE_TOPIC_TOPIC_NAME_RESULT_KEY)
+            val messageId = bundle.getInt(ChangeTopicDialogFragment.CHANGE_TOPIC_MESSAGE_ID_RESULT_KEY)
+            topicName?.let {
+                store.accept(
+                    ChatEvent.Ui.ChangeMessageTopic(
+                        messageId = messageId,
+                        topicName = it
+                    )
+                )
+            }
+        }
+    }
+
+    private fun setUpEditMessageDialog() {
+        childFragmentManager.setFragmentResultListener(
+            EditMessageDialogFragment.EDIT_MESSAGE_REQUEST_KEY,
+            this
+        ) { key, bundle ->
+            val id = bundle.getInt(EditMessageDialogFragment.EDIT_MESSAGE_RESULT_KEY_ID)
+            val content = bundle.getString(EditMessageDialogFragment.EDIT_MESSAGE_RESULT_KEY_CONTENT)
+            content?.let {
+                store.accept(
+                    ChatEvent.Ui.EditMessage(
+                        messageId = id,
+                        messageContent = content
+                    )
+                )
+            }
+        }
+    }
+
+    private fun setUpEmojiPicker() {
+        childFragmentManager.setFragmentResultListener(
+            ON_SELECT_EMOJI_REQUEST_KEY, this
+        ) { requestKey, bundle ->
+            val emoji: EmojiCNCS? = bundle.getParcelable(SELECTED_EMOJI_KEY)
+            val messageId = bundle.getInt(SELECTED_MESSAGE_KEY)
+            if (emoji != null) {
+                onSelectEmoji(
+                    messageId = messageId, selectedEmojiCNCS = emoji
+                )
+            }
+        }
+    }
+
+    private fun setUpMessageContextMenu() {
+        childFragmentManager.setFragmentResultListener(
+            CONTEXT_MENU_REQUEST_KEY, this
+        ) { _, bundle ->
+            val actionName = bundle.getString(CONTEXT_MENU_RESULT_KEY_ACTION)
+            val action = actionName?.let { MessageContextMenuAction.valueOf(it) }
+            val messageId = bundle.getInt(CONTEXT_MENU_RESULT_KEY_MESSAGE_ID)
+            if (action == null || messageId == 0) return@setFragmentResultListener
+            store.accept(
+                Event.Ui.SelectMenuAction(
+                    action = action,
+                    messageId = messageId
+                )
+            )
         }
     }
 
@@ -360,56 +421,47 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         )
     }
 
-    private fun setUpEmojiPicker() {
-        childFragmentManager.setFragmentResultListener(
-            ON_SELECT_EMOJI_REQUEST_KEY, this
-        ) { requestKey, bundle ->
-            val emoji: EmojiCNCS? = bundle.getParcelable(SELECTED_EMOJI_KEY)
-            val messageId = bundle.getInt(SELECTED_MESSAGE_KEY)
-            if (emoji != null) {
-                onSelectEmoji(
-                    messageId = messageId, selectedEmojiCNCS = emoji
-                )
-            }
+    private fun setUpTitle() {
+        val topic = store.states.value.topic
+        val stream = store.states.value.stream
+        val isDarkTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
+        val color = ColorUtils.blendARGB(
+            Color.parseColor(stream.color),
+            if (isDarkTheme) BLACK else WHITE,
+            COLOR_RATIO
+        )
+        binding.toolBar.setBackgroundColor(color)
+        activity?.window?.statusBarColor = color
+        binding.streamName.text = stream.name
+        if (topic != null) {
+            binding.topicName.text = String.format(
+                requireContext().getString(R.string.title_chat_topic_name), topic.name
+            )
+            binding.topicName.visibility = View.VISIBLE
+        } else {
+            binding.topicName.visibility = View.GONE
         }
     }
 
-    private fun setUpMessageContextMenu() {
-        childFragmentManager.setFragmentResultListener(
-            CONTEXT_MENU_REQUEST_KEY, this
-        ) { _, bundle ->
-            val actionName = bundle.getString(CONTEXT_MENU_RESULT_KEY_ACTION)
-            val action = actionName?.let { MessageContextMenuAction.valueOf(it) }
-            val messageId = bundle.getInt(CONTEXT_MENU_RESULT_KEY_MESSAGE_ID)
-            if (action == null || messageId == 0) return@setFragmentResultListener
-            store.accept(
-                Event.Ui.SelectMenuAction(
-                    action = action,
-                    messageId = messageId
-                )
+    private fun setUpTopicInput() {
+        if (store.states.value.topic != null) {
+            binding.topicInput.visibility = View.GONE
+            binding.senToTopicTextView.visibility = View.GONE
+        } else {
+            binding.topicInput.visibility = View.VISIBLE
+            val list = store.states.value.stream.topics.map { it.name }
+            val placeHolderAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                list
             )
+            binding.topicInput.setAdapter(placeHolderAdapter)
         }
     }
 
     private fun setupRefreshButton() {
         binding.error.refreshButton.setOnClickListener {
             store.accept(Event.Ui.Init)
-        }
-    }
-
-    private fun setUpActions() {
-        binding.messageEditText.doOnTextChanged { _, _, _, _ ->
-            val text = binding.messageEditText.text.toString()
-            store.accept(Event.Ui.MessageTextChanged(text))
-        }
-        binding.messageEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                onActionButtonClicked()
-            }
-            return@setOnEditorActionListener true
-        }
-        binding.sendButton.setOnClickListener {
-            onActionButtonClicked()
         }
     }
 
@@ -421,25 +473,6 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
             if (shouldScrollToBottom) binding.chatRecyclerView.layoutManager?.scrollToPosition(delegateItems.size - 1)
             shouldScrollToBottom = false
         }
-    }
-
-    private fun onActionButtonClicked() {
-        val messageText = binding.messageEditText.text.toString()
-        val topicName = binding.topicInput.text.toString()
-        store.accept(
-            ChatEvent.Ui.ActionButtonClicked(
-                content = messageText,
-                topicName = topicName
-            )
-        )
-    }
-
-    private fun makeDelegateItems(
-        list: List<MessageUi>,
-    ): MutableList<DelegateItem> {
-        return ChatDelegateItemFactory().makeDelegateItems(
-            list = list
-        )
     }
 
     private fun onSelectEmoji(
@@ -465,56 +498,23 @@ class ChatFragment : ElmBaseFragment<Effect, State, Event>(
         )
     }
 
-    private fun setUpEditMessageDialog() {
-        childFragmentManager.setFragmentResultListener(
-            EditMessageDialogFragment.EDIT_MESSAGE_REQUEST_KEY,
-            this
-        ) { key, bundle ->
-            val id = bundle.getInt(EditMessageDialogFragment.EDIT_MESSAGE_RESULT_KEY_ID)
-            val content = bundle.getString(EditMessageDialogFragment.EDIT_MESSAGE_RESULT_KEY_CONTENT)
-            content?.let {
-                store.accept(
-                    ChatEvent.Ui.EditMessage(
-                        messageId = id,
-                        messageContent = content
-                    )
-                )
-            }
-        }
-    }
-
-    private fun setUpChangeTopicDialog() {
-        childFragmentManager.setFragmentResultListener(
-            ChangeTopicDialogFragment.CHANGE_TOPIC_REQUEST_KEY,
-            this
-        ) { key, bundle ->
-            val topicName = bundle.getString(ChangeTopicDialogFragment.CHANGE_TOPIC_TOPIC_NAME_RESULT_KEY)
-            val messageId = bundle.getInt(ChangeTopicDialogFragment.CHANGE_TOPIC_MESSAGE_ID_RESULT_KEY)
-            topicName?.let {
-                store.accept(
-                    ChatEvent.Ui.ChangeMessageTopic(
-                        messageId = messageId,
-                        topicName = it
-                    )
-                )
-            }
-        }
-    }
-
-    private fun setUpTopicInput() {
-        if (store.states.value.topic != null) {
-            binding.topicInput.visibility = View.GONE
-            binding.senToTopicTextView.visibility = View.GONE
-        } else {
-            binding.topicInput.visibility = View.VISIBLE
-            val list = store.states.value.stream.topics.map { it.name }
-            val placeHolderAdapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                list
+    private fun onActionButtonClicked() {
+        val messageText = binding.messageEditText.text.toString()
+        val topicName = binding.topicInput.text.toString()
+        store.accept(
+            ChatEvent.Ui.ActionButtonClicked(
+                content = messageText,
+                topicName = topicName
             )
-            binding.topicInput.setAdapter(placeHolderAdapter)
-        }
+        )
+    }
+
+    private fun makeDelegateItems(
+        list: List<MessageUi>,
+    ): MutableList<DelegateItem> {
+        return ChatDelegateItemFactory().makeDelegateItems(
+            list = list
+        )
     }
 
     companion object {

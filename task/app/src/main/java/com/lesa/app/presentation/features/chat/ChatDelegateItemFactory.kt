@@ -12,7 +12,7 @@ class ChatDelegateItemFactory {
     fun makeDelegateItems(
         list: List<MessageUi>,
     ): MutableList<DelegateItem> {
-        val formatter = SimpleDateFormat("yyyyMMdd")
+        val formatter = SimpleDateFormat(DATE_PATTERN)
         val messagesGroupedByDates = list.groupBy {
             formatter.format(it.date)
         }.toSortedMap()
@@ -51,3 +51,5 @@ class ChatDelegateItemFactory {
         return result
     }
 }
+
+const val DATE_PATTERN = "yyyyMMdd"

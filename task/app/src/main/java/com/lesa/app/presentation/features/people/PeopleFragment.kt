@@ -126,9 +126,18 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
     }
 
     private fun setUpViews() {
+        setSearchListener()
         setUpRecyclerView()
         setupRefreshButton()
-        setSearchListener()
+    }
+
+    private fun setSearchListener() {
+        binding.searchIcon.setOnClickListener {
+            store.accept(PeopleEvent.Ui.OnSearchClicked)
+        }
+        binding.searchEditText.addTextChangedListener {
+            store.accept(PeopleEvent.Ui.Search(it.toString()))
+        }
     }
 
     private fun setUpRecyclerView() {
@@ -145,15 +154,6 @@ class PeopleFragment: ElmBaseFragment<Effect, State, Event>(
     private fun setupRefreshButton() {
         binding.error.refreshButton.setOnClickListener {
             store.accept(PeopleEvent.Ui.ReloadPeople)
-        }
-    }
-
-    private fun setSearchListener() {
-        binding.searchIcon.setOnClickListener {
-            store.accept(PeopleEvent.Ui.OnSearchClicked)
-        }
-        binding.searchEditText.addTextChangedListener {
-            store.accept(PeopleEvent.Ui.Search(it.toString()))
         }
     }
 

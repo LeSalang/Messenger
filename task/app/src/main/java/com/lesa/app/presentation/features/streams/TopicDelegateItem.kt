@@ -7,7 +7,7 @@ class TopicDelegateItem  (
     val topic: Topic
 ) : DelegateItem {
     override val id: Any
-        get() = topic.name //TODO??
+        get() = topic.name
 
     override val content: Any
         get() = topic

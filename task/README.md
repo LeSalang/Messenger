@@ -29,13 +29,17 @@
 * Инъекция зависимостей: _Dagger 2_
 * Тестирование: _JUnit, Kotest, Kaspresso, Wiremock_
 
-<img src="gitlab/stream_light_eng.png" style="height: 500px"/>
-<img src="gitlab/all_stream_dark_ru.png" style="height: 500px"/>
-<img src="gitlab/create_new_stream_dark_ru.png" style="height: 500px"/>
-<img src="gitlab/search_dark_ru.png" style="height: 500px"/>
-<img src="gitlab/image_dark_eng.png" style="height: 500px"/>
-<img src="gitlab/emoji_light_eng.png" style="height: 500px"/>
-<img src="gitlab/message_actions_dark_eng.png" style="height: 500px"/>
-<img src="gitlab/users_dark_eng.png" style="height: 500px"/>
-<img src="gitlab/user_profile_dark_eng.png" style="height: 500px"/>
-<img src="gitlab/own_profile_dark_eng.png" style="height: 500px"/>
+<p align="center">
+<img src = "gitlab/stream_light_eng.png" width="19%" />&nbsp;
+<img src = "gitlab/all_stream_dark_ru.png" width="19%" />&nbsp;
+<img src = "gitlab/create_new_stream_dark_ru.png" width="19%" />&nbsp;
+<img src = "gitlab/search_dark_ru.png" width="19%" />&nbsp;
+<img src = "gitlab/image_dark_eng.png" width="19%" />&nbsp;
+<br>
+<img src = "gitlab/emoji_light_eng.png" width="19%" />&nbsp;
+<img src = "gitlab/message_actions_dark_eng.png" width="19%" />&nbsp;
+<img src = "gitlab/users_dark_eng.png" width="19%" />&nbsp;
+<img src = "gitlab/user_profile_dark_eng.png" width="19%" />&nbsp;
+<img src = "gitlab/own_profile_dark_eng.png" width="19%" />&nbsp;
+<br>
+</p>

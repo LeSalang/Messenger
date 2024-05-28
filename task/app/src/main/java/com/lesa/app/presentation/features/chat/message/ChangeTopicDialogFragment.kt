@@ -60,7 +60,6 @@ class ChangeTopicDialogFragment : DialogFragment() {
         const val CHANGE_TOPIC_REQUEST_KEY = "ChangeTopicDialogFragment request key"
         const val CHANGE_TOPIC_MESSAGE_ID_KEY = "ChangeTopicDialogFragment message ID key"
         const val CHANGE_TOPIC_MESSAGE_ID_RESULT_KEY = "ChangeTopicDialogFragment message ID result key"
-        const val CHANGE_TOPIC_TOPIC_NAME_LIST_KEY = "ChangeTopicDialogFragment topic name key"
         const val CHANGE_TOPIC_TOPIC_NAME_RESULT_KEY = "ChangeTopicDialogFragment topic name result key"
         const val CHANGE_TOPIC_STREAM_KEY = "ChangeTopicDialogFragment stream key"
 
