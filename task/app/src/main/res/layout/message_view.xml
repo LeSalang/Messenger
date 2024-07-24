@@ -33,7 +33,7 @@
             android:id="@+id/messageTextCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="?attr/tfs_surface_color"
+            app:cardBackgroundColor="?attr/messenger_surface_color"
             app:contentPadding="@dimen/space_size_medium"
             app:cardElevation="0dp"
             app:cardCornerRadius="18dp"
@@ -58,7 +58,7 @@
                     android:id="@+id/topicCardView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="?attr/tfs_surface_glassy_color"
+                    android:backgroundTint="?attr/messenger_surface_glassy_color"
                     android:layout_marginBottom="4dp"
                     app:cardCornerRadius="18dp"
                     app:cardElevation="0dp"
@@ -95,7 +95,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/topicNameTextView"
                             app:layout_constraintTop_toTopOf="@+id/topicNameTextView"
-                            app:tint="?attr/tfs_text_shadow_color"
+                            app:tint="?attr/messenger_text_shadow_color"
                             />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

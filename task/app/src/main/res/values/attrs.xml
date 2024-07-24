@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="tfs_background_color" format="color|reference"/>
-    <attr name="tfs_surface_color" format="color|reference"/>
-    <attr name="tfs_surface_glassy_color" format="color|reference"/>
-    <attr name="tfs_surface_on_surface_color" format="color|reference"/>
-    <attr name="tfs_text_base_color" format="color|reference"/>
-    <attr name="tfs_text_shadow_color" format="color|reference"/>
-    <attr name="tfs_text_glassy_color" format="color|reference"/>
+    <attr name="messenger_background_color" format="color|reference"/>
+    <attr name="messenger_surface_color" format="color|reference"/>
+    <attr name="messenger_surface_glassy_color" format="color|reference"/>
+    <attr name="messenger_surface_on_surface_color" format="color|reference"/>
+    <attr name="messenger_text_base_color" format="color|reference"/>
+    <attr name="messenger_text_shadow_color" format="color|reference"/>
+    <attr name="messenger_text_glassy_color" format="color|reference"/>
 </resources>

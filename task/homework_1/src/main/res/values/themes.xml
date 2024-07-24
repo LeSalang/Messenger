@@ -1,7 +1,0 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.BaseComponents" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="divider">@color/black_12</item>
-    </style>
-
-    <style name="Theme.BaseComponents" parent="Base.Theme.BaseComponents" />
-</resources>

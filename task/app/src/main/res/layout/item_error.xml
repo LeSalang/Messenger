@@ -13,7 +13,7 @@
         android:layout_height="@dimen/profile_user_logo_card_size"
         android:layout_marginTop="@dimen/space_huge"
         android:src="@drawable/error"
-        app:tint="?attr/tfs_text_base_color"
+        app:tint="?attr/messenger_text_base_color"
         />
 
     <TextView
@@ -23,7 +23,7 @@
         android:gravity="center_horizontal"
         android:layout_marginVertical="@dimen/space_size_large_x"
         android:text="@string/error"
-        android:textColor="?attr/tfs_text_base_color"
+        android:textColor="?attr/messenger_text_base_color"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold"
         />
@@ -32,9 +32,9 @@
         android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="?attr/tfs_surface_on_surface_color"
+        android:backgroundTint="?attr/messenger_surface_on_surface_color"
         android:text="@string/refresh"
-        android:textColor="?attr/tfs_text_base_color"
+        android:textColor="?attr/messenger_text_base_color"
         />
 
 </LinearLayout>

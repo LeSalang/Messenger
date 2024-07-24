@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="?attr/tfs_background_color"
+    android:background="?attr/messenger_background_color"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/tfs_surface_color"
+        android:background="?attr/messenger_surface_color"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="@dimen/space_size_medium"
@@ -45,7 +45,7 @@
             android:layout_height="@dimen/appbar_title_icon_size"
             android:src="@drawable/icon_search"
             android:layout_margin="@dimen/space_size_large_x"
-            app:tint="?attr/tfs_text_base_color"
+            app:tint="?attr/messenger_text_base_color"
             />
 
         <ImageView
@@ -53,7 +53,7 @@
             android:layout_width="@dimen/appbar_title_icon_size"
             android:layout_height="@dimen/appbar_title_icon_size"
             android:src="@drawable/icon_add"
-            app:tint="?attr/tfs_text_base_color"
+            app:tint="?attr/messenger_text_base_color"
             />
 
     </LinearLayout>
@@ -62,11 +62,11 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/tfs_surface_color"
+        android:background="?attr/messenger_surface_color"
         app:tabIndicatorColor="@color/cyan"
         app:tabIndicatorFullWidth="true"
-        app:tabSelectedTextColor="?attr/tfs_text_base_color"
-        app:tabTextColor="?attr/tfs_text_base_color"
+        app:tabSelectedTextColor="?attr/messenger_text_base_color"
+        app:tabTextColor="?attr/messenger_text_base_color"
         />
 
     <androidx.viewpager2.widget.ViewPager2

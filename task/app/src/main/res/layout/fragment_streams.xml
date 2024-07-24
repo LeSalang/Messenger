@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/tfs_background_color"
+    android:background="?attr/messenger_background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >

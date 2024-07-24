@@ -12,7 +12,7 @@
         android:id="@+id/contextMenuIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:tint="?attr/tfs_text_base_color"
+        app:tint="?attr/messenger_text_base_color"
         />
 
     <Space
@@ -24,7 +24,7 @@
         android:id="@+id/contextMenuName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="?attr/tfs_text_base_color"
+        android:textColor="?attr/messenger_text_base_color"
         />
 
 </LinearLayout>

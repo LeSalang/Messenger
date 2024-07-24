@@ -1,6 +1,6 @@
 <resources>
     <style name="TextViewStyle" parent="TextAppearance.AppCompat" >
-        <item name="android:textColor">?attr/tfs_text_base_color</item>
+        <item name="android:textColor">?attr/messenger_text_base_color</item>
     </style>
 
     <style name="TextViewStyle.UserName" >
@@ -23,7 +23,7 @@
 
     <style name="TextViewStyle.UserEmail" >
         <item name="android:textSize">@dimen/text_size_small_xx</item>
-        <item name="android:textColor">?attr/tfs_text_shadow_color</item>
+        <item name="android:textColor">?attr/messenger_text_shadow_color</item>
     </style>
 
     <style name="TextViewStyle.TitleInTopicAndStreamItem" >
@@ -32,14 +32,14 @@
 
     <style name="TextViewStyle.EditText" >
         <item name="android:textSize">@dimen/text_size_small_xx</item>
-        <item name="android:textColor">?attr/tfs_text_base_color</item>
-        <item name="android:textColorHint">?attr/tfs_text_shadow_color</item>
+        <item name="android:textColor">?attr/messenger_text_base_color</item>
+        <item name="android:textColorHint">?attr/messenger_text_shadow_color</item>
         <item name="android:inputType">text</item>
     </style>
 
     <style name="TextViewStyle.TopicNameInMessageView" >
         <item name="android:textSize">@dimen/text_size_small</item>
-        <item name="android:textColor">?attr/tfs_text_glassy_color</item>
+        <item name="android:textColor">?attr/messenger_text_glassy_color</item>
     </style>
 
     <style name="TextViewStyle.MessageContent" >
@@ -52,16 +52,16 @@
     </style>
 
     <style name="CardViewStyle" parent="CardView">
-        <item name="android:background">?attr/tfs_surface_color</item>
+        <item name="android:background">?attr/messenger_surface_color</item>
     </style>
 
     <style name="ButtonStyle" parent="TextAppearance.AppCompat.Button">
-        <item name="android:backgroundTint">?attr/tfs_surface_on_surface_color</item>
-        <item name="android:textColor">?attr/tfs_text_base_color</item>
+        <item name="android:backgroundTint">?attr/messenger_surface_on_surface_color</item>
+        <item name="android:textColor">?attr/messenger_text_base_color</item>
     </style>
 
     <style name="Dialog" parent="android:Theme.Material.Light.Dialog.Alert" >
-        <item name="android:colorBackground">?attr/tfs_surface_on_surface_color</item>
+        <item name="android:colorBackground">?attr/messenger_surface_on_surface_color</item>
         <item name="android:textColorPrimary">@color/green</item>
     </style>
 </resources>

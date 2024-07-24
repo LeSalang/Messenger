@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/space_size_medium"
-        android:textColor="?attr/tfs_text_shadow_color"
+        android:textColor="?attr/messenger_text_shadow_color"
         android:textSize="@dimen/text_size_small_x"
         />
 </FrameLayout>

@@ -1,12 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.BaseComponents" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="tfs_background_color">@color/gray_239_alfa_100</item>
-        <item name="tfs_surface_color">@color/gray_223_alfa_100</item>
-        <item name="tfs_surface_glassy_color">@color/gray_159_alfa_50</item>
-        <item name="tfs_surface_on_surface_color">@color/gray_191_alfa_100</item>
-        <item name="tfs_text_base_color">@color/gray_15_alfa_100</item>
-        <item name="tfs_text_shadow_color">@color/gray_95_alfa_100</item>
-        <item name="tfs_text_glassy_color">@color/gray_15_alfa_50</item>
+        <item name="messenger_background_color">@color/gray_239_alfa_100</item>
+        <item name="messenger_surface_color">@color/gray_223_alfa_100</item>
+        <item name="messenger_surface_glassy_color">@color/gray_159_alfa_50</item>
+        <item name="messenger_surface_on_surface_color">@color/gray_191_alfa_100</item>
+        <item name="messenger_text_base_color">@color/gray_15_alfa_100</item>
+        <item name="messenger_text_shadow_color">@color/gray_95_alfa_100</item>
+        <item name="messenger_text_glassy_color">@color/gray_15_alfa_50</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <solid android:color="?attr/tfs_surface_on_surface_color"/>
+    <solid android:color="?attr/messenger_surface_on_surface_color"/>
     <size android:height="39dp"/>
     <size android:width="39dp"/>
 </shape>
