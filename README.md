@@ -1,34 +1,32 @@
-### TFS Messenger
-#### Приложение для обмена сообщениями, разработанное в рамках учебного курса Тинькофф Финтех: Android-разработка.
+### Messenger
+#### Android messaging application.
 
-#### В приложении представлены следующие функции:
-* Загрузка информации о пользователях, каналах и сообщениях через интернет
-* Кэширование информации в базе данных
-* Поиск среди пользователей, тем и каналов
-* Список пользователей с возможностью детального просмотра
-* Список каналов и тем
-* Создание новых каналов
-* Подгрузка сообщений партиями по 20 штук
-* Редактирование текста недавно отправленных сообщений
-* Отправка сообщения в существующие или новые темы
-* Изменение темы свежих сообщений
-* Копирования текста сообщений
-* Удаление недавно отправленных сообщений из чата
-* Отправка и удаление эмодзи
-* Отправка и просмотр изображений
-* Поддержка русского и английского языков
-* Поддержка дневной и ночной тем
-
-#### В приложении используются следующие технологии:
-* Вёрстка: _XML, CustomView, RecyclerView_
-* Навигация: _Cicerone_
-* Асинхронные операции: _Coroutines_
-* Работа с сетью: _Retrofit, Picasso_
-* Работа с базой данных: _Room_
-* Архитектура: _TEA_
-* Инъекция зависимостей: _Dagger 2_
-* Тестирование: _JUnit, Kotest, Kaspresso, Wiremock_
-
+#### The application features the following functionalities:
+* Loading user, channel, and message information via the internet
+* Caching information in a database
+* Searching among users, topics, and channels
+* List of users with detailed view option
+* List of channels and topics
+* Creating new channels
+* Loading messages in batches of 20
+* Editing the text of recently sent messages
+* Sending messages to existing or new topics
+* Changing the topic of recent messages
+* Copying message text
+* Deleting recently sent messages from the chat
+* Sending and deleting emojis
+* Sending and viewing images
+* Supporting Russian and English languages
+* Supporting light and dark themes
+#### The application uses the following technologies:
+* Layout: [XML](https://www.w3.org/XML/), CustomView, RecyclerView
+* Navigation: [Cicerone](https://github.com/terrakok/Cicerone)
+* Asynchronous operations: [Coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+* Networking: [Retrofit](https://square.github.io/retrofit/) + [OkHttp](https://square.github.io/okhttp/), [Picasso](https://square.github.io/picasso/)
+* Database: [Room](https://developer.android.com/jetpack/androidx/releases/room)
+* Architecture: [TEA](https://github.com/vivid-money/elmslie)
+* Dependency Injection: [Dagger](https://dagger.dev)
+* Testing: [Kotest](https://kotest.io/), [Kaspresso](https://github.com/KasperskyLab/Kaspresso), [Wiremock](https://wiremock.org/)
 <p align="center">
 <img src = "task/gitlab/stream_light_eng.png" width="19%" />&nbsp;
 <img src = "task/gitlab/all_stream_dark_ru.png" width="19%" />&nbsp;
